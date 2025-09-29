@@ -1,0 +1,64 @@
+def check_02(handles:, maximum_score:, resources:)
+  # Service handle initialization
+  logging = handles['project_0.LoggingV2']
+
+  # Assessment score and status checker hash variable
+  ret_hash = { :score => 0, :message => "", :student_message => "" }
+
+  lab_access_time_in_sec = 54000
+  lab_start_time = Time.at(Time.now.to_i - lab_access_time_in_sec)
+
+#   log_filters = [
+#     'timestamp>"' + lab_start_time.utc.iso8601 + '"',
+#     'protoPayload.serviceName="cloudresourcemanager.googleapis.com"',
+#     'protoPayload.methodName="SetIamPolicy"',
+#     'protoPayload.serviceData.policyDelta.bindingDeltas.role="roles/aiplatform.user"'
+#   ]
+
+    conn_filters = [
+        'timestamp>"' + lab_start_time.utc.iso8601 + '"',
+        'protoPayload.methodName="google.cloud.bigquery.connection.v1.ConnectionService.CreateConnection"',
+        'protoPayload.resourceName="projects/' + logging.project + '/locations/us-central1"',
+        'protoPayload.request.connectionId="gemini_conn"'
+    ]
+
+  # Build log filter
+  custom_conn_filter = conn_filters.join(" AND ")
+
+  # List_log_entries_request_object
+  list_log_entries_request_object = Google::Apis::LoggingV2::ListLogEntriesRequest.new
+
+  # Parent resource to track
+  list_log_entries_request_object.resource_names = ['projects/' + logging.project]
+
+  list_log_entries_request_object.filter = custom_conn_filter
+#   query_logs = logging.list_entry_log_entries(list_log_entries_request_object)&.entries || []
+  result = logging.list_entry_log_entries(list_log_entries_request_object).entries
+  if result.count > 0
+    serviceAccountId=result[0].proto_payload["response"]["cloudResource"]["serviceAccountId"] 
+    username = resources["user_0"]["username"]
+    log_filters = [
+     'timestamp>"' + lab_start_time.utc.iso8601 + '"',
+     'protoPayload.serviceName="cloudresourcemanager.googleapis.com"',
+     'protoPayload.methodName="SetIamPolicy"',
+     'protoPayload.authenticationInfo.principalEmail="' + username + '"',
+     'protoPayload.request.policy.bindings.members="serviceAccount:' + serviceAccountId + '"'
+    ]
+    custom_filter = log_filters.join(" AND ")
+    list_log_entries_request_object.filter = custom_filter
+
+    query_logs = logging.list_entry_log_entries(list_log_entries_request_object)&.entries || []
+
+    # Validate if logs > 0 found
+    if query_logs.count > 0
+     success_message = "성공적으로 권한이 부여되었습니다."
+     ret_hash = { :score => maximum_score, :message => success_message, :student_message => success_message }
+    else
+     error_message = "다시 한 번 절차를 확인해보세요!"
+     ret_hash[:message] = error_message
+     ret_hash[:student_message] = error_message
+    end
+  end
+ 
+  return ret_hash
+end
