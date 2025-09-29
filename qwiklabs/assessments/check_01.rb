@@ -14,7 +14,8 @@ def check_01(handles:, maximum_score:, resources:)
     'protoPayload.resourceName="projects/' + logging.project + '/locations/us-central1"',
     'protoPayload.request.connectionId="gemini_conn"'
   ]
-
+ 
+ 
   # Build log filter
   custom_filter = log_filters.join(" AND ")
 
