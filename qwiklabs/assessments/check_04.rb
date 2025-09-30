@@ -15,11 +15,12 @@ def check_04(handles:, maximum_score:, resources:)
   end
 
   if isAvailable 
-    ret_hash = { :done => true, :score => maximum_score, :message => "Assessment completed!", :student_message => "step3 completed!"}
+    success_message = "모델이 정상적으로 생성되었습니다."
+    ret_hash = { :done => true, :score => maximum_score, :message => success_message, :student_message => success_message}
   else
-    error_message = 'Please create the BigQuery dataset.'
+    error_message = '다시 한 번 절차를 확인해보세요!'
     ret_hash[:message] = error_message
     ret_hash[:student_message] = error_message
-  end
+  end 
   return ret_hash
 end
