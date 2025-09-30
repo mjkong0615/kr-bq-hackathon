@@ -36,7 +36,7 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 * Task 1: Analyzing Multimodal Customer Reviews for Marketing Insights
 * Task 2: Segmenting Customers for Targeted Marketing  
-* Task 3: Creating Tailored email message including promotions  for unsatisfied customers 
+* Task 3: Creating Tailored Recommendations for Customers with Negative Reviews
 * Task 4: Additional Exploratory Data Analysis
 * Task 5: Enhancing Product Recommendations ML model
 * Task 6: Sending a customized email with Application Integrations
@@ -697,8 +697,10 @@ Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 �
 **노트북 업로드**
 
 1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
-2. https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb를 입력합니다.
-3. 새로운 노트북 탭이 열립니다. 이 노트북의 셀들을 실행하여 태스크 2를 진행하겠습니다.
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
+2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb를 입력합니다.
+3. Region: us-central-1을 선택합니다.
+4. "Upload" 버튼을 누른 후, 화면 하단의 "Go to notebook" 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 2를 진행하겠습니다.
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=7>
@@ -708,56 +710,26 @@ Upload a Notebook on BigQuery Studio
 **1. Task 2 환경 초기화**
 
 태스크 셋업을 위해 초기 설정 셀을 실행합니다. 이 셀은 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며, 이 랩에서 사용될 주요 변수(예: PROJECT_ID, DATASET_ID)를 정의합니다.
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image2.png" alt="task2_image2.png"  width="624.00" />
 
-```python
-# 태스크 2에 필요한 라이브러리를 가져오고 클라이언트 및 변수를 초기화합니다.
-
-from google.cloud import bigquery
-import pandas as pd
-import pandas_gbq
-from IPython.display import display
-```
-
-```python
-# 위의 셀에 PROJECT_ID가 정의되어 있는지 확인
-# 이 셀을 실행하기 전, 위에서 프로젝트 ID를 입력하는 셀을 반드시 실행해야 합니다.
-
-if 'PROJECT_ID' not in locals() or not PROJECT_ID:
-  raise ValueError("ERROR: PROJECT_ID is not set. Please run the 'Set Your Project ID' cell above first.")
-
-client = bigquery.Client(project=PROJECT_ID, location="us-central1")
-
-DATASET_ID = 'cymbal'
-
-TABLE_ID_CUSTOMERS = f"{PROJECT_ID}.{DATASET_ID}.customers"
-table_id_multimodal_reviews = f"{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews"
-GEMINI_MODEL_NAME = f'{PROJECT_ID}.{DATASET_ID}.gemini_flash_model'
-table_id_segment_level_analysis = f"{PROJECT_ID}.{DATASET_ID}.segment_level_gemini_analysis"
-
-print(f"BigQuery Client Initialized for Project ID: {PROJECT_ID}")
-
-def run_bq_query(sql: str, client: bigquery.Client):
-    try:
-        query_job = client.query(sql)
-        print(f"Job {query_job.job_id} in state {query_job.state}")
-        if query_job.statement_type == 'SELECT':
-            df = query_job.to_dataframe()
-            print(f"Query complete. Fetched {len(df)} rows.")
-            return df
-        else:
-            query_job.result()
-            print(f"Query for statement type {query_job.statement_type} complete.")
-            return None
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-```
+이때 반드시 Project ID를 Qwiklabs 환경에서 주어진 Project ID로 변경해줍니다.
 
 **2. 고객 데이터 EDA 및 고객 세그먼트 세분화 로직 정의**
 
 이 단계는 Task 1의 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id를 기준으로 조인하고, 이를 바탕으로 고객 세분화를 위한 핵심 속성을 탐색하는 과정입니다. 여러분은 이 탐색을 통해 발견된 유의미한 패턴을 기반으로 세분화 기준과 로직을 자유롭게 정의할 수 있습니다.
 
-Task 1의 다중 모달 리뷰 분석 결과와 고객 인구통계 데이터를 결합하고, 결합된 데이터에 대한 EDA를 수행하여 고객 세분화를 위한 핵심 속성을 식별합니다. 이 인사이트를 바탕으로 age_group (40세 미만은 'Younger_Adult', 그 이상은 'Older_Adult'), loyalty_status (충성/비충성) 와 같은 세그먼트 기준을 정의합니다.
+Task 1의 다중 모달 리뷰 분석 결과와 고객 인구통계 데이터를 결합하고, 결합된 데이터에 대한 EDA를 수행하여 고객 세분화를 위한 핵심 속성을 식별합니다. 이 인사이트를 바탕으로 다음과 같은 세그먼트 기준을 정의합니다:
+
+age_group: 40세 미만은 'Younger_Adult', 40세 이상은 'Older_Adult'
+gender_segment: gender 컬럼의 값을 대문자로 변환 (예: 'MALE', 'FEMALE')
+loyalty_status: loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'
+text_sentiment: sentiment_json_string 컬럼에서 '$.sentiment'를 추출
+
+결과 테이블명 및 컬럼명 규칙:
+생성되는 최종 고객 세그먼트 프로파일 테이블은 cymbal.unique_segment_profiles여야 합니다.
+이 테이블에는 customer_id, age, gender, loyalty_member, text_sentiment, age_group, gender_segment, loyalty_status, 그리고 이들을 결합한 persona_age_group_profile 컬럼이 포함되어야 합니다.
+persona_age_group_profile 컬럼은 age_group, gender_segment, loyalty_status 값을 밑줄로 연결하여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 생성되어야 합니다.
+
 
 > **Note**: 이번 단계(2.1 고객 데이터 EDA 및 세분화 로직 정의)는 Option 1. Notebooks 와 Option 2. Data Canvas 두 가지 옵션 중 하나를 선택해 수행하는 단계입니다. 두 옵션 중 하나로 태스크를 완성하면 통과입니다!
 
@@ -766,140 +738,41 @@ Task 1의 다중 모달 리뷰 분석 결과와 고객 인구통계 데이터를
 Notebook을 선택해 태스크를 수행하는 경우, 이전 단계에서 사용한 Notebook에서 태스크를 이어갑니다. 
 인구통계 정보가 포함된 customers 테이블을 사용합니다. 먼저 테이블 구조를 간단히 살펴보겠습니다.
 
-```sql
-%%bigquery
-SELECT customer_id, first_name, age, gender, loyalty_member FROM `cymbal.customers` LIMIT 5
-```
-
 **2.1.1 고객 세그먼트 프로파일 식별**
 
-이 쿼리는 기존 테이블의 연령대, 성별, 충성도(loyalty status) 같은 속성을 결합하여 고객 세그먼트를 생성합니다.
+노트북에 적힌 지침에 따라 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id를 기준으로 조인하고, 위에서 정의한 age_group, gender_segment, loyalty_status, text_sentiment 컬럼을 생성합니다.
+최종적으로 persona_age_group_profile 컬럼을 포함하는 cymbal.unique_segment_profiles 테이블을 생성합니다.
 
-```python
-DESTINATION_TABLE = f"{PROJECT_ID}.{DATASET_ID}.unique_segment_profiles"
+힌트: Python 클라이언트를 사용하여 BigQuery 쿼리를 실행하거나, 노트북 내에서 %%bigquery 매직 명령어를 활용할 수 있습니다.
 
-sql_get_profiles = f"""
+Gemini 활용 가이드: Gemini에게 테이블 조인, 새로운 컬럼 생성 (조건부 로직 포함), 그리고 최종적으로 persona_age_group_profile 컬럼을 생성하는 SQL 쿼리를 요청할 수 있습니다.
 
-WITH EnrichedData AS (
-    SELECT
-        c.customer_id,
-        c.age,
-        UPPER(c.gender) as gender,
-        IF(c.loyalty_member, 'LOYAL', 'NON_LOYAL') as loyalty_status,
-        JSON_EXTRACT_SCALAR(mcr.sentiment_json_string, '$.sentiment') as text_sentiment,
-        # Add a new column 'age_group'
-        CASE
-            WHEN c.age &lt; 40 THEN 'Younger_Adult'
-            ELSE 'Older_Adult'
-        END AS age_group
-    FROM `{table_id_multimodal_reviews}` AS mcr
-    JOIN `{TABLE_ID_CUSTOMERS}` AS c ON mcr.customer_id = c.customer_id
-    WHERE c.age IS NOT NULL AND c.gender IS NOT NULL AND c.loyalty_member IS NOT NULL
-)
+결과 확인: 생성된 cymbal.unique_segment_profiles 테이블의 스키마와 데이터를 샘플링하여 예상대로 컬럼이 생성되었는지, persona_age_group_profile의 형식이 올바른지 확인합니다.
 
-SELECT
-    # Select all original columns and the new calculated column
-    customer_id,
-    age,
-    gender,
-    loyalty_status,
-    text_sentiment,
-    age_group,
-    CONCAT(age_group, '_', gender, '_', loyalty_status) as persona_age_group_profile
-FROM EnrichedData
-ORDER BY customer_id;
-"""
+> **Note**: 노트북에서 새 코드 셀을 추가하신 다음, 이 주제를 시각화하는 Python 코드를 Gemini를 통해 작성해보세요. Gemini에게 위의 예시와 비슷한 형태의 시각화 코드를 생성하도록 요청할 수 있습니다.
 
-print(f"Identifying and enriching customer profiles for Gemini analysis...")
+셀 사이의 공간에 마우스를 대고, 새로 나타난 "+ Code" 버튼을 누릅니다.
 
-df_profiles = run_bq_query(sql_get_profiles, client)
-if df_profiles is not None:
-    display(df_profiles.head())
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image3.png" alt="task2_image3.png"  width="624.00" />
 
-    print(f"\nSaving enriched customer data to BigQuery table: {DESTINATION_TABLE}...")
+"generate"을 클릭한 후, 나타난 입력창에 Gemini에게 요청할 프롬프트를 입력합니다.
 
-    try:
-        df_profiles.to_gbq(
-            destination_table=DESTINATION_TABLE,
-            project_id=PROJECT_ID,
-            if_exists='replace',
-            location='us-central1'
-        )
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image4.png" alt="task2_image4.png"  width="624.00" />
 
-        print(f"✅ Successfully saved {len(df_profiles)} enriched records to BigQuery at {DESTINATION_TABLE}.")
+예시 프롬프트:
+"BigQuery에서 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id로 조인하는 코드를 만들어줘."
 
-    except Exception as e:
-        print(f"❌ An error occurred while saving to BigQuery: {e}")
-```
+프롬프트를 입력한 후, 엔터 키를 눌러 프롬프트를 전송합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image5.png" alt="task2_image5.png"  width="624.00" />
+
+요청한 프롬프트에 대해 Gemini가 생성한 코드를 실행할 수 있습니다.
 
 **2.1.2 시각화**
 
 이 단계에서는 자유롭게 데이터 탐색을 하시면서, 앞선 단계에서 생성한 unique_segment_profiles 테이블, customers 테이블을 살펴봅니다. 
 
-아래 코드 셀은 각 세그먼트에 속하는 고객의 수를 시각화하는 코드입니다.
-
-```python
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-
-def plot_customer_distribution(df: pd.DataFrame):
-    if df is None or df.empty:
-        print("DataFrame is empty. Skipping plot generation.")
-        return
-
-    sns.set_theme(style="whitegrid", font_scale=1.0)
-    plt.figure(figsize=(10, 6))
-    palette = sns.cubehelix_palette(n_colors=len(df), start=.5, rot=-.75, dark=0.3, light=0.7)
-    ax = sns.barplot(
-        x='persona_age_group_profile', y='customer_count', data=df,
-        palette=palette, hue='persona_age_group_profile', legend=False
-    )
-
-    for p in ax.patches:
-        ax.annotate(f'{int(p.get_height()):,}', (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='center', xytext=(0, 8), textcoords='offset points',
-                    fontsize=9, color='dimgray')
-
-    ax.set(title='Customer Segment Distribution', xlabel='Persona Profile', ylabel='Number of Customers')
-    ax.title.set_size(16); ax.title.set_weight('bold'); ax.xaxis.label.set_size(12);
-    ax.yaxis.label.set_size(12); ax.title.set_position([.5, 1.05]);
-    plt.xticks(rotation=45, ha='right')
-    plt.ylim(0, df['customer_count'].max() * 1.15)
-    sns.despine()
-    plt.tight_layout()
-    plt.show()
-
-sql_data_for_viz = f"""
-WITH EnrichedData AS (
-    SELECT
-        c.customer_id,
-        CASE
-            WHEN c.age &lt; 40 THEN 'Younger_Adult'
-            ELSE 'Older_Adult'
-        END AS age_group,
-        UPPER(c.gender) as gender,
-        IF(c.loyalty_member, 'LOYAL', 'NON_LOYAL') as loyalty_status
-    FROM `{TABLE_ID_CUSTOMERS}` AS c
-    WHERE c.age IS NOT NULL AND c.gender IS NOT NULL AND c.loyalty_member IS NOT NULL
-)
-
-SELECT
-    CONCAT(age_group, '_', gender, '_', loyalty_status) as persona_age_group_profile,
-    COUNT(DISTINCT customer_id) AS customer_count
-FROM EnrichedData
-GROUP BY persona_age_group_profile
-ORDER BY customer_count DESC;
-"""
-
-print("Querying data for visualization...")
-
-df_for_viz = run_bq_query(sql_data_for_viz, client)
-
-print("Generating plot...")
-
-plot_customer_distribution(df_for_viz)
-```
+이 섹션에 작성된 코드 셀은 각 세그먼트에 속하는 고객의 수를 시각화하는 코드입니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/4a0efc497af584e5.png" alt="4a0efc497af584e5.png"  width="624.00" />
 
@@ -916,33 +789,13 @@ age_group과 loyalty_status의 조합이 어떻게 고객 수에 영향을 미�
 address_city 정보를 활용하여 각 persona_age_group_profile별 고객들이 특정 도시에 집중되어 있는지 또는 넓게 분포되어 있는지 시각화하여 지리적 특성을 파악합니다.
 
 
-> **Note**: 노트북에서 새 코드 셀을 추가하신 다음, 이 주제를 시각화하는 Python 코드를 Gemini를 통해 작성해보세요. Gemini에게 위의 예시와 비슷한 형태의 시각화 코드를 생성하도록 요청할 수 있습니다.
-
-셀 사이의 공간에 마우스를 대고, 새로 나타난 "+ Code" 버튼을 누릅니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/dade7587ec1ee02a.png" alt="dade7587ec1ee02a.png"  width="624.00" />
-
-"generate"을 클릭한 후, 나타난 입력창에 Gemini에게 요청할 프롬프트를 입력합니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/b19c6141dd7e1f0d.png" alt="b19c6141dd7e1f0d.png"  width="624.00" />
-
-예시 프롬프트:
-
-"나는 BigQuery에서 customers 테이블과 cymbal.unique_segment_profiles 테이블을 사용하고 있어. 각 persona_age_group_profile별로 고객들이 어떤 address_city에 가장 많이 거주하는지 상위 5개 도시를 보여주는 Bar Chart를 그려줘."
-
-프롬프트를 입력한 후, 엔터 키를 누릅니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/cc02efb13a188c08.png" alt="cc02efb13a188c08.png"  width="624.00" />
-
-요청한 프롬프트에 대해 Gemini가 생성한 코드를 실행할 수 있습니다. 
-
 **옵션 2: Data Canvas**
 
 BigQuery Data Canvas는 시각적인 인터페이스를 통해 복잡한 데이터 조인, 변환, 집계 및 시각화를 수행할 수 있는 도구입니다. 이 옵션을 통해 고객 데이터의 EDA 및 세그먼트 생성 작업을 시각적으로 진행합니다.
 
-**2.2.1 Data Canvas에 테이블 추가하기**
+**2.2.1 Data Canvas에 테이블 추가 및 조인 수행**
 
-화면 왼쪽 탐색 패널에서 Data Canvas를 클릭하거나, + 버튼을 눌러 새 Canvas를 생성합니다. 
+화면 왼쪽 탐색 패널에서 Data Canvas를 클릭하거나, + 버튼을 눌러 새 Canvas를 생성합니다.
 Data Canvas를 처음 사용하는 경우, API 사용 설정 버튼이 나타납니다. "" 버튼을 클릭하여 Data Canvas API를 활성화합니다.
 
 Data Canvas 화면의 Recents 아래 multimodal_customer_reviews 테이블과 customers 테이블을 각각 캔버스에 추가합니다.
@@ -986,70 +839,29 @@ customers 테이블 노드를 클릭한 후 나타나는 Join 옵션을 선택�
 
 새로운 창의 쿼리 편집기에서 직접 SQL을 작성하거나, Gemini에게 자연어 프롬프트를 사용하여 컬럼 생성을 요청합니다.
 
-Gemini 활용 예시 프롬프트:
+* sentiment_json_string 컬럼에서 '$.sentiment'를 추출하여 'text_sentiment'라는 새 컬럼을 만듭니다.
+* age 컬럼을 기반으로 40세 미만은 'Younger_Adult', 40세 이상은 'Older_Adult'로 구분하는 'age_group' 컬럼을 추가합니다.
+* gender 컬럼의 값을 대문자로 변환하여 'gender_segment'라는 컬럼으로 만듭니다.
+* loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가합니다.
 
-```
-"sentiment_json_string 칼럼에서 '$.sentiment'를 추출해서 'text_sentiment'라는 새 칼럼을 만들고, 
-age 컬럼을 기반으로 40세 미만은 'Younger_Adult', 40세 이상은 'Older_Adult'로 구분하는 'age_group' 컬럼을 추가해 줘. gender 컬럼의 값은 대문자로 'gender_segment'라는 칼럼으로 만들어 줘. 
-마지막으로 loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가해 줘."
-```
+Gemini 활용 가이드: \
+Gemini에게 자연어 프롬프트를 사용하여 위 요구사항을 만족하는 SQL 쿼리 생성을 요청할 수 있습니다. \
+예를 들어: "gender 컬럼의 값은 대문자로 'gender_segment'라는 칼럼으로 만들고, loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가해 줘." \
+쿼리를 실행하여 결과를 확인하고, 예상대로 새로운 컬럼들이 생성되었는지 검토합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/bbb2804f0f932c0e.png" alt="bbb2804f0f932c0e.png"  width="624.00" />
 
-SQL 작성 예시:
-
-```sql
-SELECT
-  *,
-  JSON_EXTRACT_SCALAR(sentiment_json_string, '$.sentiment') AS text_sentiment,
-  CASE
-    WHEN age &lt; 40 THEN 'Younger_Adult'
-    ELSE 'Older_Adult'
-END
-  AS age_group,
-  UPPER(gender) AS gender_segment,
-IF
-  (loyalty_member, 'LOYAL', 'NON_LOYAL') AS loyalty_status
-FROM
-  `SQL`
-WHERE
-  age IS NOT NULL
-  AND gender IS NOT NULL
-  AND loyalty_member IS NOT NULL;
-```
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/58a320d6b6f4b887.png" alt="58a320d6b6f4b887.png"  width="624.00" />
-
-Run 버튼으로 쿼리를 실행해 결과를 확인합니다. 
+Run 버튼으로 쿼리를 실행해 결과를 확인합니다.
 
 이제 위에서 생성한 ‘age_group, gender_segment, loyalty_status' 칼럼을 이어 붙여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 고객 세그먼트를 나타내는 새로운 칼럼을 생성합니다.
 
-다시 해당 노드(마지막으로 작업을 수행한 노드)를 ㄷ마지막으로 작업한 노드를 클릭한 후 하단의 Query these results 버튼을 클릭합니다. 
+다시 해당 노드(마지막으로 작업을 수행한 노드)를 ㄷ마지막으로 작업한 노드를 클릭한 후 하단의 Query these results 버튼을 클릭합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/371f475802604197.png" alt="371f475802604197.png"  width="544.50" />
 
 이제 위에서 생성한 ‘age_group, gender_segment, loyalty_status' 칼럼을 이어 붙여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 고객 세그먼트를 나타내는 새로운 칼럼을 생성합니다.
 
 Gemini에게 자연어 프롬프트를 사용하여 그룹화 및 프로파일 생성 쿼리를 요청하거나 직접 SQL을 작성합니다.
-
-Gemini 활용 예시: 
-```
-"age_group, gender_segment, loyalty_status 컬럼을 기준으로 그룹화하고, 이 세 가지 값을 밑줄로 연결하여 'persona_age_group_profile'이라는 고유한 프로파일 컬럼을 만들어 줘. 그리고 원본 테이블의 customer_id, age, gender, loyalty_status, text_sentiment, age_group과 새로운 칼럼을 하나의 테이블로 보여줘."
-```
-
-SQL 작성 예시:
-```sql
-SELECT
-  t.customer_id,
-  t.age,
-  t.gender,
-  t.loyalty_status,
-  t.text_sentiment,
-  t.age_group,
-  CONCAT(t.age_group, '_', t.gender_segment, '_', t.loyalty_status) AS persona_age_group_profile
-FROM
-  `SQL 1` AS t;
-```
 
 쿼리를 실행하여 의도한 형식에 맞게 고유한 페르소나 프로파일 칼럼이 생성되었는지 확인합니다.
 
@@ -1094,159 +906,20 @@ Create tables for Customer Personas
 
 이전 단계에서 Data Canvas 또는 BigQuery Studio를 통해 cymbal.unique_segment_profiles 테이블을 성공적으로 생성했다면, 이제 이 테이블을 기반으로 Gemini 모델을 호출하여 각 세그먼트의 상세 페르소나를 생성합니다.
 
-"Gemini를 사용하여 상세 페르소나 생성" 이라는 헤더 블록 아래의 코드부터 실행합니다.
+노트북에서 "Gemini를 사용한 상세 페르소나 생성" 이라는 헤더 블록 아래의 셀부터 실행하여, 앞에서 정의한 각각의 페르소나에 대해 BigQuery ML의 ML.GENERATE_TEXT 함수와 Gemini 모델을 사용해 다각적인 페르소나 분석을 생성하고, 출력값을 cymbal.segment_level_gemini_analysis 테이블에 저장합니다.
 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image6.png" alt="task2_image6.png"  width="624.00" />
 
 > **참고**: 이후 단계는 BigQuery ML의 ML.GENERATE_TEXT 함수를 반복적으로 호출하는 로직이 필요하며, 현재 BigQuery Data Canvas 인터페이스 내에서 직접적으로 이 반복 호출을 구성하기 어렵습니다. 따라서 남은 태스크는 BigQuery Studio의 Python 노트북 셀에서 실행하는 것을 권장합니다.
 
 앞에서 정의한 각각의 페르소나에 대해 BigQuery ML의 ML.GENERATE_TEXT 함수와 Gemini 모델을 사용해 다각적인 페르소나 분석을 생성하고, 출력값을 cymbal.segment_level_gemini_analysis 테이블에 저장합니다.
 
-```python
-FINAL_DESTINATION_TABLE_ID = "segment_level_gemini_analysis"
-table_id_segment_level_analysis = f"{DATASET_ID}.{FINAL_DESTINATION_TABLE_ID}"
-gemini_prompt_template = """
-고객 세그먼트 프로필 "{p}"를 기반으로 유효한 단일 JSON 객체를 생성합니다.
-JSON은 다음 키를 반드시 포함해야 합니다:
-"persona_description" (이 페르소나에 대한 간결한 한 문장 요약),
-"summary" (그들의 예상되는 선호도에 대한 더 자세한 요약),
-"motivations" (구매 결정에 영향을 미치는 요인),
-"needs" (제품 또는 서비스에서 찾는 것),
-"marketing_pitch" (그들을 타겟팅하는 짧은 마케팅 문구).
-전체 출력은 하나의 JSON 객체여야 하며, 텍스트 본문은 한국어로 구성합니다.
-"""
 
-TEMP_TABLE_ID = "temp_gemini_prompts"
-TEMP_TABLE = f"{PROJECT_ID}.{DATASET_ID}.{TEMP_TABLE_ID}"
-
-print("1. Loading unique persona profiles from BigQuery.")
-
-sql_load_profiles = f"SELECT persona_age_group_profile FROM `{DATASET_ID}.unique_segment_profiles` ORDER BY 1"
-source_df = run_bq_query(sql_load_profiles, client)
-if source_df is not None and not source_df.empty:
-    unique_profiles_df = source_df['persona_age_group_profile'].astype(str).drop_duplicates().to_frame(name='profile_name')
-    print(f"Found {len(source_df)} total rows. Analyzing {len(unique_profiles_df)} unique profiles. Preparing for batch analysis...")
-
-    prompts_df = pd.DataFrame({
-        'profile_name': unique_profiles_df['profile_name'], 
-        'prompt': unique_profiles_df['profile_name'].apply(
-            lambda p: gemini_prompt_template.format(p=p)
-        )
-    })
-    pandas_gbq.to_gbq(
-        prompts_df,
-        f'{DATASET_ID}.{TEMP_TABLE_ID}',
-        project_id=PROJECT_ID,
-        if_exists='replace',
-        location='us-central1'
-    )
-    print("✅ Temporary prompts table created successfully.")
-    print("\n2. Starting single batch analysis using Gemini on BigQuery...")
-
-    sql_batch_analysis = f"""
-    SELECT
-        t2.profile_name,
-        t1.ml_generate_text_llm_result AS analysis
-    FROM
-        ML.GENERATE_TEXT(
-            MODEL `{GEMINI_MODEL_NAME}`,
-            (SELECT * FROM `{TEMP_TABLE}`),
-            STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)
-        ) AS t1
-    JOIN
-        `{TEMP_TABLE}` AS t2
-    ON
-        t1.prompt = t2.prompt;`
-    """
-    df_all_analysis = run_bq_query(sql_batch_analysis, client)
-    if df_all_analysis is not None:
-        print("✅ Analysis complete.")
-        print(f"\n3. Saving {len(df_all_analysis)} analyses to BigQuery table: {table_id_segment_level_analysis}")
-
-        pandas_gbq.to_gbq(
-            df_all_analysis,
-            table_id_segment_level_analysis,
-            project_id=PROJECT_ID,
-            if_exists='replace',
-            location='us-central1'
-        )
-
-        print("✅ Results successfully saved to BigQuery.")
-else:
-    print("No profiles found to analyze.")
-```
-
-최종 결과물을 저장하기 위해 Gemini가 생성한 페르소나를 확인합니다.
-```python
-df_raw_analysis = run_bq_query(f"SELECT * FROM `{table_id_segment_level_analysis}` LIMIT 5", client)
-if df_raw_analysis is not None:
-    with pd.option_context('display.max_colwidth', None):
-        display(df_raw_analysis)
-```
 
 **2.4 최종 고객 인사이트 및 페르소나 정의 테이블 생성**
 
-마지막으로, 주요 인사이트를 담은 테이블과 정리된 페르소나 설명을 담은 테이블을 생성합니다. 
-
-```python
-table_id_multimodal_reviews = f"{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews"
-TABLE_ID_CUSTOMERS = f"{PROJECT_ID}.{DATASET_ID}.customers"
-table_id_segment_level_analysis = f"{PROJECT_ID}.{DATASET_ID}.segment_level_gemini_analysis"
-table_id_final_customer_insights = f"{PROJECT_ID}.{DATASET_ID}.final_customer_insights"
-sql_create_final_table = f"""
-
-CREATE OR REPLACE TABLE `{table_id_final_customer_insights}` AS
-WITH EnrichedData AS (
-    SELECT mcr.*, c.first_name, c.last_name, c.age, c.gender, c.loyalty_member,
-        CONCAT(
-            CASE WHEN c.age &lt; 40 THEN 'Younger_Adult' ELSE 'Older_Adult' END, '_',
-            UPPER(c.gender), IF(c.loyalty_member, '_LOYAL', '_NON_LOYAL')
-        ) AS persona_age_group_profile
-    FROM `{table_id_multimodal_reviews}` AS mcr
-    JOIN `{TABLE_ID_CUSTOMERS}` AS c ON mcr.customer_id = c.customer_id
-)
-SELECT enriched.*, persona.analysis AS gemini_persona_analysis
-FROM EnrichedData enriched
-LEFT JOIN `{table_id_segment_level_analysis}` persona ON enriched.persona_age_group_profile = persona.profile_name;
-"""
-
-print(f"1. Creating the final customer insights table '{table_id_final_customer_insights}'...")
-
-run_bq_query(sql_create_final_table, client)
-
-print("✅ Final customer insights table created successfully.")
-
-final_persona_table_id = f"{PROJECT_ID}.{DATASET_ID}.customer_persona_definitions"
-sql_create_personas = f"""
-CREATE OR REPLACE TABLE `{final_persona_table_id}` AS
-WITH cleaned_analysis AS (
-  SELECT
-    profile_name AS profile,
-    -- Clean the JSON string by removing markdown backticks and whitespace
-    TRIM(REGEXP_REPLACE(analysis, r'(?i)(^```json\\s*|\\s*```$)', '')) as cleaned_json
-  FROM
-    `{table_id_segment_level_analysis}`
-)
-SELECT
-    profile AS persona_age_group_profile,
-    JSON_EXTRACT_SCALAR(cleaned_json, '$.persona_description') AS persona_segment_description
-FROM
-    cleaned_analysis
-WHERE
-    JSON_EXTRACT_SCALAR(cleaned_json, '$.persona_description') IS NOT NULL;
-"""
-
-print(f"\n2. Creating final persona definitions table from Gemini output: {final_persona_table_id}...")
-
-run_bq_query(sql_create_personas, client)
-
-print("✅ Final persona definitions table created successfully.")
-print(f"\n--- 3. Verifying Final Customer Persona Definitions (Generated by Gemini) ---")
-
-df_personas = run_bq_query(f"SELECT * FROM `{final_persona_table_id}` ORDER BY 1", client)
-if df_personas is not None:
-    with pd.option_context('display.max_colwidth', None):
-        display(df_personas)
-```
+마지막으로, 주요 인사이트를 담은 테이블과 정리된 페르소나 설명을 담은 테이블을 생성합니다.
+해당 부분의 코드는 제공됩니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/bdf6585a0a125882.png" alt="bdf6585a0a125882.png"  width="624.00" />
 
