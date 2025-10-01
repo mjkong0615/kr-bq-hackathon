@@ -129,14 +129,15 @@ Create BigQuery External Connection
 
 #### **2.1.2 환경 초기화**
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook1.png" alt="notebook1.png"  width="348.90" />
+![alt text](images/task1_notebook1.png)
+
 
 먼저 설정 쉘을 실행합니다. 이 셀은 필요한 모든 라이브러리를 가져오고, BigQuery에 대한 연결을 초기화하며, 실습 전반에 걸쳐 사용할 주요 변수(프로젝트 ID 및 GCS Bucket 경로 등)를 정의합니다.
 
 그리고 셀을 실행하세요.  
 
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook2.png" alt="notebook2.png"  />  
+![alt text](images/task1_notebook2.png)
   
 
 
@@ -148,7 +149,8 @@ Create BigQuery External Connection
 
 다음으로, BigQuery 외부 테이블을 생성합니다. 이는 Cloud Storage의 파일로 작업하는 가장 강력한 방법으로, 소스 파일을 직접 가리키는 보장된 스키마를 가진 테이블 정의를 생성하여 스키마 자동 감지 오류의 가능성을 제거합니다. 아래 셀을 실행하세요.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook3.png" alt="notebook3.png"  />
+![alt text](images/task1_notebook3.png)
+
 
 #### **2.2.2 텍스트 리뷰 테이블 확인**
 
@@ -206,10 +208,6 @@ Create Gemini Model
 데이터와 모델이 준비되었으니 첫 번째 분석을 할 차례입니다. 아래 셀에서 Gemini 모델을 호출하여 각 텍스트 리뷰를 읽고 두 가지 작업을 수행합니다: 주요 용어 추출 및 감성 분류.
 
 ```python
-# 이제 소스 테이블이 올바른 스키마를 가지고 있음이 보장되었으므로,
-# 이 간단하고 효율적인 'pass-through' 패턴을 사용할 수 있습니다. 모델은
-# 각 리뷰를 처리하고 나중에 쉽게 조인할 수 있도록 'customer_review_id'를 전달합니다.
-# 텍스트 키워드 분석
 
 table_id_reviews_keywords = f"{PROJECT_ID}.{DATASET_ID}.customer_reviews_keywords"
 sql_analyze_keywords = f"""
@@ -290,37 +288,6 @@ LIMIT 5
 
 ![alt text](images/task1_notebook6.png)
 
-
-```python
-# 객체 테이블의 각 이미지 콘텐츠를 분석하기 위해 Gemini를 호출합니다.
-table_id_image_results = f"{PROJECT_ID}.{DATASET_ID}.review_images_results"
-sql_analyze_images = f"""
-CREATE OR REPLACE TABLE `{table_id_image_results}` AS
-SELECT uri, ml_generate_text_llm_result AS image_analysis_json
-FROM ML.GENERATE_TEXT( MODEL `{GEMINI_MODEL_NAME}`, TABLE `{table_id_review_images}`,
-    STRUCT('For each image, summarize it and extract relevant keywords. Answer in JSON with keys "summary" and "keywords".' AS prompt, TRUE AS flatten_json_output)
-);
-"""
-
-
-print("\nStarting image analysis...")
-
-run_bq_query(sql_analyze_images, client)
-
-# 객체 테이블의 각 비디오 콘텐츠를 분석하기 위해 Gemini를 호출합니다.
-table_id_video_results = f"{PROJECT_ID}.{DATASET_ID}.review_videos_results"
-sql_analyze_videos = f"""
-CREATE OR REPLACE TABLE `{table_id_video_results}` AS
-SELECT uri, ml_generate_text_llm_result AS video_analysis_json
-FROM ML.GENERATE_TEXT( MODEL `{GEMINI_MODEL_NAME}`, TABLE `{table_id_review_videos}`,
-    STRUCT('For each video, summarize it and extract keywords. Answer in JSON with keys "summary" and "keywords".' AS prompt, TRUE AS flatten_json_output)
-);
-"""
-
-print("\nStarting video analysis...")
-
-run_bq_query(sql_analyze_videos, client)
-```
 #### **2.5.2 이미지 및 비디오 분석 샘플 검토**
 
 결과를 더 구체적으로 만들기 위해, 이 셀은 실제 미디어 파일을 해당 AI 생성 분석 결과 바로 아래에 표시합니다. 이는 모델 출력의 품질을 시각적으로 확인하는 좋은 방법입니다.
