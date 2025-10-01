@@ -86,12 +86,14 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 먼저, BigQuery가 Gemini 모델과 작동할 수 있도록 Cloud 리소스 연결을 생성합니다.
 
 1. Google Cloud 콘솔에서 **Navigation menu**(☰)로 이동하여 **BigQuery**를 선택합니다.
-2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 **BigQuery Federation**을 클릭합니다.
+2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
 3. **connection ID**에 gemini_conn을 입력합니다.
 4. **리전 유형**으로 **리전**을 선택한 다음, 드롭다운에서 us-central1을 선택합니다.
 5. **CREATE CONNECTION**를 클릭합니다.
 6. 확인 창이 나타납니다. **GO TO Connections**을 클릭합니다.
 7. **Connection info** 창(us-central1.gemini_conn)에서 **Service account ID**를 찾아 텍스트 편집기에 복사합니다. 다음 단계에서 필요합니다.
+
+<img src="images/task1_gotoconnection.png" alt="gotoconnection.png"  width="348.90" />
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=1>
@@ -110,6 +112,8 @@ Create BigQuery External Connection
 3. **New principals** 필드에 이전에 복사한 Service account를 붙여넣습니다.
 4. **Select a role** 필드에서 **Vertex AI User** 및 **Storage Object Admin** 역할을 선택합니다.
 5. **저장**을 클릭합니다.
+
+<img src="images/task1_iam.png" alt="grant_access.png"  width="348.90" />
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=2>
@@ -150,7 +154,6 @@ Create BigQuery External Connection
 다음으로, BigQuery 외부 테이블을 생성합니다. 이는 Cloud Storage의 파일로 작업하는 가장 강력한 방법으로, 소스 파일을 직접 가리키는 보장된 스키마를 가진 테이블 정의를 생성하여 스키마 자동 감지 오류의 가능성을 제거합니다. 아래 셀을 실행하세요.
 
 ![alt text](images/task1_notebook3.png)
-
 
 #### **2.2.2 텍스트 리뷰 테이블 확인**
 
@@ -339,9 +342,6 @@ Video(video_url, width=640)
 이제 모든 것을 하나로 합쳐 보겠습니다. 다음 쿼리는 원본 리뷰 데이터를 모든 새로운 분석 테이블(텍스트, 이미지, 비디오)과 조인하여 하나의 포괄적인 멀티모달 결과 테이블을 생성합니다.
 
 ```python
-# REGEXP_EXTRACT의 정규 표현식은 하나의 캡처 그룹 `(\\d+)`만 갖도록 수정되었습니다.
-# 이를 통해 파일 이름에서 리뷰 ID를 추출하여 이미지/비디오 분석을 원본 리뷰에 다시 조인할 수 있습니다.
-
 table_id_multimodal_reviews = f"{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews"
 sql_create_multimodal_table = f"""
 CREATE OR REPLACE TABLE `{table_id_multimodal_reviews}` AS
@@ -396,6 +396,8 @@ Create Multimodal Table
 
 이 단계에서는 Notebook에 내장된 생성형 AI Assist를 사용하여 플롯을 생성합니다.
 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/8403d1142e8f1303.png" alt="8403d1142e8f1303.png"  width="624.00" />
+
 1. **+ code** 버튼을 클릭하여 새 코드 셀을 추가합니다.
 2. 새 셀 안에서 **generate** 버튼을 클릭합니다.
 3. 프롬프트 상자에 다음을 주석으로 입력합니다:
@@ -406,68 +408,19 @@ Create Multimodal Table
 plot a bar chart for the distribution of text_sentiment in the multimodal_customer_reviews table
 ```
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/8403d1142e8f1303.png" alt="8403d1142e8f1303.png"  width="624.00" />
-
-제안된 코드를 수락한 다음 셀을 실행하여 차트를 표시합니다. 이는 전반적인 감성 분석에 대한 빠른 개요를 제공합니다. 출력은 다음과 같습니다: (막대 차트 이미지)
+제안된 코드를 수락한 다음 셀을 실행하여 차트를 표시합니다. 이는 전반적인 감성 분석에 대한 빠른 개요를 제공합니다. 출력은 다음과 같습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/a22946ea304fcf84.png" alt="a22946ea304fcf84.png"  width="362.50" />
 
-##### 다음 코드를 통해 차트 결과를 확인하세요:
-
-```python
-# prompt: plot a bar chart for the distribution of text_sentiment in the multimodal_customer_reviews table
-import pandas_gbq
-import pandas as pd
-import matplotlib.pyplot as plt
-import json
-
-# Load the data from BigQuery
-
-sql = f"""
-SELECT sentiment_json_string
-FROM `{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews`
-WHERE sentiment_json_string IS NOT NULL
-"""
-
-df_sentiment = pandas_gbq.read_gbq(sql, project_id=PROJECT_ID, dialect="standard")
-
-# Extract sentiment from the JSON string
-def extract_sentiment(json_string):
-   try:
-       data = json.loads(json_string.replace("```","").replace("json",""))
-       return data.get('sentiment')
-   except json.JSONDecodeError:
-       return None
-
-df_sentiment['text_sentiment'] = df_sentiment['sentiment_json_string'].apply(lambda x : extract_sentiment(x))
-
-print(df_sentiment['text_sentiment'])
-
-# Filter out rows where sentiment could not be extracted
-df_sentiment = df_sentiment.dropna(subset=['text_sentiment'])
-
-# Plotting the bar chart
-plt.figure(figsize=(8, 6))
-df_sentiment['text_sentiment'].value_counts().plot(kind='bar', color=['skyblue', 'lightcoral', 'lightgreen'])
-plt.title('Distribution of Text Sentiment in Multimodal Customer Reviews')
-plt.xlabel('Sentiment')
-plt.ylabel('Number of Reviews')
-plt.xticks(rotation=45)
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-plt.tight_layout()
-plt.show()
-```
-
 #### **2.7.2 감성 분포 시각화 확인**
 
-다음 코드를 통해 알맞은 횟수의 sentiment가 시각화되었는지 확인하세요:
+다음 코드를 통해 알맞은 횟수의 sentiment가 시각화되었는지 확인하세요.
 
 ```sql
 %%bigquery
 SELECT count(customer_id) as count, sentiment_json_string as sentiment FROM `cymbal.multimodal_customer_reviews`
 GROUP BY sentiment_json_string
 ```
-
 
 #### **Hands-on : GenAI로 플롯 생성하기**
 
