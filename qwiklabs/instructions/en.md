@@ -8,14 +8,14 @@
 
 팀 단위의 챌린지 랩(Team Assignments)를 위해, 하나의 챌린지 랩 시나리오에 3명의 팀원들에게 추가적으로 사용자 계정을 부여한 다음, 그에 따라 총 4명의 팀원에게 작업을 할당하게 됩니다.
 
-### Objective
+## Objective
 
 * **데이터 분석 (Analysis):** BQ와 Gemini를 함께 사용하여 이미지, 비디오, 텍스트 등 **멀티모달(multimodal) 고객 리뷰**의 감성(Sentiment)을 분석합니다.
 * **세분화 및 타겟팅 (Segment & Target):** EDA를 통해 고객을 세분화(Segmentation)하고, 특히 **부정적인 피드백을 남긴 고객**을 식별하여 이들을 위한 맞춤형 프로모션 메시지를 생성합니다.
 * **모델링 및 예측 (Model & Predict):** 더 나은 제품 추천 모델을 만들기 위해 추가 EDA를 진행하고 피처(feature)를 도출한 뒤, BigQuery Studio의 Data Science Agent(DSA)를 활용해 고급 추천 모델을 구축하고 예측 결과를 BigQuery 테이블로 저장합니다.
 * **자동화 및 실행 (Automate & Activate):** BigQuery의 고객 경험 기반의 데이터 분석 결과를 **Application Integration**을 통해 맞춤형 이메일을 자동으로 전송하는 워크플로우를 구축하여 확보된 인사이트를 즉각적인 마케팅 활동으로 연결합니다.
 
-### Scenario
+## Scenario
 
 온라인 리테일러인 Cymbal E-Commerce는 온라인 플랫폼을 강화하여 변화하는 고객 요구에 신속하게 적응하는 것을 목표로 합니다. 이를 달성하기 위해, 고객의 데이터를 분석하고, BigQuery와 Gemini를 활용해서 고객 이탈률을 최소화하는 방안을 구축하고 있습니다.
 
@@ -23,7 +23,7 @@
 
 Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지하고 Google Cloud를 선택했습니다. Google Cloud의 최첨단 AI 기술은 이 지능형 솔루션을 개발하고 확장하는 데 필요한 강력한 기반을 제공하며, 리테일 산업에서 Cymbal E-Commerce의 선도적인 입지를 공고히 할 것입니다.
 
-### Your Challenge
+## Your Challenge
 
 여러분의 핵심 과제는 이 전략적 계획을 신속하게 발전시키는 것입니다. 여기에는 BigQuery를 사용하여 고객 피드백을 신속하게 분석하는 작업이 포함되며, 이는 맞춤형 캠페인 전략을 수립하고 구체화하는 데 활용됩니다. 여러분은 다양한 채널에서 이러한 캠페인을 실행해야 하며, 이때에도 BigQuery의 여러 기능을 활용하여 각 채널에 맞는 매력적인 콘텐츠를 제작해야 합니다.
 
@@ -31,7 +31,7 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 특히, 이 BQML를 사용하여 마케팅 전략을 수립하고 실행 및 테스트 프로세스 속도를 획기적으로 높일 수 있습니다.
 
-### Task Outline
+## Task Outline
 
 * Task 1: Analyzing Multimodal Customer Reviews for Marketing Insights
 * Task 2: Segmenting Customers for Targeted Marketing  
@@ -40,21 +40,20 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 * Task 5: Enhancing Product Recommendations ML model
 * Task 6: Sending a customized email with Application Integrations
 
-### Task Dependencies
+## Task Dependencies
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/2bdc11dcabc95304.png" alt="2bdc11dcabc95304.png"  width="624.00" />
 
 
 
-## Step 1: 마케팅 인사이트를 위한 고객 리뷰 멀티모달 분석
+## Task 1: 마케팅 인사이트를 위한 고객 리뷰 멀티모달 분석
 
 
-
-##### **Overview**
+#### **Overview**
 
 고객 리뷰 분석 실습에 오신 것을 환영합니다! 이 작업에서는 텍스트뿐만 아니라 이미지와 동영상을 포함하는 멀티모달 고객 리뷰 데이터를 다루게 됩니다. 우리의 목표는 BigQuery와 Vertex AI의 Gemini Pro 모델의 강력한 기능을 활용하여 이 다양한 데이터를 처리하고, 그 결과로 얻은 인사이트를 통합하여 고객 경험에 대한 이해를 얻고 이를 적용 할 수 있게 하는 것입니다.
 
-##### **Objective**
+#### **Objective**
 
 * BigQuery Studio에서 챌린지 실습 Notebook을 설정하고 실행합니다.
 * 외부 테이블을 생성하여 Cloud Storage에 저장된 파일의 데이터를 직접 쿼리합니다.
@@ -62,11 +61,11 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 * 모든 분석 결과를 하나의 포괄적인 테이블로 통합합니다.
 * 감성 분포와 시간 경과에 따른 추세를 시각화하여 실행 가능한 비즈니스 인사이트를 도출합니다.
 
-##### **Setup**
+#### **Setup**
 
 이 초기 설정은 BigQuery와 Cloud Storage가 Vertex AI Gemini 모델과 통신할 수 있도록 권한을 구성하는 과정을 포함합니다.
 
-### **시작하기 전: Cloud Storage의 샘플 데이터 탐색**
+#### **시작하기 전: Cloud Storage의 샘플 데이터 탐색**
 
 실습 단계를 시작하기 전에 작업할 샘플 데이터를 간단히 살펴보겠습니다. Cloud Storage Bucket에서 고객 리뷰 텍스트, 이미지, 비디오에 직접 액세스하여 볼 수 있습니다. 이를 통해 멀티모달 데이터를 더 잘 이해할 수 있습니다.
 
@@ -105,7 +104,7 @@ Create BigQuery External Connection
 
 연결과 연관된 서비스 계정은 Vertex AI 및 Cloud Storage에 액세스할 수 있는 권한이 필요합니다.
 
-###### **Vertex AI User / Storage Object Admin 역할 부여**
+##### **Vertex AI User / Storage Object Admin 역할 부여**
 
 1. **Navigation menu**(☰)로 이동하여 **IAM 및 관리자 &gt; IAM**을 선택합니다.
 2. **+ Grant Access**를 클릭합니다.
@@ -144,8 +143,6 @@ Create BigQuery External Connection
 
 이 셀은 실행 완료 시 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며,
 분석을 위한 전역 변수를 설정합니다.
-
-
 
 
 #### **2.2.1 텍스트 리뷰 외부 테이블 생성**
@@ -280,7 +277,7 @@ SELECT * FROM `cymbal.multimodal_customer_reviews` where video_uri is not null
 
 출력은 다음과 같습니다.
 
-#####  <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/375c9ea3f9add6e.png" alt="375c9ea3f9add6e.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/375c9ea3f9add6e.png" alt="375c9ea3f9add6e.png"  width="624.00" />
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=5>
@@ -365,7 +362,7 @@ Finally, create a grouped bar chart where each age group shows the total count o
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/6e07c46c14efd6f9.png" alt="6e07c46c14efd6f9.png"  width="624.00" />
 
-**모든 성별 카테고리에 걸쳐 긍정, 부정, 중립 리뷰의 총 수를 비교하는 그룹화된 막대 차트 생성하기.**
+###### 모든 성별 카테고리에 걸쳐 긍정, 부정, 중립 리뷰의 총 수를 비교하는 그룹화된 막대 차트 생성하기.
 
 ```
 # 고객 감성이 성별에 따라 다른지 분석하고 싶어.
@@ -394,8 +391,6 @@ Visualize Sentiment Trends
 
 
 ## Task 2: 고객 세분화를 통한 타겟 마케팅
-
-
 
 **개요**
 
