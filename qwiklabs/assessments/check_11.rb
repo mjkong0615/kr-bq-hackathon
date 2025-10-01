@@ -2,11 +2,24 @@
 def check_11(handles:, maximum_score:, resources:)
   bigquery = handles['project_0.BigqueryV2']
   ret_hash = { :score => 0, :message => "", :student_message => "" }
-  isAvailable = true
+  isAvailable = false
+
+  begin
+    segment_top_products_ranked_object = bigquery.get_table("cymbal".to_s, "segment_top_products_ranked".to_s ) || []
+    city_top_products_ranked_object = bigquery.get_table("cymbal".to_s, "city_top_products_ranked".to_s ) || []
+  rescue 
+    isAvailable = false
+  end 
+
+  if segment_top_products_ranked_object && city_top_products_ranked_object 
+    isAvailable = true
+  end 
+
   if isAvailable 
-    ret_hash = { :done => true, :score => maximum_score, :message => "Assessment completed!", :student_message => "step3 completed!"}
+    success_message = "테이블이 정상적으로 생성되었습니다."
+    ret_hash = { :done => true, :score => maximum_score, :message => success_message, :student_message => success_message}
   else
-    error_message = 'Please create the BigQuery dataset.'
+    error_message = "다시 한 번 절차를 확인해보세요!"
     ret_hash[:message] = error_message
     ret_hash[:student_message] = error_message
   end
