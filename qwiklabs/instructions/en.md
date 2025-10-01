@@ -1320,9 +1320,7 @@ Upload a file to Bucket
 
 ## Task 6: 다중 소스 데이터를 결합한 지능형 고객 리인게이지먼트
 
-
-
-#### **Overview**
+#### Overview
 
 이 작업에서는 이전 단계들에서 생성된 여러 데이터 소스를 실시간으로 결합하여, 이탈 징후를 보이는 '부정적 고객(negative customer)'에게 맞춤화된 추천 이메일을 자동으로 발송하는 파이프라인을 완성합니다.
 
@@ -1330,13 +1328,13 @@ BigQuery 연속 쿼리(CQ)가 **두 가지 핵심 데이터**를 실시간으로
 
 <div><ql-infobox>
 
-**활용할 데이터 소스:**
+#### 활용할 데이터 소스
 
 1. **Task 3의 결과 (고객 세그먼트):** 고객의 활동을 분석하여 '이탈 위험' 또는 '부정적 경험' 세그먼트로 분류된 고객 리스트 . 이 테이블에는 customer_id와 segment_name와 고객 세그먼트에서 가장 인기 있거나 선호되는 제품 데이터가 포함됩니다
 2. **Task 5의 결과 (AI 추천 모델):** BigQuery ML의 추천 모델이 각 개별 고객을 위해 생성한 최신 맞춤 추천 제품 리스트. 이 테이블에는 customer_id 와 recommended_products가 포함되어 있습니다.
 </ql-infobox></div>
 
-**Objective**
+#### Objective
 
 이 실습에서는 다음 방법을 배웁니다:
 
@@ -1346,17 +1344,19 @@ BigQuery 연속 쿼리(CQ)가 **두 가지 핵심 데이터**를 실시간으로
 * Gemini를 사용하여 이메일 텍스트를 생성하는 연속 쿼리를 BigQuery에서 생성하기
 * 연속 쿼리를 테스트하기 위해 결합된 데이터, negative_customer_recommended_products 에 데이터 추가
 
-##### **Setup**
+Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 예상되는 이메일 시나리오를 스크린샷으로 제공합니다. 
+
+#### Setup
 
 이 실습에서는 시뮬레이션이나 데모 환경이 아닌 실제 클라우드 환경에서 직접 실습 활동을 수행할 수 있습니다. 실습 시간 동안 Google Cloud에 로그인하고 액세스하는 데 사용할 수 있는 새로운 임시 사용자 인증 정보가 제공됩니다. Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 이 랩에서는 이메일 결과 확인을 위해 같은 계정에 이메일을 발송해서 받아보도록 되어있습니다.
 
-#### **작업 1. BigQuery ML 원격 모델 생성 및 구성**
+#### 1. BigQuery ML 원격 모델 생성 및 구성
 
 이 작업을 위해 continuous_queries라는 BigQuery 데이터세트와 negative_cutomer_recommended_products라는 새로운 값을 인서트할 빈 테이블을 포함한 여러 리소스가 미리 생성되어 있습니다.
 
 이 작업에서는 워크플로우를 위한 개인화된 이메일 콘텐츠를 생성하기 위해 엔드포인트로 Gemini 2.5 Flash Lite를 사용하는 BigQuery ML 원격 모델을 포함한 추가 BigQuery 리소스를 생성하고 구성합니다.
 
-**BigQuery 원격 Connection 생성**
+##### 1.1 BigQuery 원격 Connection 생성
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Explorer** 창에서 **+ Add Data**를 클릭한 다음, **Vertex AI**를 검색합니다. 결과에서 **Vertex AI**를 클릭하세요.
@@ -1366,7 +1366,7 @@ BigQuery 연속 쿼리(CQ)가 **두 가지 핵심 데이터**를 실시간으로
 6. **Create connection**을 클릭한 다음, **Go to connection**을 클릭합니다 (페이지 하단 메시지)
 7. **Connection info** 페이지에서 다음 섹션에서 사용할 **Service account ID**를 복사합니다. 예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com
 
-**BigQuery 서비스 계정에 Vertex AI용 IAM 역할 부여**
+##### 1.2 BigQuery 서비스 계정에 Vertex AI용 IAM 역할 부여
 
 1. Google Cloud 콘솔의 **Navigation menu**()에서 **IAM & Admin** &gt; **IAM**을 선택합니다.
 2. **Grant access**를 클릭합니다.
@@ -1374,15 +1374,12 @@ BigQuery 연속 쿼리(CQ)가 **두 가지 핵심 데이터**를 실시간으로
 4. **Select a role**에서 **Vertex AI** &gt; **Vertex AI User**를 선택합니다.
 5. **Save**를 클릭합니다.
 
-**BigQuery ML 원격 모델 생성**
+##### 1.3 BigQuery ML 원격 모델 생성
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Untitled query**를 클릭하여 빈 쿼리 창에 액세스합니다.
 3. BigQuery ML 모델을 생성하기 위해 다음 쿼리를 복사하여 붙여넣고, **Run**을 클릭합니다.
 SQL
-
-
-# Create a BigQuery ML remote model named gemini_2_0_flash
 
 ```sql
 CREATE MODEL `Project ID.continuous_queries.gemini_2_5_flash_lite`
@@ -1396,13 +1393,14 @@ OPTIONS(endpoint = 'gemini-2.0-flash');
 <ql-activity-tracking step=16>
 Create Gemin_2_0_flash Model
 </ql-activity-tracking>
-#### **작업 2. 사용자 지정 서비스 계정에 BigQuery 및 Pub/Sub 리소스 접근 권한 부여**
+
+#### 2 사용자 지정 서비스 계정에 BigQuery 및 Pub/Sub 리소스 접근 권한 부여
 
 이 작업을 위해 recapture_customer라는 Pub/Sub 토픽과 bq-continuous-query-sa@Project ID.iam.gserviceaccount.com이라는 사용자 지정 서비스 계정을 포함한 여러 리소스가 미리 생성되어 있습니다.
 
 이 작업에서는 이후 작업에서 개인화된 이메일을 생성하고 보내는 데 사용될 BigQuery 데이터세트, 원격 모델 및 Pub/Sub 토픽에 대한 접근 권한을 사용자 지정 서비스 계정에 부여합니다.
 
-**사용자 지정 서비스 계정에 BigQuery 데이터세트 및 원격 모델 접근 권한 부여**
+##### 2.1 사용자 지정 서비스 계정에 원격 모델 접근 권한 부여
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
@@ -1411,15 +1409,18 @@ Create Gemin_2_0_flash Model
 5. **Add principal**을 클릭합니다.
 6. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 7. **Select a role**에서 **BigQuery** &gt; **BigQuery Connection User**를 선택합니다.
-8. **Save**를 클릭한 다음, **Close**를 클릭합니다.
-9. **Explorer** 창에서 버려진 장바구니 테이블을 포함하는 데이터세트의 이름인 continuous_queries를 클릭합니다.
-10. **Dataset info** 페이지에서 **Sharing**을 클릭하고 **Permissions**를 선택합니다.
-11. **Add principal**을 클릭합니다.
-12. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
-13. **Select a role**에서 **BigQuery** &gt; **BigQuery Data Editor**를 선택합니다.
-14. **Save**를 클릭한 다음, **Close**를 클릭합니다.
+8. **Save**를 클릭한 다음, **Close**를 클릭합니다
 
-**사용자 지정 서비스 계정에 Pub/Sub Viewer 및 Pub/Sub Publisher 역할 부여**
+##### 2.2 사용자 지정 서비스 계정에 BigQuery 데이터세트 접근 권한 부여
+
+1. **Explorer** 창에서 고객 리뷰 테이블을 포함하는 데이터세트의 이름인 continuous_queries를 클릭합니다.
+2. **Dataset info** 페이지에서 **Sharing**을 클릭하고 **Permissions**를 선택합니다.
+3. **Add principal**을 클릭합니다.
+4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
+5. **Select a role**에서 **BigQuery** &gt; **BigQuery Data Editor**를 선택합니다.
+6. **Save**를 클릭한 다음, **Close**를 클릭합니다.
+
+##### 2.3 사용자 지정 서비스 계정에 Pub/Sub Viewer 및 Pub/Sub Publisher 역할 부여
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **Pub/Sub**을 검색하고 클릭합니다.
 2. recapture_customer 행에서 **More Actions**(세로 점 3개)를 클릭하고, **View permissions**를 선택합니다.
@@ -1435,13 +1436,13 @@ Create Gemin_2_0_flash Model
 Check Pub/Sub role
 </ql-activity-tracking>
 
-#### **작업 3. Application Integration 트리거 생성 및 구성**
+#### 3. Application Integration 트리거 생성 및 구성
 
 Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Service) 솔루션으로, 특정 비즈니스 운영을 지원하기 위해 통합되어야 하는 여러 애플리케이션과 데이터를 연결하고 관리하는 도구 세트를 제공하며, 이를 통합(integration)이라고 합니다. 트리거(trigger)는 통합에서 작업 또는 작업 시퀀스를 시작하는 외부 이벤트로, Pub/Sub 토픽의 이벤트를 기반으로 하는 Pub/Sub 트리거 등이 있습니다. 트리거는 통합의 진입점이라고 생각할 수 있으며, 트리거에 연결된 이벤트는 트리거와 관련된 작업이 실행되도록 합니다.
 
 이 작업에서는 Pub/Sub 토픽으로 새 메시지가 전송될 때 통합을 실행하는 Application Integration 트리거를 생성하고 구성합니다. 통합의 출력은 버려진 장바구니의 고객에게 전송되는 이메일입니다.
 
-**Pub/Sub 트리거 생성**
+##### 3.1 Pub/Sub 트리거 생성
 
 1. Google Cloud 콘솔 검색창(페이지 상단)에 **Application Integration**을 입력한 다음, 결과 목록에서 **Application Integration**을 클릭합니다.
 2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.
@@ -1456,7 +1457,7 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 * 목록에 보이지 않으면 **Refresh list**를 클릭하세요.
 * **Grant the necessary roles**라는 경고가 표시되면 **Grant**를 클릭하세요.
 
-**Pub/Sub 트리거를 위한 데이터 매핑 변수 구성**
+##### 3.2 Pub/Sub 트리거를 위한 데이터 매핑 변수 구성
 
 1. 캔버스 상단에서 **Tasks**(Triggers 옆)를 클릭합니다.
 2. 검색창에 Data Mapping을 입력합니다.
@@ -1468,7 +1469,7 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 5. 캔버스에서 **Data Mapping** 항목을 클릭하고, **Open Data Mapping Editor**를 클릭합니다.
 6. 다음 단계에서는 각각 CloudPubSubMessage.data 유형의 입력 변수 네 개를 만듭니다.
 
-**변수 1. message_output**
+- **[변수 1] message_output**
 
 1. **Input** 아래에서 **Variable or Value**를 클릭합니다.
 2. **Variable**을 선택한 다음, **CloudPubSubMessage.data**를 선택합니다. **Save**를 클릭합니다.
@@ -1479,7 +1480,8 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 7. **Blank default value means**에서 **Empty string**을 활성화합니다.
 8. **Create**를 클릭합니다.
 
-**변수 2. customer_message** 방금 Input에 함수가 포함되지 않은 변수 하나를 만들었습니다. 이제 Input에 두 개의 함수가 포함된 다른 변수를 만듭니다.
+- **[변수 2] customer_message** 
+방금 Input에 함수가 포함되지 않은 변수 하나를 만들었습니다. 이제 Input에 두 개의 함수가 포함된 다른 변수를 만듭니다.
 
 1. **Input** 아래에서 **Variable or Value**를 클릭합니다.
 2. **Variable**을 선택한 다음, **CloudPubSubMessage.data**를 선택합니다. **Save**를 클릭합니다.
@@ -1494,7 +1496,8 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 11. **Blank default value means**에서 **Empty string**을 활성화합니다.
 12. **Create**를 클릭합니다.
 
-**변수 3 및 4. customer_email 및 customer_name** 이전 섹션의 1~12단계를 반복하여 다음 정보를 사용하여 두 개의 변수를 더 만듭니다:
+- **[변수 3 및 4] customer_email 및 customer_name** 
+이전 섹션의 1~12단계를 반복하여 다음 정보를 사용하여 두 개의 변수를 더 만듭니다:
 
 | GET_PROPERTY()의 값 | 출력 이름 |
 | --- | --- |
@@ -1512,7 +1515,7 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 &lt;img width="508" height="281" alt="Image" src="https://github.com/user-attachments/assets/b15be4da-e679-49f6-b8a4-96d68f574138" /&gt;
 
-**이메일 보내기 작업 추가**
+#### 3.3 이메일 보내기 작업 추가
 
 1. 화면 상단의 **Data Mapping Task Editor** 옆에 있는 뒤로 가기 화살표(&lt;-)를 클릭하여 캔버스로 돌아갑니다.
 2. 브라우저 탭을 복제합니다 (현재 탭에서 마우스 오른쪽 버튼을 클릭하고 **Duplicate(복제)** 선택).
@@ -1551,11 +1554,11 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 Create and publish Application Integration
 </ql-activity-tracking>
 
-**작업4. BigQuery에서 Gemini로 이메일 텍스트를 생성하는 연속 쿼리(continuous query) 만들기**
+#### 4. BigQuery에서 Gemini로 이메일 텍스트를 생성하는 연속 쿼리(continuous query) 만들기**
 
 이전 태스크에서, BigQuery ML 원격 모델 및 Pub/Sub용 Application Integration 트리거와 같이 통합에 필요한 다양한 구성 요소를 생성하고 구성했습니다. 이 태스크에서는 워크플로우의 마지막 조각을 생성합니다. 즉, 새로 추천되는 제품이 있는지 BigQuery 테이블을 모니터링하고, 해당 고객을 위한 맞춤형 프로모션 이메일을 생성하도록 Gemini에 요청을 보낸 다음, 개인화된 이메일 콘텐츠를 Pub/Sub 주제(topic)에 작성하는 연속 쿼리(continuous query)를 생성합니다.
 
-**BigQuery Enterprise reservation 만들기**
+##### 4.1 BigQuery Enterprise reservation 만들기
 
 * Google Cloud 콘솔에서 **Navigation 메뉴**() &gt; **BigQuery** &gt; **Capacity Management**를 클릭합니다.
 * **Create reservation**을 클릭합니다.
@@ -1566,7 +1569,7 @@ Create and publish Application Integration
 * Baseline slots에 **50**을 입력합니다.
 * **저장**을 클릭합니다.
 
-**Assignment 만들기**
+##### 4.2 Assignment 만들기
 
 예약이 생성된 후, slot reservation table에서 bq-continuous-queries-reservation 이름의 예약 행을 찾습니다.
 
@@ -1576,7 +1579,7 @@ Create and publish Application Integration
 * **Create**를 클릭합니다.
 * bq-continuous-queries-reservation 예약 옆의 화살표를 확장하여 projects/Project ID로 표시되는 새 할당을 볼 수 있습니다.
 
-**BigQuery에서 continuous query 만들기**
+##### 4.3 BigQuery에서 continuous query 만들기
 
 * BigQuery 왼쪽 메뉴에서 **Studio**를 클릭합니다.
 * **Untitled Query**를 클릭하여 빈 쿼리 창에 액세스합니다.
@@ -1633,7 +1636,7 @@ SELECT
 
 내 진행 상황 확인(Check my progress)을 클릭하여 목표를 확인합니다 
 
-**작업5. 연속 쿼리를 테스트하기 위해 Task3와 데이터와 Task6의 데이터를 가공하여 'negative_customer_recommended_products' 테이블에 데이터 추가하기**
+#### 5. 연속 쿼리를 테스트하기 위해 Task3와 데이터와 Task6의 데이터를 가공하여 'negative_customer_recommended_products' 테이블에 데이터 추가하기
 
 마지막 태스크에서는 negative_customer_recommended_products 테이블에 일부 데이터를 추가하여, 고객에게 개인화된 이메일을 보내는 통합(integration)을 시작함으로써 연속 쿼리를 테스트합니다.
 
