@@ -1331,7 +1331,7 @@ BigQuery 연속 쿼리(CQ)가 **두 가지 핵심 데이터**를 실시간으로
 #### 활용할 데이터 소스
 
 1. **Task 3의 결과 (고객 세그먼트):** 고객의 활동을 분석하여 '이탈 위험' 또는 '부정적 경험' 세그먼트로 분류된 고객 리스트 . 이 테이블에는 customer_id와 segment_name와 고객 세그먼트에서 가장 인기 있거나 선호되는 제품 데이터가 포함됩니다
-2. **Task 5의 결과 (AI 추천 모델):** BigQuery ML의 추천 모델이 각 개별 고객을 위해 생성한 최신 맞춤 추천 제품 리스트. 이 테이블에는 customer_id 와 recommended_products가 포함되어 있습니다.
+2. **Task 5의 결과 (맞춤 추천 제품 리스트):** BigQuery ML의 추천 모델이 각 개별 고객을 위해 생성한 최신 맞춤 추천 제품 리스트. 이 테이블에는 customer_id 와 recommended_products가 포함되어 있습니다.
 </ql-infobox></div>
 
 #### Objective
@@ -1348,7 +1348,8 @@ Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니
 
 #### Setup
 
-이 실습에서는 시뮬레이션이나 데모 환경이 아닌 실제 클라우드 환경에서 직접 실습 활동을 수행할 수 있습니다. 실습 시간 동안 Google Cloud에 로그인하고 액세스하는 데 사용할 수 있는 새로운 임시 사용자 인증 정보가 제공됩니다. Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 이 랩에서는 이메일 결과 확인을 위해 같은 계정에 이메일을 발송해서 받아보도록 되어있습니다.
+이 실습에서는 시뮬레이션이나 데모 환경이 아닌 실제 클라우드 환경에서 직접 실습 활동을 수행할 수 있습니다. 실습 시간 동안 Google Cloud에 로그인하고 액세스하는 데 사용할 수 있는 새로운 임시 사용자 인증 정보가 제공됩니다.
+Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 
 
 #### 1. BigQuery ML 원격 모델 생성 및 구성
 
@@ -1535,7 +1536,6 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/22b44f7f0dfa1df3.png" alt="22b44f7f0dfa1df3.png"  width="624.00" />
 
-&lt;img width="508" height="281" alt="Image" src="https://github.com/user-attachments/assets/b15be4da-e679-49f6-b8a4-96d68f574138" /&gt;
 
 #### 3.3 이메일 보내기 작업 추가
 
@@ -1666,13 +1666,10 @@ SELECT
 
 #### 5. 연속 쿼리를 테스트하기 위해 Task3와 데이터와 Task6의 데이터를 가공하여 'negative_customer_recommended_products' 테이블에 데이터 추가하기
 
-마지막 태스크에서는 negative_customer_recommended_products 테이블에 일부 데이터를 추가하여, 고객에게 개인화된 이메일을 보내는 통합(integration)을 시작함으로써 연속 쿼리를 테스트합니다.
+마지막 태스크에서는 negative_customer_recommended_products 테이블에 일부 데이터를 추가하여, 고객에게 개인화된 이메일을 보내는 Application integration 작업을 시작함으로써 연속 쿼리를 테스트합니다.
 
 1. BigQuery에서 **제목 없는 쿼리** 오른쪽에 있는 **+** 아이콘(**SQL 쿼리**)을 클릭하여 새 쿼리 창을 엽니다.
 2. 다음 쿼리를 복사하여 Task3과 Task6에서 얻은 추천 정보를 JOIN하여 테이블에 데이터를 삽입하고 **실행**을 클릭합니다.
-
-* (원하는 경우 'Name'을 본인 이름으로 바꿀 수 있습니다. 생성된 이메일에 접근하고 싶다면 'User Email'을 본인의 이메일 주소로 바꿀 수도 있습니다.)
-* (아래 쿼리에 포함된 랩 사용자 이름(User Email)을 그대로 사용하면 생성된 이메일에 접근할 수 없습니다.)
 
 ```sql
 -- 'negative_customer_recommended_products' 테이블에 테스트 데이터를 삽입합니다.
@@ -1702,12 +1699,11 @@ LIMIT 3;
 
 결과창에 **이 문(statement)이 negative_customer_recommended_products에 1개의 행을 추가했습니다**라는 메시지가 표시되면 이 태스크를 완료한 것입니다.
 
+* 실제 이메일 전송 기능을 활용하기 위해서는 Google Cloud Platform의 일반 사용자 계정이 필요합니다.
+
 
 ![alt text](images/task6_email.png)
 
 
 워크플로우 구축을 완료 하면, 위와 같이 이메일이 제작됩니다.
 이메일로 전송될 추천 제품 테이블에 새 행을 삽입함으로써, negative sentiment을 가진 사용자에 대한 맞춤형 이메일을 보내는 워크플로우를 구축했습니다. 
-
-
-* 실제 이메일 전송 기능을 활용하기 위해서는 Google Cloud Platform의 일반 사용자 계정이 필요합니다.
