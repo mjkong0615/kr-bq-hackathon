@@ -1287,23 +1287,21 @@ Checkpoint 3
 }
 
 
-## Task 3: 불만족 고객을 위한 맞춤형 프로모션 이메일 메시지 생성
+## Task 3: 불만족 고객을 위한 맞춤형 프로모션 상품 추천 및 평가
 
 
 
 **개요**
 
-Task 3에서는 Task 1에서 식별된 불만족 리뷰와 Task 2에서 정의된 고객 세그먼트 및 페르소나 정보를 활용하여, 불만족한 고객의 재참여를 유도하기 위해 개인화된 프로모션 이메일 메시지를 생성합니다. 
-
-Gemini와 BigQuery ML을 사용하여 고객의 부정적인 피드백을 고려해 관련성 높은 제품 추천 및 맞춤형 혜택을 제공하는 이메일 콘텐츠를 자동으로 생성하고 이를 BigQuery 테이블에 저장합니다.
+Task 3에서는 Task 1에서 식별된 불만족 리뷰와 Task 2에서 정의된 고객 세그먼트 및 페르소나 정보를 활용하여, 불만족한 고객의 재참여를 유도하기 위해 개인화된 상품 추천을 수행하고, 이 추천을 평가합니다.
 
 **목표**
 
 * 감성 분석 기반 부정적 피드백 고객 식별
 * 식별된 고객의 세그먼트 프로파일 및 지리 정보 검색
-* 해당 고객 세그먼트 내 최고 인기 구매 제품 조회
-* 맞춤형 프로모션 및 개인화 제품 추천 이메일 메시지 생성
-* 생성된 맞춤형 이메일 콘텐츠를 BigQuery 테이블에 저장
+* 각 세그먼트 및 지역 내 최고 인기 구매 제품을 조회하는 SQL 쿼리 작성
+* 맞춤형 프로모션 제품 추천
+* Gemini를 사용해 제품 추천을 평가하는 Python 코드 및 SQL 쿼리 작성
 
 <div><ql-warningbox>
 
@@ -1313,89 +1311,19 @@ Gemini와 BigQuery ML을 사용하여 고객의 부정적인 피드백을 고려
 **노트북 업로드**
 
 1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
-2. https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task3.ipynb를 입력합니다.
-3. 새로운 노트북 탭이 열립니다. 이 노트북의 셀들을 실행하여 태스크 3을 진행하겠습니다.
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
+2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task3.ipynb를 입력합니다.
+3. Region: us-central-1을 선택합니다.
+4. "Upload" 버튼을 누른 후, 화면 하단의 "Go to notebook" 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 3을 진행하겠습니다.
 
 **1. Task 3 환경 초기화**
 
 태스크 셋업을 위해 초기 설정 셀을 실행합니다. 이 셀은 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며, 이 랩에서 사용될 주요 변수(예: PROJECT_ID, DATASET_ID)를 정의합니다.
 
-```python
-# 태스크 3에 필요한 라이브러리를 가져오고 클라이언트 및 변수를 초기화합니다.
-
-from google.cloud import bigquery
-import pandas as pd
-import pandas_gbq
-from IPython.display import display
-
-# 위의 셀에 PROJECT_ID가 정의되어 있는지 확인
-# 이 셀을 실행하기 전, 위에서 프로젝트 ID를 입력하는 셀을 반드시 실행해야 합니다.
-
-if 'PROJECT_ID' not in locals() or not PROJECT_ID:
-
-    raise ValueError("ERROR: PROJECT_ID is not set. Please run the 'Set Your Project ID' cell above first.")
-
-GCS_BUCKET_URI = f'gs://{PROJECT_ID}-bucket'
-CSV_GCS_URI = f'{GCS_BUCKET_URI}/products.csv'
-client = bigquery.Client(project=PROJECT_ID, location="us-central1")
-DATASET_ID = 'cymbal'
-TABLE_ID_CUSTOMERS = f"{PROJECT_ID}.{DATASET_ID}.customers"
-table_id_multimodal_reviews = f"{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews"
-GEMINI_MODEL_NAME = f'{PROJECT_ID}.{DATASET_ID}.gemini_flash_model'
-table_id_segment_level_analysis = f"{PROJECT_ID}.{DATASET_ID}.segment_level_gemini_analysis"
-print(f"BigQuery Client Initialized for Project ID: {PROJECT_ID}")
-
-def run_bq_query(sql: str, client: bigquery.Client):
-
-    try:
-        query_job = client.query(sql)
-        print(f"Job {query_job.job_id} in state {query_job.state}")
-        if query_job.statement_type == 'SELECT':
-            df = query_job.to_dataframe()
-            print(f"Query complete. Fetched {len(df)} rows.")
-            return df
-        else:
-            query_job.result()
-            print(f"Query for statement type {query_job.statement_type} complete.")
-            return None
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-```
-
 **2. 불만족 리뷰 고객 식별**
 
-이 단계에서는 final_customer_insights 테이블의 sentiment_json_string 칼럼에서 감성 분석 결과가 "negative"인 고객의 customer_id 목록을 추출하고, negative_customers_list라는 BigQuery 테이블로 저장합니다.
-
-```python
-sql_get_negative = f"""
-
-CREATE OR REPLACE TABLE `cymbal.negative_customers_list` AS
-SELECT
-    customer_id
-FROM
-    `cymbal.final_customer_insights`
-WHERE
-    ((JSON_EXTRACT_SCALAR(sentiment_json_string, '$.sentiment') = 'negative') OR (JSON_EXTRACT_SCALAR(sentiment_json_string, '$.sentiment') = 'neutral'))
-GROUP BY customer_id;
-"""
-
-df_negative_customers = run_bq_query(sql_get_negative, client)
-if df_negative_customers is not None:
-    display(df_negative_customers)
-```
-
-생성된 negative_customers_list 테이블을 확인합니다.
-
-```python
-sql_show_table = "SELECT * FROM `cymbal.negative_customers_list` LIMIT 5;"
-
-print("Fetching data from the new table...")
-
-df_new_table_contents = run_bq_query(sql_show_table, client)
-if df_new_table_contents is not None:
-   display(df_new_table_contents)
-```
+이 단계에서는 final_customer_insights 테이블의 sentiment_json_string 칼럼에서 감성 분석 결과가 "negative" 혹은 "neutral"인 고객의 customer_id 목록을 추출하고, negative_customers_list라는 BigQuery 테이블로 저장합니다.
+제공된 코드를 실행하여 다음 단계로 넘어갑니다.
 
 **3. 불만족 고객의 세그먼트 및 지리적 데이터 검색**
 
@@ -1403,29 +1331,6 @@ Step 2에서 식별된 불만족 고객에 대한 데이터를 가져옵니다.
 
 customers 테이블에서 address_city를 추출하고, final_customer_insights에서 persona_age_group_profile 정보를 추출해 negative_customer_segment_data 테이블에 저장합니다.
 
-```python
-sql_create_negative_segment_data = f"""
-
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.negative_customer_segment_data` AS
-SELECT
-    ncl.customer_id,
-    t1.persona_age_group_profile,
-    t2.address_city
-FROM
-    `{DATASET_ID}.negative_customers_list` AS ncl
-JOIN
-    `{DATASET_ID}.final_customer_insights` AS t1 ON ncl.customer_id = t1.customer_id
-JOIN
-    `{DATASET_ID}.customers` AS t2 ON ncl.customer_id = t2.customer_id;
-"""
-
-run_bq_query(sql_create_negative_segment_data, client)
-sql_show_table = "SELECT * FROM `cymbal.negative_customer_segment_data` LIMIT 5;"
-print("Fetching data from the new table...")
-df_new_table_contents = run_bq_query(sql_show_table, client)
-if df_new_table_contents is not None:
-   display(df_new_table_contents)
-```
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=10>
@@ -1434,75 +1339,22 @@ if df_new_table_contents is not None:
 
 **4. 세그먼트, 도시별 인기 제품 추출 및 최종 추천 상품 결정**
 
-각 불만족 고객이 속한 세그먼트(persona_age_group_profile)와 거주 도시(address_city) 내에서 다른 고객들이 가장 많이 구매한 제품을 조회하여 이 제품들을 개인화된 이메일 추천에 활용합니다. 세그먼트의 인기 상품 2개, 거주 도시의 인기 상품 2개의 정보를 top_products 테이블로 저장합니다.
+각 불만족 고객이 속한 세그먼트(persona_age_group_profile)와 거주 도시(address_city) 내에서 다른 고객들이 가장 많이 구매한 제품을 조회하여 이 제품들을 개인화된 상품 추천에 활용합니다. 각 세그먼트별 상위 2개 인기 제품과 각 도시별 상위 2개 인기 제품을 각각 cymbal.segment_top_products_ranked 테이블과 cymbal.city_top_products_ranked 테이블로 저장하는 SQL 쿼리를 직접 작성합니다.
 
-```python
-sql_create_segment_top_products = f"""
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.segment_top_products_ranked` AS
-WITH SegmentProductsRanked AS (
-    SELECT
-        fci.persona_age_group_profile,
-        cre.productId,
-        COUNT(cre.productId) AS purchase_count,
-        ROW_NUMBER() OVER(PARTITION BY fci.persona_age_group_profile ORDER BY COUNT(cre.productId) DESC) AS rn
-    FROM
-        `{DATASET_ID}.final_customer_insights` AS fci
-    JOIN
-        `{DATASET_ID}.customer_reviews_external` AS cre
-        ON fci.customer_id = cre.customer_id
-    WHERE
-        cre.productId IS NOT NULL
-    GROUP BY
-        fci.persona_age_group_profile, cre.productId
-)
-SELECT
-    persona_age_group_profile,
-    MAX(CASE WHEN rn = 1 THEN productId END) AS segment_top1_product,
-    MAX(CASE WHEN rn = 2 THEN productId END) AS segment_top2_product
-FROM
-    SegmentProductsRanked
-WHERE
-    rn &lt;= 2
-GROUP BY
-    persona_age_group_profile;
-"""
+요구사항:
+* cymbal.segment_top_products_ranked 테이블:
+컬럼명: persona_age_group_profile, segment_top1_product, segment_top2_product \
+final_customer_insights 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다. \
+ROW_NUMBER() 윈도우 함수를 사용하여 persona_age_group_profile별로 productId의 구매 횟수(COUNT(product_id))에 따라 순위를 매깁니다. \
+상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 segment_top1_product, segment_top2_product 컬럼에 저장합니다. \
+* cymbal.city_top_products_ranked 테이블:
+컬럼명: address_city, city_top1_product, city_top2_product \
+customers 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다. \
+ROW_NUMBER() 윈도우 함수를 사용하여 address_city별로 product_id의 구매 횟수(COUNT(product_id))에 따라 순위를 매깁니다. \
+상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 city_top1_product, city_top2_product 컬럼에 저장합니다. \
 
-run_bq_query(sql_create_segment_top_products, client)
-print("✅ segment_top_products_ranked 테이블 생성 완료.")
+힌트: 두 쿼리 모두 WITH 절을 사용하여 순위가 매겨진 중간 결과를 생성하고, 이후 MAX(CASE WHEN ... END) 패턴을 사용하여 피벗하여 최종 컬럼을 만들 수 있습니다.
 
-sql_create_city_top_products = f"""
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.city_top_products_ranked` AS
-WITH CityProductsRanked AS (
-    SELECT
-        c.address_city,
-        cre.productId,
-        COUNT(cre.productId) AS purchase_count,
-        ROW_NUMBER() OVER(PARTITION BY c.address_city ORDER BY COUNT(cre.productId) DESC) AS rn
-    FROM
-        `{DATASET_ID}.customers` AS c
-    JOIN
-        `{DATASET_ID}.customer_reviews_external` AS cre
-        ON c.customer_id = cre.customer_id
-    WHERE
-        cre.productId IS NOT NULL
-    GROUP BY
-        c.address_city, cre.productId
-)
-SELECT
-    address_city,
-    MAX(CASE WHEN rn = 1 THEN productId END) AS city_top1_product,
-    MAX(CASE WHEN rn = 2 THEN productId END) AS city_top2_product
-FROM
-    CityProductsRanked
-WHERE
-    rn &lt;= 2
-GROUP BY
-    address_city;
-"""
-
-run_bq_query(sql_create_city_top_products, client)
-print("✅ city_top_products_ranked 테이블 생성 완료.")
-```
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=11>
@@ -1511,103 +1363,8 @@ Create tables for Top Products
 
 각각 상품 테이블을 합치고, 고객이 리뷰를 남긴 상품과의 중복을 확인합니다. 고객이 리뷰한 상품이 추천 목록에 포함된 경우 이를 제외하고, 포함되지 않은 경우 거주 도시 기반의 두 번째 추천 상품을 제외해 총 3개의 추천 상품 목록으로 정리합니다.
 
-```python
-sql_create_final_recommendation_array = f"""
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.temp_final_recommendation_array` AS
-WITH ExpandedCandidates AS (
-    SELECT
-        t1.customer_id,
-        t1.email,
-        t1.first_name,
-        t1.segment,
-        t_candidate_product AS candidate_product_item
-    FROM
-        `{DATASET_ID}.temp_candidate_products_list` AS t1,
-        UNNEST(t1.candidate_products) AS t_candidate_product
-),
-PurchasedProductsExpanded AS (
-    SELECT DISTINCT
-        customer_id,
-        CAST(productId AS STRING) AS purchased_product_item
-    FROM
-        `{DATASET_ID}.customer_reviews_external`
-    WHERE
-        productId IS NOT NULL
-),
-ExcludedProducts AS (
-    SELECT
-        ec.customer_id,
-        ec.email,
-        ec.first_name,
-        ec.segment,
-        ec.candidate_product_item,
-        CASE
-            WHEN ppe.purchased_product_item IS NULL THEN ec.candidate_product_item
-            ELSE NULL
-        END AS recommended_product_item_if_new
-    FROM
-        ExpandedCandidates AS ec
-    LEFT JOIN
-        PurchasedProductsExpanded AS ppe
-        ON ec.customer_id = ppe.customer_id
-        AND ec.candidate_product_item = ppe.purchased_product_item
-    GROUP BY 1, 2, 3, 4, 5, ppe.purchased_product_item
-),
-FinalCandidates AS (
-    SELECT
-        ep.customer_id,
-        ep.email,
-        ep.first_name,
-        ep.segment,
-        ARRAY_AGG(recommended_product_item_if_new IGNORE NULLS ORDER BY
-            -- 상품 선정 우선순위: Segment Top 1, Segment Top 2, City Top 1
-            CASE
-                WHEN recommended_product_item_if_new = CAST(t_city.city_top1_product AS STRING) THEN 3
-                WHEN recommended_product_item_if_new = CAST(t_seg.segment_top2_product AS STRING) THEN 2
-                WHEN recommended_product_item_if_new = CAST(t_seg.segment_top1_product AS STRING) THEN 1
-                ELSE 4
-            END
-        ) AS final_recommended_products_with_exclusion
-    FROM
-        ExcludedProducts AS ep
-    JOIN
-        `{DATASET_ID}.segment_top_products_ranked` AS t_seg ON ep.segment = t_seg.persona_age_group_profile
-    JOIN
-        `{DATASET_ID}.customers` AS c ON ep.customer_id = c.customer_id
-    JOIN
-        `{DATASET_ID}.city_top_products_ranked` AS t_city ON c.address_city = t_city.address_city
-    GROUP BY 1, 2, 3, 4
-)
-SELECT
-    customer_id,
-    email,
-    segment,
-    first_name,
-    final_recommended_products_with_exclusion AS final_products_array
-FROM
-    FinalCandidates;
-"""
+이 단계의 코드는 제공되니 그대로 실행하여 cymbal.final_personalized_recommendations 테이블을 생성하세요.
 
-run_bq_query(sql_create_final_recommendation_array, client)
-print(f"✅ `{PROJECT_ID}.{DATASET_ID}.temp_final_recommendation_array` 생성 완료.")
-
-sql_create_final_recommendations = f"""
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.final_personalized_recommendations` AS
-SELECT
-    customer_id,
-    first_name as customer_name,
-    email as customer_email,
-    segment,
-    final_products_array[OFFSET(0)] AS product1,
-    final_products_array[OFFSET(1)] AS product2,
-    final_products_array[OFFSET(2)] AS product3
-FROM
-    `{DATASET_ID}.temp_final_recommendation_array`;
-"""
-
-run_bq_query(sql_create_final_recommendations, client)
-print(f"✅ `{PROJECT_ID}.{DATASET_ID}.final_personalized_recommendations` 테이블 생성 완료.")
-```
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=12>
@@ -1616,55 +1373,12 @@ Create tables for Personalized Recommendations
 
 **5. Gemini로 개인화된 추천 콘텐츠 평가**
 
-이제 고객별로 추천한 상품의 적합도를 평가합니다. 이 평가는 BigQuery에서 Gemini를 활용해, 고객 세그먼트와 상품 이름, 카테고리만을 주어 평가하는 간단한 예시입니다.
+이제 고객별로 추천한 상품의 적합도를 평가합니다. 이 평가는 BigQuery에서 Gemini를 활용하며, 고객 세그먼트 페르소나, 추천 상품 이름, 카테고리 정보를 기반으로 합니다.
 
-고객 정보와 추천 상품 및 상품 정보를 하나의 테이블로 정리합니다.
-
-```python
-sql_create_product_details_table = f"""
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{DATASET_ID}.temp_recommendation_details` AS
-WITH ProductsExpanded AS (
-    SELECT
-        customer_id,
-        email,
-        first_name,
-        segment,
-        t_prod AS product_id,
-        t_offset AS rank
-    FROM
-        `{DATASET_ID}.temp_final_recommendation_array`,
-        UNNEST(final_products_array) AS t_prod WITH OFFSET AS t_offset
-    WHERE
-        t_prod IS NOT NULL AND t_offset &lt; 3
-)
-SELECT
-    pe.customer_id,
-    pe.email,
-    pe.first_name,
-    pe.segment,
-    pe.rank + 1 AS recommendation_rank,
-    p.title AS product_title,
-    p.categories AS product_categories,
-    t_analysis.analysis AS gemini_persona_analysis
-FROM
-    ProductsExpanded AS pe
-JOIN
-    `{DATASET_ID}.products` AS p
-    ON pe.product_id = CAST(p.productId AS STRING)
-JOIN
-    `{DATASET_ID}.segment_level_gemini_analysis` AS t_analysis
-    ON pe.segment = t_analysis.profile_name
-ORDER BY
-    pe.customer_id, recommendation_rank;
-"""
-
-run_bq_query(sql_create_product_details_table, client)
-print(f"✅ `{PROJECT_ID}.{DATASET_ID}.temp_recommendation_details` 테이블 생성 완료")
-```
-
-Gemini 모델을 활용해 추천 상품 평가를 수행합니다.   
-이때 다음 코드에 포함된 프롬프트를 활용해 추천 사항(테이블의 행)마다 평가를 수행하도록 합니다.   
-고객 정보와 추천 상품 및 상품 정보를 하나의 테이블로 정리합니다.
+요구사항:
+1. cymbal.temp_recommendation_details 테이블 생성 (제공된 코드 실행): 이 테이블을 먼저 생성하여 필요한 데이터를 준비합니다.
+2. 평가 프롬프트 생성 (Python 코드 작성): 각 추천 사항(테이블의 행)마다 Gemini 평가 프롬프트를 동적으로 생성하는 Python 코드를 작성합니다. GEMINI_EVALUATION_PROMPT_TEMPLATE 변수를 활용하여 prompt 컬럼을 만드세요.
+* GEMINI_EVALUATION_PROMPT_TEMPLATE:
 
 ```python
 GEMINI_EVALUATION_PROMPT_TEMPLATE = """
@@ -1681,86 +1395,14 @@ JSON 형식 제약조건:
 * "reasoning" (점수를 부여한 근거, 50단어 이내)
 * 출력은 JSON 객체 하나여야 합니다.
 """
-
-TEMP_EVAL_PROMPT_TABLE_ID = "temp_gemini_evaluation_prompts"
-TEMP_EVAL_TABLE = f"{PROJECT_ID}.{DATASET_ID}.{TEMP_EVAL_PROMPT_TABLE_ID}"
-sql_get_eval_data = f"SELECT customer_id, recommendation_rank, product_title, product_categories, gemini_persona_analysis FROM `{DATASET_ID}.temp_recommendation_details`"
-df_eval_data = run_bq_query(sql_get_eval_data, client)
-if df_eval_data is not None and not df_eval_data.empty:
-    prompts_df_eval = pd.DataFrame({
-        'customer_id': df_eval_data['customer_id'],
-        'recommendation_rank': df_eval_data['recommendation_rank'],
-        'product_title': df_eval_data['product_title'],
-        'prompt': df_eval_data.apply(
-            lambda row: GEMINI_EVALUATION_PROMPT_TEMPLATE.format(
-                persona_analysis=row['gemini_persona_analysis'],
-                product_title=row['product_title'],
-                product_categories=row['product_categories']
-            ), axis=1
-        )
-    })
-    pandas_gbq.to_gbq(
-        prompts_df_eval,
-        f'{DATASET_ID}.{TEMP_EVAL_PROMPT_TABLE_ID}',
-        project_id=PROJECT_ID,
-        if_exists='replace',
-        location='us-central1'
-    )
-else:
-    print("⚠️ 평가 프롬프트를 생성할 상품 데이터가 없습니다.")
-
-table_id_evaluation_output = f"{DATASET_ID}.gemini_recommendation_evaluation"
-TEMP_EVAL_TABLE = f"{PROJECT_ID}.{DATASET_ID}.{TEMP_EVAL_PROMPT_TABLE_ID}"
-sql_batch_evaluation = f"""
-CREATE OR REPLACE TABLE `{PROJECT_ID}.{table_id_evaluation_output}` AS
-WITH PromptData AS (
-    SELECT
-        customer_id,
-        recommendation_rank,
-        product_title,
-        prompt
-    FROM
-        `{TEMP_EVAL_TABLE}`
-),
-GeminiOutput AS (
-    SELECT
-        ml_generate_text_llm_result AS raw_json_output,
-        prompt AS original_prompt_text
-    FROM
-        ML.GENERATE_TEXT(
-            MODEL `{GEMINI_MODEL_NAME}`,
-            (SELECT prompt FROM PromptData),
-            STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)
-        )
-),
-JoinedOutput AS (
-    SELECT
-        t1.customer_id,
-        t1.recommendation_rank,
-        t1.product_title,
-        t2.raw_json_output
-    FROM
-        PromptData AS t1
-    JOIN
-        GeminiOutput AS t2
-        ON t1.prompt = t2.original_prompt_text
-)
-SELECT
-    j.customer_id,
-    j.recommendation_rank,
-    j.product_title,
-    j.raw_json_output AS gemini_raw_evaluation,
-    CAST(JSON_EXTRACT_SCALAR(TRIM(REGEXP_REPLACE(j.raw_json_output, r'(?i)(^```json\\s*|\\s*```$)', '')), '$.compatibility_score') AS INT64) AS compatibility_score,
-    TRIM(JSON_EXTRACT_SCALAR(TRIM(REGEXP_REPLACE(j.raw_json_output, r'(?i)(^```json\\s*|\\s*```$)', '')), '$.reasoning')) AS evaluation_reasoning
-FROM
-    JoinedOutput AS j
-ORDER BY
-    j.customer_id, j.recommendation_rank;
-"""
-
-run_bq_query(sql_batch_evaluation, client)
-print(f"✅ 적합성 평가 테이블 `{PROJECT_ID}.{table_id_evaluation_output}` 생성 완료.")
 ```
+
+* 결과: 생성된 프롬프트 DataFrame은 customer_id, recommendation_rank, product_title, prompt 컬럼을 포함해야 합니다.
+3. 프롬프트 저장: 생성된 프롬프트 DataFrame을 temp_gemini_evaluation_prompts라는 임시 BigQuery 테이블에 저장합니다.
+4. Gemini 모델 호출 및 평가 테이블 생성 (SQL 쿼리 작성): temp_gemini_evaluation_prompts 테이블의 프롬프트를 사용하여 BigQuery ML의 ML.GENERATE_TEXT 함수를 호출하는 SQL 쿼리를 작성합니다.
+* JSON 결과 파싱 및 최종 테이블 (cymbal.gemini_recommendation_evaluation) 생성 로직은 제공되니 이를 활용하여 쿼리를 완성하세요.
+* 모델 이름: GEMINI_MODEL_NAME 변수를 사용합니다.
+* STRUCT 옵션: STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)를 사용합니다.
 
 모든 과정을 마치고, Gemini의 평가 내용을 조회합니다. 추후 다른 Task(Task 6)에서 이번 태스크의 내용을 일부 활용할 수 있도록 BigQuery 테이블로 저장되었는지 확인합니다.
 
