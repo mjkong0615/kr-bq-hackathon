@@ -1446,9 +1446,12 @@ Check Pub/Sub role
 
 #### 3. Application Integration 트리거 생성 및 구성
 
-Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Service) 솔루션으로, 특정 비즈니스 운영을 지원하기 위해 통합되어야 하는 여러 애플리케이션과 데이터를 연결하고 관리하는 도구 세트를 제공하며, 이를 통합(integration)이라고 합니다. 트리거(trigger)는 통합에서 작업 또는 작업 시퀀스를 시작하는 외부 이벤트로, Pub/Sub 토픽의 이벤트를 기반으로 하는 Pub/Sub 트리거 등이 있습니다. 트리거는 통합의 진입점이라고 생각할 수 있으며, 트리거에 연결된 이벤트는 트리거와 관련된 작업이 실행되도록 합니다.
+Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Service) 솔루션으로, 특정 비즈니스 운영을 지원하기 위해 통합되어야 하는 여러 애플리케이션과 데이터를 연결하고 관리하는 도구 세트를 제공합니다.
 
-이 작업에서는 Pub/Sub 토픽으로 새 메시지가 전송될 때 통합을 실행하는 Application Integration 트리거를 생성하고 구성합니다. 통합의 출력은 버려진 장바구니의 고객에게 전송되는 이메일입니다.
+트리거(trigger)는 Application Integration에서 작업 또는 작업 시퀀스를 시작하는 외부 이벤트입니다. 이 단계에서는 Pub/Sub 토픽의 이벤트를 기반으로 하는 Pub/Sub 트리거를 사용합니다. 트리거는 통합의 진입점이라고 생각할 수 있으며, 트리거에 연결된 이벤트는 트리거와 관련된 작업이 실행되도록 합니다.
+
+이 작업에서는 Pub/Sub 토픽으로 새 메시지가 전송될 때 통합을 실행하는 Application Integration 트리거를 생성하고 구성합니다. 출력은 negative sentiment 고객에게 전송되는 이메일이 됩니다.
+
 
 ##### 3.1 Pub/Sub 트리거 생성
 
