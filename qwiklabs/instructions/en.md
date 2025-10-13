@@ -4,19 +4,18 @@
 ## **Overview**
 
 
-
 본 챌린지 랩은 Google Cloud의 데이터 분석 기능(BQML, Gemini in Bigquery 등)과 ML기능을 활용하여, 고객 데이터 분석부터 실행(action)까지 이어지는 엔드투엔드(end-to-end) 개인화 마케팅 파이프라인을 구축하는 실습 경험을 제공합니다.
 
 팀 단위의 챌린지 랩(Team Assignments)를 위해, 하나의 챌린지 랩 시나리오에 3명의 팀원들에게 추가적으로 사용자 계정을 부여한 다음, 그에 따라 총 4명의 팀원에게 작업을 할당하게 됩니다.
 
-### Objective
+## Objective
 
 * **데이터 분석 (Analysis):** BQ와 Gemini를 함께 사용하여 이미지, 비디오, 텍스트 등 **멀티모달(multimodal) 고객 리뷰**의 감성(Sentiment)을 분석합니다.
 * **세분화 및 타겟팅 (Segment & Target):** EDA를 통해 고객을 세분화(Segmentation)하고, 특히 **부정적인 피드백을 남긴 고객**을 식별하여 이들을 위한 맞춤형 프로모션 메시지를 생성합니다.
 * **모델링 및 예측 (Model & Predict):** 더 나은 제품 추천 모델을 만들기 위해 추가 EDA를 진행하고 피처(feature)를 도출한 뒤, BigQuery Studio의 Data Science Agent(DSA)를 활용해 고급 추천 모델을 구축하고 예측 결과를 BigQuery 테이블로 저장합니다.
 * **자동화 및 실행 (Automate & Activate):** BigQuery의 고객 경험 기반의 데이터 분석 결과를 **Application Integration**을 통해 맞춤형 이메일을 자동으로 전송하는 워크플로우를 구축하여 확보된 인사이트를 즉각적인 마케팅 활동으로 연결합니다.
 
-### Scenario
+## Scenario
 
 온라인 리테일러인 Cymbal E-Commerce는 온라인 플랫폼을 강화하여 변화하는 고객 요구에 신속하게 적응하는 것을 목표로 합니다. 이를 달성하기 위해, 고객의 데이터를 분석하고, BigQuery와 Gemini를 활용해서 고객 이탈률을 최소화하는 방안을 구축하고 있습니다.
 
@@ -24,7 +23,7 @@
 
 Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지하고 Google Cloud를 선택했습니다. Google Cloud의 최첨단 AI 기술은 이 지능형 솔루션을 개발하고 확장하는 데 필요한 강력한 기반을 제공하며, 리테일 산업에서 Cymbal E-Commerce의 선도적인 입지를 공고히 할 것입니다.
 
-### Your Challenge
+## Your Challenge
 
 여러분의 핵심 과제는 이 전략적 계획을 신속하게 발전시키는 것입니다. 여기에는 BigQuery를 사용하여 고객 피드백을 신속하게 분석하는 작업이 포함되며, 이는 맞춤형 캠페인 전략을 수립하고 구체화하는 데 활용됩니다. 여러분은 다양한 채널에서 이러한 캠페인을 실행해야 하며, 이때에도 BigQuery의 여러 기능을 활용하여 각 채널에 맞는 매력적인 콘텐츠를 제작해야 합니다.
 
@@ -32,30 +31,29 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 특히, 이 BQML를 사용하여 마케팅 전략을 수립하고 실행 및 테스트 프로세스 속도를 획기적으로 높일 수 있습니다.
 
-### Task Outline
+## Task Outline
 
 * Task 1: Analyzing Multimodal Customer Reviews for Marketing Insights
 * Task 2: Segmenting Customers for Targeted Marketing  
-* Task 3: Creating Tailored Recommendations for Customers with Negative Reviews
+* Task 3: Creating Tailored email message including promotions  for unsatisfied customers 
 * Task 4: Additional Exploratory Data Analysis
 * Task 5: Enhancing Product Recommendations ML model
 * Task 6: Sending a customized email with Application Integrations
 
-### Task Dependencies
+## Task Dependencies
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/2bdc11dcabc95304.png" alt="2bdc11dcabc95304.png"  width="624.00" />
 
 
 
-## Step 1: 마케팅 인사이트를 위한 고객 리뷰 멀티모달 분석
+## Task 1: 마케팅 인사이트를 위한 고객 리뷰 멀티모달 분석
 
 
+#### **Overview**
 
-##### **Overview**
+고객 리뷰 분석 실습에 오신 것을 환영합니다! 이 작업에서는 텍스트뿐만 아니라 이미지와 동영상을 포함하는 멀티모달 고객 리뷰 데이터를 다루게 됩니다. 우리의 목표는 BigQuery와 Vertex AI의 Gemini Pro 모델의 강력한 기능을 활용하여 이 다양한 데이터를 처리하고, 그 결과로 얻은 인사이트를 통합하여 고객 경험에 대한 이해를 얻고 이를 적용 할 수 있게 하는 것입니다.
 
-고객 리뷰 분석 실습에 오신 것을 환영합니다! 이 작업에서는 텍스트뿐만 아니라 이미지와 동영상을 포함하는 멀티모달 고객 리뷰 데이터를 다루게 됩니다. 우리의 목표는 BigQuery와 Vertex AI의 Gemini Pro 모델의 강력한 기능을 활용하여 이 다양한 데이터를 처리하고, 그 결과로 얻은 인사이트를 통합하여 고객 경험에 대한 깊은 이해를 얻는 것입니다.
-
-##### **Objective**
+#### **Objective**
 
 * BigQuery Studio에서 챌린지 실습 Notebook을 설정하고 실행합니다.
 * 외부 테이블을 생성하여 Cloud Storage에 저장된 파일의 데이터를 직접 쿼리합니다.
@@ -63,21 +61,22 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 * 모든 분석 결과를 하나의 포괄적인 테이블로 통합합니다.
 * 감성 분포와 시간 경과에 따른 추세를 시각화하여 실행 가능한 비즈니스 인사이트를 도출합니다.
 
-##### **Setup**
+#### **Setup**
 
 이 초기 설정은 BigQuery와 Cloud Storage가 Vertex AI Gemini 모델과 통신할 수 있도록 권한을 구성하는 과정을 포함합니다.
 
-### **시작하기 전: Cloud Storage의 샘플 데이터 탐색**
+#### **시작하기 전: Cloud Storage의 샘플 데이터 탐색**
 
 실습 단계를 시작하기 전에 작업할 샘플 데이터를 간단히 살펴보겠습니다. Cloud Storage Bucket에서 고객 리뷰 텍스트, 이미지, 비디오에 직접 액세스하여 볼 수 있습니다. 이를 통해 멀티모달 데이터를 더 잘 이해할 수 있습니다.
 
-1. Google Cloud 콘솔에서 **Navigation Menu**(☰)로 이동하여 **Cloud Storage &gt; Bucket**을 선택합니다.   
-2. 실습 환경에 제공된 Bucket 이름을 클릭합니다 (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식).   
-3. Bucket 내부에서 review/ 폴더로 이동합니다.   
-4. 다음 항목을 찾을 수 있습니다:   
-   * **고객 리뷰 (CSV):** customer_reviews.csv를 클릭하여 원시 텍스트 리뷰 데이터를 미리 봅니다.
-   * **리뷰 이미지:** images/ 폴더로 들어가 샘플 이미지 파일을 확인합니다. 개별 이미지를 클릭하여 직접 볼 수 있습니다.
-   * **리뷰 비디오:** videos/ 폴더로 들어가 샘플 비디오 파일을 확인합니다. 개별 비디오를 클릭하여 콘솔 내에서 재생할 수 있습니다.
+1. Google Cloud 콘솔에서 **Navigation Menu**(☰)로 이동하여 **Cloud Storage &gt; Bucket**을 선택합니다.
+2. 실습 환경에 제공된 Bucket 이름을 클릭합니다 (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식).
+3. **Bucket** 내부에서 review/ 폴더로 이동합니다.
+4. 다음 항목을 찾을 수 있습니다:
+
+* **고객 리뷰 (CSV):** customer_reviews.csv를 클릭하여 원시 텍스트 리뷰 데이터를 미리 봅니다.
+* **리뷰 이미지:** images/ 폴더로 들어가 샘플 이미지 파일을 확인합니다. 개별 이미지를 클릭하여 직접 볼 수 있습니다.
+* **리뷰 비디오:** videos/ 폴더로 들어가 샘플 비디오 파일을 확인합니다. 개별 비디오를 클릭하여 콘솔 내에서 재생할 수 있습니다.
 
 실습의 분석 작업을 진행하기 전에 이 파일들을 자유롭게 둘러보며 콘텐츠에 익숙해지세요.
 
@@ -86,12 +85,14 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 먼저, BigQuery가 Gemini 모델과 작동할 수 있도록 Cloud 리소스 연결을 생성합니다.
 
 1. Google Cloud 콘솔에서 **Navigation menu**(☰)로 이동하여 **BigQuery**를 선택합니다.
-2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 **BigQuery Federation**을 클릭합니다.
-3. **connection ID**에 gemini_conn을 입력합니다.
-4. **리전 유형**으로 **리전**을 선택한 다음, 드롭다운에서 us-central1을 선택합니다.
+2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
+3. **connection ID**에 **gemini_conn**을 입력합니다.
+4. **리전 유형**으로 **리전**을 선택한 다음, 드롭다운에서 **us-central1**을 선택합니다.
 5. **CREATE CONNECTION**를 클릭합니다.
 6. 확인 창이 나타납니다. **GO TO Connections**을 클릭합니다.
 7. **Connection info** 창(us-central1.gemini_conn)에서 **Service account ID**를 찾아 텍스트 편집기에 복사합니다. 다음 단계에서 필요합니다.
+
+<img src="images/task1_gotoconnection.png" alt="gotoconnection.png"  width="348.90" />
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=1>
@@ -103,13 +104,15 @@ Create BigQuery External Connection
 
 연결과 연관된 서비스 계정은 Vertex AI 및 Cloud Storage에 액세스할 수 있는 권한이 필요합니다.
 
-###### **Vertex AI User / Storage Object Admin 역할 부여**
+##### **Vertex AI User / Storage Object Admin 역할 부여**
 
 1. **Navigation menu**(☰)로 이동하여 **IAM 및 관리자 &gt; IAM**을 선택합니다.
 2. **+ Grant Access**를 클릭합니다.
 3. **New principals** 필드에 이전에 복사한 Service account를 붙여넣습니다.
 4. **Select a role** 필드에서 **Vertex AI User** 및 **Storage Object Admin** 역할을 선택합니다.
 5. **저장**을 클릭합니다.
+
+<img src="images/task1_iam.png" alt="grant_access.png"  width="348.90" />
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=2>
@@ -124,98 +127,33 @@ Create BigQuery External Connection
 
 1. Google Cloud 콘솔에서 **BigQuery**로 이동합니다.
 2. **Explorer** 창에서 **Notebook** 옆에 있는 점 3개(⋮) 아이콘을 클릭하고 **URL에서 Notebook 업로드**를 선택합니다.
-3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1.ipynb를 입력합니다.
+3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1.ipynb 를 입력합니다.
 4. Notebook이 새 탭에서 열리면 셀을 순서대로 실행할 준비가 된 것입니다.
 
 #### **2.1.2 환경 초기화**
 
-먼저 설정 쉘을 실행합니다. 이 셀은 필요한 모든 라이브러리를 가져오고, BigQuery에 대한 연결을 초기화하며, 실습 전반에 걸쳐 사용할 주요 변수(프로젝트 ID 및 GCS Bucket 경로 등)를 정의합니다.
+![alt text](images/task1_notebook1.png)
 
-그리고 셀을 실행하세요.
 
-```python
-# 이 셀은 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며,
-# 분석을 위한 전역 변수를 설정합니다.
+먼저 설정 쉘을 실행합니다. 이 셀은 필요한 모든 라이브러리를 가져오고, BigQuery에 대한 연결을 초기화하며, 실습 전반에 걸쳐 사용할 주요 변수(프로젝트 ID 및 GCS Bucket 경로 등)를 정의합니다.  알맞은 프로젝트 ID로 변경해주세요
 
-from google.cloud import bigquery
-import pandas as pd
-from IPython.display import HTML, display, Image, Video
-from google.cloud import storage
-import matplotlib.pyplot as plt
-import seaborn as sns
+그리고 다음 셀을 실행하세요. 
 
-client = bigquery.Client(location="us-central1")
+![alt text](images/task1_project_setting.png)
 
-# 중요: 이 PROJECT_ID가 실습의 프로젝트 ID와 일치하는지 확인하세요.
-DATASET_ID = 'cymbal'
-REGION = 'us-central1'
-CONNECTION_ID_FOR_EXTERNAL_TABLE = f'{REGION}.gemini_conn'
-GEMINI_MODEL_NAME = f'{PROJECT_ID}.{DATASET_ID}.gemini_flash_lite_model'
-GCS_BUCKET_URI = f'gs://{PROJECT_ID}-bucket'
-CSV_GCS_URI = f'{GCS_BUCKET_URI}/review/customer_reviews.csv'
-IMAGES_GCS_URI_PATTERN = f'{GCS_BUCKET_URI}/review/images/*'
-VIDEOS_GCS_URI_PATTERN = f'{GCS_BUCKET_URI}/review/videos/*'
+이 셀은 실행 완료 시 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며,
+분석을 위한 전역 변수를 설정합니다.
 
-# 오류를 방지하기 위해 데이터세트가 없으면 생성합니다.
-
-client.create_dataset(DATASET_ID, exists_ok=True)
-print(f"Dataset {DATASET_ID} ensured.")
-print(f"BigQuery Client Initialized. Project ID: {PROJECT_ID}")
-
-def run_bq_query(sql: str, client: bigquery.Client):
-    """BigQuery 쿼리를 실행하고 결과를 반환하는 헬퍼 함수입니다."""
-    try:
-        query_job = client.query(sql)
-        print(f"Job {query_job.job_id} in state {query_job.state}")
-        if query_job.statement_type == 'SELECT':
-            df = query_job.to_dataframe()
-            print(f"Query complete. Fetched {len(df)} rows.")
-            return df
-        else:
-            query_job.result()
-            print(f"Query for statement type {query_job.statement_type} complete.")
-            return None
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-```
 
 #### **2.2.1 텍스트 리뷰 외부 테이블 생성**
 
-다음으로, BigQuery 외부 테이블을 생성합니다. 이는 Cloud Storage의 파일로 작업하는 가장 강력한 방법으로, 소스 파일을 직접 가리키는 보장된 스키마를 가진 테이블 정의를 생성하여 스키마 자동 감지 오류의 가능성을 제거합니다. 아래 셀을 실행하세요.
+다음으로, BigQuery 외부 테이블을 생성합니다. 이 쿼리는 Cloud Storage의 파일로 작업하는 방법으로, 소스 파일을 직접 참조하는 테이블 스키마를 정의하고 생성합니다. 
 
-```python
-# 이것이 확실한 해결책입니다. 명시적으로 정의된 스키마를 사용하여 GCS의 CSV 파일을
-# 직접 가리키는 EXTERNAL TABLE을 생성합니다. 이 방법은 데이터 로딩 및
-# 스키마 자동 감지 문제를 완전히 우회합니다.
+실행완료시 다음과 같은 로그와 함께 `customer_reviews_external`테이블을 생성합니다.
 
-table_id_reviews_external = f"{PROJECT_ID}.{DATASET_ID}.customer_reviews_external"
-sql_create_external_table = f"""
-CREATE OR REPLACE EXTERNAL TABLE `{table_id_reviews_external}` (
-    customer_review_id INT64,
-    customer_id INT64,
-    location_id INT64,
-    review_datetime DATETIME,
-    review_text STRING,
-    social_media_source STRING,
-    social_media_handle STRING,
-    productId INT64,
-    rating INT64
-)
+![alt text](images/task1_external_table.png)
 
-OPTIONS (
-  format = 'CSV',
-  uris = ['{CSV_GCS_URI}'],
-  field_delimiter = ',',
-  skip_leading_rows = 1,
-  allow_quoted_newlines = TRUE
-);
-"""
 
-print(f"Creating external table: {table_id_reviews_external}...")
-
-run_bq_query(sql_create_external_table, client)
-```
 
 #### **2.2.2 텍스트 리뷰 테이블 확인**
 
@@ -225,7 +163,6 @@ run_bq_query(sql_create_external_table, client)
 %%bigquery
 
 SELECT * FROM `cymbal.customer_reviews_external`
-
 LIMIT 5
 ```
 
@@ -235,34 +172,10 @@ LIMIT 5
 
 #### **2.3.1 이미지 및 비디오용 객체 테이블 생성**
 
-마찬가지로, 비정형 미디어 파일(이미지 및 비디오)에 대한 객체 테이블을 생성해야 합니다. 이를 통해 BigQuery와 Gemini가 해당 파일에 액세스하고 분석할 수 있습니다.
+마찬가지로, 비정형 미디어 파일(이미지 및 비디오)에 대한 객체 테이블을 생성해야 합니다. 실행완료 시 아래와 같은 로그와 함께 BigQuery와 Gemini가 해당 파일에 액세스하고 분석할 수 있습니다.
 
-```python
-# 리뷰 이미지에 대한 객체 테이블을 생성합니다.
+![alt text](images/task1_create_img:video_external.png)
 
-table_id_review_images = f"{PROJECT_ID}.{DATASET_ID}.review_images"
-sql_create_image_table = f"""
-CREATE OR REPLACE EXTERNAL TABLE `{table_id_review_images}`
-WITH CONNECTION `{CONNECTION_ID_FOR_EXTERNAL_TABLE}`
-OPTIONS (object_metadata = 'SIMPLE', uris = ['{IMAGES_GCS_URI_PATTERN}']);
-"""
-
-print(f"\nCreating object table for review images: {table_id_review_images}")
-
-run_bq_query(sql_create_image_table, client)
-
-# 리뷰 비디오에 대한 객체 테이블을 생성합니다.
-table_id_review_videos = f"{PROJECT_ID}.{DATASET_ID}.review_videos"
-sql_create_video_table = f"""
-CREATE OR REPLACE EXTERNAL TABLE `{table_id_review_videos}`
-WITH CONNECTION `{CONNECTION_ID_FOR_EXTERNAL_TABLE}`
-OPTIONS (object_metadata = 'SIMPLE', uris = ['{VIDEOS_GCS_URI_PATTERN}']);
-"""
-
-print(f"\nCreating object table for review videos: {table_id_review_videos}")
-
-run_bq_query(sql_create_video_table, client)
-```
 
 #### **2.3.2 BigQuery 객체 테이블 확인**
 
@@ -284,20 +197,10 @@ Create External Review Tables and Upload Data
 이제, BigQuery 데이터세트 내에 gemini-2.0-flash 모델을 등록합니다. 이 단계를 통해 강력한 생성 모델을 SQL 쿼리에서 직접 호출할 수 있게 됩니다.
 
 
-```python
-# 이 SQL 명령어는 BigQuery에 원격 모델을 생성하고,
-# 이전에 설정한 연결을 통해 Gemini Flash 엔드포인트에 연결합니다.
+이 SQL 명령어를 실행 완료 시, BigQuery에 원격 모델을 생성하고,
+이전에 설정한 연결을 통해 Gemini Flash 엔드포인트에 연결합니다.
 
-sql_create_gemini_model = f"""
-CREATE OR REPLACE MODEL `{GEMINI_MODEL_NAME}`
-REMOTE WITH CONNECTION `{CONNECTION_ID_FOR_EXTERNAL_TABLE}`
-OPTIONS (endpoint = 'gemini-2.0-flash');
-"""
-
-print(f"Creating Gemini model: {GEMINI_MODEL_NAME}...")
-
-run_bq_query(sql_create_gemini_model, client)
-```
+![alt text](images/task1_create_model.png)  
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=4>
@@ -306,61 +209,11 @@ Create Gemini Model
 
 #### **2.4.2 텍스트 키워드 및 감성 분석**
 
-데이터와 모델이 준비되었으니 첫 번째 분석을 할 차례입니다. 아래 셀에서 Gemini 모델을 호출하여 각 텍스트 리뷰를 읽고 두 가지 작업을 수행합니다: 주요 용어 추출 및 감성 분류.
+데이터와 모델이 준비되었으니 첫 번째 분석을 할 차례입니다. 아래 셀에서 Gemini 모델을 호출하여 각 텍스트 리뷰를 읽고 (주요 용어 추출 및 감정 분석) 두 가지 작업을 수행합니다.
 
-```python
-# 이제 소스 테이블이 올바른 스키마를 가지고 있음이 보장되었으므로,
-# 이 간단하고 효율적인 'pass-through' 패턴을 사용할 수 있습니다. 모델은
-# 각 리뷰를 처리하고 나중에 쉽게 조인할 수 있도록 'customer_review_id'를 전달합니다.
-# 텍스트 키워드 분석
+텍스트 감정 분석 완료 시, 다음과 같은 로그와 함께 작업이 완료됩니다.
 
-table_id_reviews_keywords = f"{PROJECT_ID}.{DATASET_ID}.customer_reviews_keywords"
-sql_analyze_keywords = f"""
-CREATE OR REPLACE TABLE `{table_id_reviews_keywords}` AS
-SELECT
-  customer_review_id,
-  ml_generate_text_llm_result AS keywords_json_string
-FROM ML.GENERATE_TEXT(
-    MODEL `{GEMINI_MODEL_NAME}`,
-    (
-      SELECT
-        customer_review_id,
-        CONCAT('Extract keywords from the following customer review. Return as a JSON string array like {{"keywords": ["keyword1"]}}. Review: ', review_text) AS prompt
-      FROM
-        `{table_id_reviews_external}`
-    ),
-    STRUCT(0.2 AS temperature, TRUE AS flatten_json_output)
-  );
-"""
-
-print("Starting customer review keyword analysis...")
-
-run_bq_query(sql_analyze_keywords, client)
-
-# 텍스트 감성 분석
-table_id_reviews_analysis = f"{PROJECT_ID}.{DATASET_ID}.customer_reviews_analysis"
-sql_analyze_sentiment = f"""
-CREATE OR REPLACE TABLE `{table_id_reviews_analysis}` AS
-SELECT
-  customer_review_id,
-  ml_generate_text_llm_result AS sentiment_json_string
-FROM ML.GENERATE_TEXT(
-    MODEL `{GEMINI_MODEL_NAME}`,
-    (
-      SELECT
-        customer_review_id,
-        CONCAT('Classify the sentiment of the following review as "positive", "negative", or "neutral". Return as a JSON string like {{"sentiment": "positive"}}. Review: ', review_text) AS prompt
-      FROM
-        `{table_id_reviews_external}`
-    ),
-    STRUCT(0.2 AS temperature, TRUE AS flatten_json_output)
-  );
-"""
-
-print("\nStarting customer review sentiment analysis...")
-
-run_bq_query(sql_analyze_sentiment, client)
-```
+![alt text](images/task1_analyze_text.png)
 
 #### **2.4.3 텍스트 분석 결과 확인**
 
@@ -391,72 +244,13 @@ LIMIT 5
 
 이제 멀티모달 부분입니다. Gemini에게 리뷰의 이미지와 비디오를 분석하여 각각에 대한 요약과 키워드를 생성하도록 요청할 것입니다.
 
-```python
-# 객체 테이블의 각 이미지 콘텐츠를 분석하기 위해 Gemini를 호출합니다.
-table_id_image_results = f"{PROJECT_ID}.{DATASET_ID}.review_images_results"
-sql_analyze_images = f"""
-CREATE OR REPLACE TABLE `{table_id_image_results}` AS
-SELECT uri, ml_generate_text_llm_result AS image_analysis_json
-FROM ML.GENERATE_TEXT( MODEL `{GEMINI_MODEL_NAME}`, TABLE `{table_id_review_images}`,
-    STRUCT('For each image, summarize it and extract relevant keywords. Answer in JSON with keys "summary" and "keywords".' AS prompt, TRUE AS flatten_json_output)
-);
-"""
+실행완료 시, 다음과 같은 로그와 함께 분석이 완료됩니다.
 
-print("\nStarting image analysis...")
+![alt text](images/task1_analyze_img:video.png)
 
-run_bq_query(sql_analyze_images, client)
-
-# 객체 테이블의 각 비디오 콘텐츠를 분석하기 위해 Gemini를 호출합니다.
-table_id_video_results = f"{PROJECT_ID}.{DATASET_ID}.review_videos_results"
-sql_analyze_videos = f"""
-CREATE OR REPLACE TABLE `{table_id_video_results}` AS
-SELECT uri, ml_generate_text_llm_result AS video_analysis_json
-FROM ML.GENERATE_TEXT( MODEL `{GEMINI_MODEL_NAME}`, TABLE `{table_id_review_videos}`,
-    STRUCT('For each video, summarize it and extract keywords. Answer in JSON with keys "summary" and "keywords".' AS prompt, TRUE AS flatten_json_output)
-);
-"""
-
-print("\nStarting video analysis...")
-
-run_bq_query(sql_analyze_videos, client)
-```
 #### **2.5.2 이미지 및 비디오 분석 샘플 검토**
 
-결과를 더 구체적으로 만들기 위해, 이 셀은 실제 미디어 파일을 해당 AI 생성 분석 결과 바로 아래에 표시합니다. 이는 모델 출력의 품질을 시각적으로 확인하는 좋은 방법입니다.
-
-```python
-# 이 셀은 분석 결과와 직접 비교하기 위해 미디어 파일을 가져와 표시합니다.
-storage_client = storage.Client()
-
-print(f"\n--- Displaying Individual Image Samples & Analysis ---")
-
-df_img_samples = run_bq_query(f"SELECT uri, image_analysis_json FROM `{table_id_image_results}` LIMIT 2", client)
-
-if df_img_samples is not None:
-    for _, row in df_img_samples.iterrows():
-        print("-" * 30)
-        print(f"Analysis for: {row['uri']}")
-        display(HTML(f"&lt;pre style='white-space: pre-wrap;'&gt;{row['image_analysis_json']}&lt;/pre&gt;"))
-        try:
-            bucket_name, blob_name = row['uri'].replace("gs://", "").split("/", 1)
-            display(Image(data=storage_client.bucket(bucket_name).blob(blob_name).download_as_bytes(), width=300))
-        except Exception as e:
-
-            print(f"--&gt; Could not display image {row['uri']}. Error: {e}")
-
-print(f"\n--- Displaying Individual Video Samples & Analysis ---")
-
-df_vid_samples = run_bq_query(f"SELECT uri, video_analysis_json FROM `{table_id_video_results}` LIMIT 1", client)
-
-if df_vid_samples is not None:
-    for _, row in df_vid_samples.iterrows():
-        print("-" * 30)
-        print(f"Analysis for: {row['uri']}")
-        display(HTML(f"&lt;pre style='white-space: pre-wrap;'&gt;{row['video_analysis_json']}&lt;/pre&gt;"))
-
-video_url=f"https://storage.googleapis.com/{PROJECT_ID}-bucket/review/videos/Review%20Video%20(1).mp4"
-Video(video_url, width=640)
-```
+결과를 더 구체적으로 만들기 위해, 이 셀은 실제 미디어 파일을 해당 AI 생성 분석 결과 바로 아래에 표시합니다. 이를 통해 모델 출력의 품질을 시각적으로 확인 할 수 있습니다.
 
 이미지 분석 출력 예시:
 
@@ -468,43 +262,9 @@ Video(video_url, width=640)
 
 #### **2.6.1 통합 분석 테이블 생성**
 
-이제 모든 것을 하나로 합쳐 보겠습니다. 다음 쿼리는 원본 리뷰 데이터를 모든 새로운 분석 테이블(텍스트, 이미지, 비디오)과 조인하여 하나의 포괄적인 멀티모달 결과 테이블을 생성합니다.
+이제 하나로 합쳐 보겠습니다. 다음 쿼리를 통해, 원본 리뷰 데이터를 모든 새로운 분석 테이블(텍스트, 이미지, 비디오)과 조인하여 하나의 포괄적인 멀티모달 결과 테이블을 생성하게 됩니다.
 
-```python
-# REGEXP_EXTRACT의 정규 표현식은 하나의 캡처 그룹 `(\\d+)`만 갖도록 수정되었습니다.
-# 이를 통해 파일 이름에서 리뷰 ID를 추출하여 이미지/비디오 분석을 원본 리뷰에 다시 조인할 수 있습니다.
-
-table_id_multimodal_reviews = f"{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews"
-sql_create_multimodal_table = f"""
-CREATE OR REPLACE TABLE `{table_id_multimodal_reviews}` AS
-WITH
-  image_results_parsed AS (
-    SELECT SAFE_CAST(REGEXP_EXTRACT(uri, r'Review.*\\((\\d+)\\)') AS INT64) AS customer_review_id, uri AS image_uri, image_analysis_json
-    FROM `{table_id_image_results}`
-  ),
-  video_results_parsed AS (
-    SELECT SAFE_CAST(REGEXP_EXTRACT(uri, r'Video.*\\((\\d+)\\)') AS INT64) AS customer_review_id, uri AS video_uri, video_analysis_json
-    FROM `{table_id_video_results}`
-  )
-SELECT
-    cr.*, -- 올바르게 정의된 소스 테이블의 모든 열 선택
-    s.sentiment_json_string,
-    k.keywords_json_string,
-    irp.image_uri,
-    irp.image_analysis_json,
-    vrp.video_uri,
-    vrp.video_analysis_json
-FROM `{table_id_reviews_external}` AS cr
-LEFT JOIN `{table_id_reviews_analysis}` AS s ON cr.customer_review_id = s.customer_review_id
-LEFT JOIN `{table_id_reviews_keywords}` AS k ON cr.customer_review_id = k.customer_review_id
-LEFT JOIN image_results_parsed AS irp ON cr.customer_review_id = irp.customer_review_id
-LEFT JOIN video_results_parsed AS vrp ON cr.customer_review_id = vrp.customer_review_id;
-"""
-
-print("Creating unified multimodal analysis table...")
-
-run_bq_query(sql_create_multimodal_table, client)
-```
+![alt text](images/task1_unified_table.png)
 
 #### **2.6.2 통합 테이블 확인**
 
@@ -517,7 +277,7 @@ SELECT * FROM `cymbal.multimodal_customer_reviews` where video_uri is not null
 
 출력은 다음과 같습니다.
 
-#####  <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/375c9ea3f9add6e.png" alt="375c9ea3f9add6e.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/375c9ea3f9add6e.png" alt="375c9ea3f9add6e.png"  width="624.00" />
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=5>
@@ -527,6 +287,8 @@ Create Multimodal Table
 #### **2.7.1 GenAI로 sentiment 분석 시각화**
 
 이 단계에서는 Notebook에 내장된 생성형 AI Assist를 사용하여 플롯을 생성합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/8403d1142e8f1303.png" alt="8403d1142e8f1303.png"  width="624.00" />
 
 1. **+ code** 버튼을 클릭하여 새 코드 셀을 추가합니다.
 2. 새 셀 안에서 **generate** 버튼을 클릭합니다.
@@ -538,61 +300,13 @@ Create Multimodal Table
 plot a bar chart for the distribution of text_sentiment in the multimodal_customer_reviews table
 ```
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/8403d1142e8f1303.png" alt="8403d1142e8f1303.png"  width="624.00" />
-
-제안된 코드를 수락한 다음 셀을 실행하여 차트를 표시합니다. 이는 전반적인 감성 분석에 대한 빠른 개요를 제공합니다. 출력은 다음과 같습니다: (막대 차트 이미지)
+제안된 코드를 수락한 다음 셀을 실행하여 차트를 표시합니다. 이는 전반적인 감성 분석에 대한 빠른 개요를 제공합니다. 출력은 다음과 같습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/a22946ea304fcf84.png" alt="a22946ea304fcf84.png"  width="362.50" />
 
-##### 다음 코드를 통해 차트 결과를 확인하세요:
-
-```python
-# prompt: plot a bar chart for the distribution of text_sentiment in the multimodal_customer_reviews table
-import pandas_gbq
-import pandas as pd
-import matplotlib.pyplot as plt
-import json
-
-# Load the data from BigQuery
-
-sql = f"""
-SELECT sentiment_json_string
-FROM `{PROJECT_ID}.{DATASET_ID}.multimodal_customer_reviews`
-WHERE sentiment_json_string IS NOT NULL
-"""
-
-df_sentiment = pandas_gbq.read_gbq(sql, project_id=PROJECT_ID, dialect="standard")
-
-# Extract sentiment from the JSON string
-def extract_sentiment(json_string):
-   try:
-       data = json.loads(json_string.replace("```","").replace("json",""))
-       return data.get('sentiment')
-   except json.JSONDecodeError:
-       return None
-
-df_sentiment['text_sentiment'] = df_sentiment['sentiment_json_string'].apply(lambda x : extract_sentiment(x))
-
-print(df_sentiment['text_sentiment'])
-
-# Filter out rows where sentiment could not be extracted
-df_sentiment = df_sentiment.dropna(subset=['text_sentiment'])
-
-# Plotting the bar chart
-plt.figure(figsize=(8, 6))
-df_sentiment['text_sentiment'].value_counts().plot(kind='bar', color=['skyblue', 'lightcoral', 'lightgreen'])
-plt.title('Distribution of Text Sentiment in Multimodal Customer Reviews')
-plt.xlabel('Sentiment')
-plt.ylabel('Number of Reviews')
-plt.xticks(rotation=45)
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-plt.tight_layout()
-plt.show()
-```
-
 #### **2.7.2 감성 분포 시각화 확인**
 
-다음 코드를 통해 알맞은 횟수의 sentiment가 시각화되었는지 확인하세요:
+다음 코드를 통해 알맞은 횟수의 sentiment가 시각화되었는지 확인하세요.
 
 ```sql
 %%bigquery
@@ -600,12 +314,12 @@ SELECT count(customer_id) as count, sentiment_json_string as sentiment FROM `cym
 GROUP BY sentiment_json_string
 ```
 
-
 #### **Hands-on : GenAI로 플롯 생성하기**
 
 이제 간단한 프롬프트를 작성하여 직접 시각화를 만들어 보겠습니다. 여러분의 과제는 생성형 AI 어시스턴트에게 새롭고 창의적인 질문을 하여 table_id_multimodal_reviews 테이블에서 숨겨진 패턴과 인사이트를 발견하는 것입니다.
 
-아래는 여러분에게 영감을 줄 몇 가지 예시입니다. 이것들을 실행해보고 자신만의 것을 만들어 보세요! **참고:** 생성된 코드에서 오류가 발생하면 코드 셀을 삭제하고 다시 시도하세요.
+아래는 여러분에게 영감을 줄 몇 가지 예시입니다. 이것들을 실행해보고 자신만의 것을 만들어 보세요!   
+**참고:** 생성된 코드에서 오류가 발생하면 코드 셀을 삭제하고 다시 시도하세요.
 
 ###### **긍정, 부정, 중립 리뷰의 일일 수를 시간 경과에 따라 추적하는 라인 그래프 생성하기.**
 ```
@@ -648,7 +362,7 @@ Finally, create a grouped bar chart where each age group shows the total count o
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/6e07c46c14efd6f9.png" alt="6e07c46c14efd6f9.png"  width="624.00" />
 
-**모든 성별 카테고리에 걸쳐 긍정, 부정, 중립 리뷰의 총 수를 비교하는 그룹화된 막대 차트 생성하기.**
+###### 모든 성별 카테고리에 걸쳐 긍정, 부정, 중립 리뷰의 총 수를 비교하는 그룹화된 막대 차트 생성하기.
 
 ```
 # 고객 감성이 성별에 따라 다른지 분석하고 싶어.
@@ -676,8 +390,8 @@ Visualize Sentiment Trends
 이것으로 작업 1이 완료되었습니다. 멀티모달 고객 리뷰를 성공적으로 분석하고, 인사이트를 통합하고, 감성 트렌드를 시각화했습니다
 
 
-## Task 2: 고객 세분화를 통한 타겟 마케팅
 
+## Task 2: 고객 세분화를 통한 타겟 마케팅
 
 
 **개요**
