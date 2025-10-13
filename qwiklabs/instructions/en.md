@@ -1684,15 +1684,15 @@ INSERT INTO `continuous_queries.negative_customer_segment_products`
 ) 
 SELECT 
       pr.customer_id,
-      ncs.customer_name, 
-      ncs.customer_email, 
-      ncs.segment, 
-      ncs.product1 AS top_products,
+      fpr.customer_name, 
+      fpr.customer_email, 
+      fpr.segment, 
+      fpr.product1 AS top_products,
       pr.recommended_products 
 FROM 
 `continuous_queries.product_recommendations` AS pr 
 JOIN 
-`continuous_queries.negative_customer_segment` AS ncs 
+`continuous_queries.final_personalized_recommendations` AS fpr
 ON pr.customer_name = ncs.customer_name
 LIMIT 3; 
 ```
