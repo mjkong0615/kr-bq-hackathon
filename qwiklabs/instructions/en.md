@@ -94,6 +94,7 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 <img src="images/task1_gotoconnection.png" alt="gotoconnection.png"  width="348.90" />
 
+
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=1>
 Create BigQuery External Connection      
@@ -388,7 +389,6 @@ Visualize Sentiment Trends
 만약 모든 단계를 완료했음에도 활동 추적이 성공하지 않으면 나중에 다시 시도해 주세요.
 
 이것으로 작업 1이 완료되었습니다. 멀티모달 고객 리뷰를 성공적으로 분석하고, 인사이트를 통합하고, 감성 트렌드를 시각화했습니다
-
 
 
 ## Task 2: 고객 세분화를 통한 타겟 마케팅
@@ -1265,60 +1265,53 @@ Checkpoint 1\.
 
 #### Overview
 
-이 작업에서는 이전 단계들에서 생성된 여러 데이터 소스를 실시간으로 결합하여, 이탈 징후를 보이는 '부정적 고객(negative customer)'에게 맞춤화된 추천 이메일을 자동으로 발송하는 파이프라인을 완성합니다.
+이 작업에서는 이전 단계들과 **독립적으로 진행되는 작업**으로, 이탈 징후를 보이는 '부정적 segment 고객(negative segment customer)'데이터를 추가하여 해당 데이터에 맞춤화된 추천 이메일을 자동으로 발송하는 파이프라인을 **BQ의 연속 쿼리 기능**을 통해 완성합니다.
 
-BigQuery 연속 쿼리(CQ)가 **두 가지 핵심 데이터**를 실시간으로 결합하고, Gemini가 이 모든 문맥을 이해하여 최종 이메일을 생성한 뒤, Application Integration을 통해 실제 발송까지 완료하는 과정을 구축합니다.
+BigQuery 연속 쿼리(CQ)가 실시간으로 추가되는 데이터를 감지하고, Gemini가 추가되는 데이터를 이해하여 최종 이메일을 생성한 뒤, **Cloud Pub/sub**을 통해 **Application Integration**으로 이메일을 발송하도록 합니다.
 
 <div><ql-infobox>
 
-#### 활용할 데이터 소스
-
-1. **Task 3의 결과 (고객 세그먼트):** 고객의 활동을 분석하여 '이탈 위험' 또는 '부정적 경험' 세그먼트로 분류된 고객 리스트 . 이 테이블에는 customer_id와 segment_name와 고객 세그먼트에서 가장 인기 있거나 선호되는 제품 데이터가 포함됩니다
-2. **Task 5의 결과 (맞춤 추천 제품 리스트):** BigQuery ML의 추천 모델이 각 개별 고객을 위해 생성한 최신 맞춤 추천 제품 리스트. 이 테이블에는 customer_id 와 recommended_products가 포함되어 있습니다.
-</ql-infobox></div>
 
 #### Objective
 
 이 실습에서는 다음 방법을 배웁니다:
 
-* BigQuery ML 원격 모델(Gemini 2.5 Flash Lite) 생성 및 구성하기
+* BigQuery ML 원격 모델(Gemini 2.0 Flash) 생성 및 구성하기
 * 사용자 지정 서비스 계정에 BigQuery 및 Pub/Sub 리소스 접근 권한 부여하기
 * Application Integration 트리거 생성 및 구성하기
 * Gemini를 사용하여 이메일 텍스트를 생성하는 연속 쿼리를 BigQuery에서 생성하기
-* 연속 쿼리를 테스트하기 위해 결합된 데이터, negative_customer_recommended_products 에 데이터 추가
+* 연속 쿼리를 테스트하기 위해 결합된 데이터, negative_customer_segment_products 에 데이터 추가
 
-Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 예상되는 이메일 시나리오를 스크린샷으로 제공합니다. 
+> Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 예상되는 이메일 시나리오를 스크린샷으로 제공합니다. 
 
-#### Setup
-
-이 실습에서는 시뮬레이션이나 데모 환경이 아닌 실제 클라우드 환경에서 직접 실습 활동을 수행할 수 있습니다. 실습 시간 동안 Google Cloud에 로그인하고 액세스하는 데 사용할 수 있는 새로운 임시 사용자 인증 정보가 제공됩니다.
-Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니다. 
 
 #### 1. BigQuery ML 원격 모델 생성 및 구성
 
-이 작업을 위해 continuous_queries라는 BigQuery 데이터세트와 negative_cutomer_recommended_products라는 새로운 값을 인서트할 빈 테이블을 포함한 여러 리소스가 미리 생성되어 있습니다.
+이 작업을 위해 continuous_queries라는 BigQuery 데이터세트와 negative_cutomer_segment_products라는 새로운 값을 인서트할 빈 테이블을 포함한 여러 리소스가 미리 생성되어 있습니다.
 
-이 작업에서는 워크플로우를 위한 개인화된 이메일 콘텐츠를 생성하기 위해 엔드포인트로 Gemini 2.5 Flash Lite를 사용하는 BigQuery ML 원격 모델을 포함한 추가 BigQuery 리소스를 생성하고 구성합니다.
+이 작업에서는 워크플로우를 위한 개인화된 이메일 콘텐츠를 생성하기 위해 엔드포인트로 Gemini 2.0 Flash 를 사용하는 BigQuery ML 원격 모델을 포함한 추가 BigQuery 리소스를 생성하고 구성합니다.
 
 ##### 1.1 BigQuery 원격 Connection 생성
 
-1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
+1. Google Cloud 콘솔에서 **Navigation menu** &gt; **BigQuery**를 클릭합니다.
 2. **Explorer** 창에서 **+ Add Data**를 클릭한 다음, **Vertex AI**를 검색합니다. 결과에서 **Vertex AI**를 클릭하고 뜨는 **Bigquery Federation**을 클릭합니다.
 3. **Connection type**에서 Vertex AI remote models, remote functions and BigLake (Cloud Resource)를 선택합니다.
 4. **Connection ID**에 **continuous-queries-connection**을 입력합니다.
 5. **Location type**에서 **Region** &gt; **us-central1**을 선택합니다.
-6. **Create connection**을 클릭한 다음, **Go to connection**을 클릭합니다 (페이지 하단 메시지)
+6. **Create connection**을 클릭한 다음, **Go to connection**을 클릭합니다 
 
-![alt text](images/task6_gotoconnection.png)
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_gotoconnection.png" alt="task6_gotoconnection.png"  width="541.50" />
 
-7. **Connection info** 페이지에서 다음 섹션에서 사용할 **Service account ID**를 복사합니다. 예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com
+7. **Connection info** 페이지에서 다음 섹션에서 사용할 **Service account ID**를 복사합니다.  
+ 예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com
 
 
 ##### 1.2 BigQuery 서비스 계정에 Vertex AI용 IAM 역할 부여
 
-1. Google Cloud 콘솔의 **Navigation menu**()에서 **IAM & Admin** &gt; **IAM**을 선택합니다.
+1. Google Cloud 콘솔의 **Navigation menu**에서 **IAM & Admin** &gt; **IAM**을 선택합니다.
 2. **Grant access**를 클릭합니다.
-3. **New principals**에 이전 섹션에서 복사한 서비스 계정 ID를 입력합니다 (예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com).
+3. **New principals**에 이전 섹션에서 복사한 서비스 계정 ID를 입력합니다   
+(예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com).
 4. **Select a role**에서 **Vertex AI** &gt; **Vertex AI User**를 선택합니다.
 5. **Save**를 클릭합니다.
 
@@ -1330,7 +1323,7 @@ Qwiklab의 student 계정에는 아웃바운드 이메일 전송이 제한됩니
 SQL
 
 ```sql
-CREATE MODEL `Project ID.continuous_queries.gemini_2_5_flash_lite`
+CREATE MODEL `Project ID.continuous_queries.gemini_2_0_flash`
 REMOTE WITH CONNECTION `Region.continuous-queries-connection`
 OPTIONS(endpoint = 'gemini-2.0-flash');
 ```
@@ -1356,7 +1349,8 @@ Create Gemin_2_0_flash Model
 3. **External connections**를 확장하고, **Region.continuous-queries-connection**을 클릭합니다.
 4. **Connection info** 페이지에서 **Share**를 클릭합니다.
 5. **Add principal**을 클릭합니다.
-6. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
+6. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다:  
+bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 7. **Select a role**에서 **BigQuery** &gt; **BigQuery Connection User**를 선택합니다.
 8. **Save**를 클릭한 다음, **Close**를 클릭합니다
 
@@ -1366,7 +1360,7 @@ Create Gemin_2_0_flash Model
 2. **Dataset info** 페이지에서 **Sharing**을 클릭하고 **Permissions**를 선택합니다.
 3. **Add principal**을 클릭합니다.
 
-![alt text](images/task6_view_permission.png)
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_view_permission.png" alt="6848190bb9b4107c.png"  width="541.50" />
 
 4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 5. **Select a role**에서 **BigQuery** &gt; **BigQuery Data Editor**를 선택합니다.
@@ -1377,7 +1371,8 @@ Create Gemin_2_0_flash Model
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **Pub/Sub**을 검색하고 클릭합니다.
 2. recapture_customer 행에서 **More Actions**(세로 점 3개)를 클릭하고, **View permissions**를 선택합니다.
 3. **Add principal**을 클릭합니다.
-4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
+4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다  
+ bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 5. **Select a role**에서 **Pub/Sub** &gt; **Pub/Sub Viewer**를 선택합니다.
 6. **Add another role**을 클릭합니다.
 7. **Select a role**에서 **Pub/Sub** &gt; **Pub/Sub Publisher**를 선택합니다.
@@ -1394,37 +1389,53 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 트리거(trigger)는 Application Integration에서 작업 또는 작업 시퀀스를 시작하는 외부 이벤트입니다. 이 단계에서는 Pub/Sub 토픽의 이벤트를 기반으로 하는 Pub/Sub 트리거를 사용합니다. 트리거는 통합의 진입점이라고 생각할 수 있으며, 트리거에 연결된 이벤트는 트리거와 관련된 작업이 실행되도록 합니다.
 
-이 작업에서는 Pub/Sub 토픽으로 새 메시지가 전송될 때 통합을 실행하는 Application Integration 트리거를 생성하고 구성합니다. 출력은 negative sentiment 고객에게 전송되는 이메일이 됩니다.
+이 작업에서는 Pub/Sub 토픽으로 새 메시지가 전송될 때 통합을 실행하는 Application Integration 트리거를 생성하고 구성합니다.
 
 
 ##### 3.1 Pub/Sub 트리거 생성
 
-1. Google Cloud 콘솔 검색창(페이지 상단)에 **Application Integration**을 입력한 다음, 결과 목록에서 **Application Integration**을 클릭합니다.
-2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.
-3. **Quick setup**을 클릭하여 필요한 API를 활성화합니다.
-4. **Create integration**을 클릭하고, 통합에 다음 이름을 지정합니다: recommend-customer-products-integration
-5. **CREATE**를 클릭합니다.
-6. recommend-customer-products-integration 페이지에서 **Triggers**(페이지 상단)를 클릭합니다.
-7. **Cloud Pub/Sub**을 선택하고 캔버스를 클릭하여 Pub/Sub 트리거를 추가합니다.
-8. 트리거 세부 정보 창의 **Trigger Input &gt; Pub/Sub topic**에 미리 생성된 Pub/Sub 토픽 경로를 추가합니다: projects/Project ID/topics/recapture_customer
-9. **Service account**에서 사용자 지정 서비스 계정 ID를 선택합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
+1. Google Cloud 콘솔 검색창(페이지 상단)에 **Application Integration**을 입력한 다음, 결과 목록에서 **Application Integration**을 클릭합니다.  
 
-* 목록에 보이지 않으면 **Refresh list**를 클릭하세요.
-* **Grant the necessary roles**라는 경고가 표시되면 **Grant**를 클릭하세요.
+2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.  
+
+3. **Quick setup**을 클릭하여 필요한 API를 활성화합니다.  
+
+4. **Create integration**을 클릭하고, 통합에 다음 이름을 지정합니다.   
+`recommend-customer-products-integration`
+
+5. **CREATE**를 클릭합니다.  
+
+6. `recommend-customer-products-integration` 페이지에서 **Triggers**(페이지 상단)를 클릭합니다.  
+
+7. **Cloud Pub/Sub**을 선택하고 캔버스를 클릭하여 Pub/Sub 트리거를 추가합니다.  
+
+8. 트리거 세부 정보 창의 **Trigger Input &gt; Pub/Sub topic**에 미리 생성된 Pub/Sub 토픽 경로를 추가합니다  
+ 
+ projects/Project ID/topics/recapture_customer
+
+9. **Service account**에서 사용자 지정 서비스 계정 ID를 선택합니다  
+  bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
+
+> - 목록에 보이지 않으면 **Refresh list**를 클릭하세요.  
+> - **Grant the necessary roles**라는 경고가 표시되면 **Grant**를 클릭하세요.  
 
 ##### 3.2 Pub/Sub 트리거를 위한 데이터 매핑 변수 구성
 
-1. 캔버스 상단에서 **Tasks**(Triggers 옆)를 클릭합니다.
-2. 검색창에 Data Mapping을 입력합니다.
-3. 결과에서 **Data Mapping**을 선택하고 캔버스를 클릭하여 **Cloud Pub/Sub Trigger** 아래에 데이터 매핑 작업을 추가합니다.
-4. **Cloud Pub/Sub Trigger**의 하단 연결점을 클릭하고 커서를 드래그하여 **Data Mapping**의 상단 연결점에 연결합니다.
+1. 캔버스 상단에서 **Tasks**(Triggers 옆)를 클릭합니다.  
+
+2. 검색창에 Data Mapping을 입력합니다.  
+
+3. 결과에서 **Data Mapping**을 선택하고 캔버스를 클릭하여 **Cloud Pub/Sub Trigger** 아래에 데이터 매핑 작업을 추가합니다.  
+
+4. **Cloud Pub/Sub Trigger**의 하단 연결점을 클릭하고 커서를 드래그하여 **Data Mapping**의 상단 연결점에 연결합니다.  
 
 * 이제 **Cloud Pub/Sub Trigger** 하단에서 **Data Mapping** 상단으로 흐르는 화살표가 있어야 합니다.
 
-![alt text](images/task6_applicationintegration1.png)
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_applicationintegration1.png" alt="task6_applicationintegration1.png"  width="541.50" />
 
 5. 캔버스에서 **Data Mapping** 항목을 클릭하고, **Open Data Mapping Editor**를 클릭합니다.
-6. 다음 단계에서는 각각 CloudPubSubMessage.data 유형의 입력 변수 네 개를 만듭니다.
+
+6. 다음 단계에서는 각각 `CloudPubSubMessage.data` 유형의 입력 변수 네 개를 만듭니다.
 
 - **[변수 1] message_output**
 
@@ -1437,7 +1448,8 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 7. **Blank default value means**에서 **Empty string**을 활성화합니다.
 8. **Create**를 클릭합니다.
 
-![alt text](images/task6_applicationintegration2.png)
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_applicationintegration2.png" alt="task6_applicationintegration2.png"  width="541.50" />
 
 - **[변수 2] customer_message** 
 방금 Input에 함수가 포함되지 않은 변수 하나를 만들었습니다. 이제 Input에 두 개의 함수가 포함된 다른 변수를 만듭니다.
@@ -1451,6 +1463,8 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 ![alt text](images/task6_value.png)
 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_value.png" alt="task6_value.png"  width="541.50" />
+
 7. 이 변수와 동일한 행에서, **Output** 아래에서 **Create a new one**을 클릭합니다.
 8. **Name**에 customer_message를 입력합니다.
 9. **Variable type**에서 **Output from integration**을 선택합니다.
@@ -1458,7 +1472,7 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 11. **Blank default value means**에서 **Empty string**을 활성화합니다.
 12. **Create**를 클릭합니다.
 
-![alt text](images/task6_variable.png)
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_variable.png" alt="task6_variable.png"  width="541.50" />
 
 - **[변수 3 및 4] customer_email 및 customer_name** 
 이전 섹션의 1~12단계를 반복하여 다음 정보를 사용하여 두 개의 변수를 더 만듭니다:
@@ -1510,13 +1524,14 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 
 16. 캔버스에서 **Gmail** 항목을 클릭하여 세부 정보를 확인합니다.
-17.  Configure Connector(커넥터 구성) 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
-18. Set entities/actions(항목/작업 설정)에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
+17.  **Configure Connector** 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
+18. **Set entities/actions**에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
 19. recommend-customer-products-integration  페이지의 오른쪽 상단에서 Publish(게시)를 클릭합니다.
 
-![alt text](images/task6_justpublish.png)
 
-위와 같은 description generation 창이 뜨는 경우, `NO, JUST PUBLISH`를 클릭합니다.
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_justpublish.png" alt="task6_justpublish.png"  width="541.50" />
+
+위와 같은 Autogenerate integration description 창이 뜨는 경우, `NO, JUST PUBLISH`를 클릭합니다.
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=18>
@@ -1529,7 +1544,7 @@ Create and publish Application Integration
 
 ##### 4.1 BigQuery Enterprise reservation 만들기
 
-![alt text](images/task6_capacitymanagement.png)
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_capacitymanagement.png" alt="task6_capacitymanagement.png"  width="300.50" />
 
 * Google Cloud 콘솔에서 **Navigation 메뉴**() &gt; **BigQuery** &gt; **Capacity Management**를 클릭합니다.
 * **Create reservation**을 클릭합니다.
@@ -1549,8 +1564,53 @@ Create and publish Application Integration
 * Job type으로 Continuous을 선택합니다.
 * **Create**를 클릭합니다.
 * bq-continuous-queries-reservation 예약 옆의 화살표를 확장하여 projects/Project ID로 표시되는 새 할당을 볼 수 있습니다.
+##### 4.3 Bigeuery에서 ML의 결과물 미리보기
+핵심 SELECT 쿼리를 실행하여, Pub/Sub으로 전송될 최종 결과물을 화면에서 직접 확인합니다.
+
+이 쿼리는 Continuous Query 모드가 아닌 일반 쿼리 모드에서 실행하시면 됩니다.
+
+```sql
+--- 미리보기용 쿼리: EXPORT 부분을 제외하고 최종 결과물(JSON)만 조회합니다.
+--- PROJECT_ID를 실제 값으로 변경해주세요.
+
+SELECT
+   TO_JSON_STRING(
+     STRUCT(
+       customer_name AS customer_name,
+       customer_email AS customer_email,
+       REGEXP_REPLACE(REGEXP_EXTRACT(ml_generate_text_llm_result,r"(?im)\<html>(?s:.)*\</html>"), r"(?i)\[your name\]", "Your friends at AI Megastore") AS customer_message
+     )
+   ) AS pubsub_message
+ FROM ML.GENERATE_TEXT(
+   MODEL `PROJECT_ID.continuous_queries.gemini_2_0_flash`,  -- 사용자의 모델 경로
+   (
+     SELECT
+       ncs.customer_name,
+       ncs.customer_email,
+       CONCAT(
+         "Write a personalized retention email in HTML format to customer ", ncs.customer_name,
+         ", who is in our '", ncs.segment, "' segment. ",
+         "We understand they were unhappy with product_id '", ncs.top_products, "'. ",
+         "Apologize for the experience and offer them these specific recommendations as an alternative: ",
+         ncs.recommended_products,           ". Keep the tone supportive and encouraging."
+       ) AS prompt
+     FROM
+       -- 1단계에서 추가된 행을 감지합니다.
+      APPENDS(TABLE `continuous_queries.negative_customer_segment_products`,
+               CURRENT_TIMESTAMP() - INTERVAL 10 MINUTE) as ncs
+   ),
+   STRUCT( 1024 AS max_output_tokens,
+     0.2 AS temperature,
+     1 AS candidate_count,
+     TRUE AS flatten_json_output)
+ )
+```
+
+위 쿼리를 실행하면, 쿼리 결과 창에 다음 쿼리를 통해서, Pub/Sub으로 전송될 데이터와 똑같은 형식의 JSON 문자열이 표시됩니다. 이 내용을 보고 이메일 메시지가 의도대로 잘 생성되는지 검토할 수 있습니다.
 
 ##### 4.3 BigQuery에서 continuous query 만들기
+
+미리보기 결과가 만족스럽다면, 이제 `EXPORT DATA` 쿼리를 사용하여 실제 Continuous Query를 생성하고 실행합니다.
 
 * BigQuery 왼쪽 메뉴에서 **Studio**를 클릭합니다.
 * **Untitled Query**를 클릭하여 빈 쿼리 창에 액세스합니다.
@@ -1584,7 +1644,7 @@ SELECT
      FROM
        -- Table B(negative_customer_recommended_products)에 새로 추가되는 행을 감지
       APPENDS(TABLE `continuous_queries.negative_customer_segment_products`, 
-               CURRENT_TIMESTAMP() - INTERVAL 10 MINUTE) as ncs
+               CURRENT_TIMESTAMP() - INTERVAL 10 MINUTE ) as ncs
    ),
    STRUCT( 1024 AS max_output_tokens,
      0.2 AS temperature,
@@ -1607,46 +1667,33 @@ SELECT
 
 내 진행 상황 확인(Check my progress)을 클릭하여 목표를 확인합니다 
 
-#### 5. 연속 쿼리를 테스트하기 위해 Task3와 데이터와 Task6의 데이터를 가공하여 'negative_customer_recommended_products' 테이블에 데이터 추가하기
+#### 5. 연속 쿼리를 테스트하기 위해 Task3와 데이터와 Task6의 데이터를 가공하여 'negative_customer_segment_products' 테이블에 데이터 추가하기
 
-마지막 태스크에서는 negative_customer_recommended_products 테이블에 일부 데이터를 추가하여, 고객에게 개인화된 이메일을 보내는 Application integration 작업을 시작함으로써 연속 쿼리를 테스트합니다.
+마지막 태스크에서는 negative_customer_segment_products 테이블에 일부 데이터를 추가하여, 고객에게 개인화된 이메일을 보내는 Application integration 작업을 시작함으로써 연속 쿼리를 테스트합니다.
 
 1. BigQuery에서 **제목 없는 쿼리** 오른쪽에 있는 **+** 아이콘(**SQL 쿼리**)을 클릭하여 새 쿼리 창을 엽니다.
-2. 다음 쿼리를 복사하여 Task3과 Task6에서 얻은 추천 정보를 JOIN하여 테이블에 데이터를 삽입하고 **실행**을 클릭합니다.
+2. 다음 쿼리를 복사하여 새로운 추천 더미 데이터를 테이블에 테스트로 삽입하고, student_username을 수정한 후, **실행**을 클릭합니다.
 
 ```sql
--- 'negative_customer_recommended_products' 테이블에 테스트 데이터를 삽입합니다.
-INSERT INTO `continuous_queries.negative_customer_segment_products` 
+-- 'negative_customer_segment_products' 테이블에 테스트 데이터를 삽입합니다.
+INSERT INTO continuous_queries.negative_customer_segment_products
 (
-      customer_id,
-      customer_name, 
-      customer_email, 
-      segment, 
-      top_products, 
-      recommended_products
-) 
-SELECT 
-      pr.customer_id,
-      fpr.customer_name, 
-      fpr.customer_email, 
-      fpr.segment, 
-      fpr.product1 AS top_products,
-      pr.recommended_products 
-FROM 
-`continuous_queries.product_recommendations` AS pr 
-JOIN 
-`continuous_queries.final_personalized_recommendations` AS fpr
-ON pr.customer_name = ncs.customer_name
-LIMIT 3; 
+    customer_id,
+    customer_name,
+    customer_email,
+    segment,
+    top_products,
+    recommended_products
+)
+VALUES
+(1001, 'Alice Johnson', '{student-username}', 'negative', 'Smart Thermostat, Wireless Headphones', 'Smart Lighting Kit, Portable Speaker');
 ```
 
-결과창에 **이 문(statement)이 negative_customer_recommended_products에 1개의 행을 추가했습니다**라는 메시지가 표시되면 이 태스크를 완료한 것입니다.
+결과창에 **이 문(statement)이 negative_customer_segment_products에 1개의 행을 추가했습니다**라는 메시지가 표시되면 이 태스크를 완료한 것입니다.
 
 * 실제 이메일 전송 기능을 활용하기 위해서는 Google Cloud Platform의 일반 사용자 계정이 필요합니다.
 
-
-![alt text](images/task6_email.png)
-
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_email.png" alt="task6_email.png"  width="541.50" />
 
 워크플로우 구축을 완료 하면, 위와 같이 이메일이 제작됩니다.
 이메일로 전송될 추천 제품 테이블에 새 행을 삽입함으로써, negative sentiment을 가진 사용자에 대한 맞춤형 이메일을 보내는 워크플로우를 구축했습니다. 
