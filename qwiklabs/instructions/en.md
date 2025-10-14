@@ -812,6 +812,19 @@ Checkpoint 4.
 * \[옵션\] 데이터 인사이트와 데이터 캔버스를 활용한 데이터 분석을 경험합니다.  
 * 분석 결과를 CSV 파일로 Google Cloud Storage 내 Bucket에 저장합니다. 
 
+### **서비스 계정에 IAM 역할 부여**
+
+빅쿼리를 활용할 수 있는 권한이 필요합니다.
+
+* **BigQuery 데이터 편집자(****roles/bigquery.DataEditor****)**
+* **BigQuery 데이터 사용자(****roles/bigquery.User****)**
+* **Vertex AI 사용자(****roles/aiplatform.user****)**
+
+1. **탐색 메뉴**(☰)로 이동하여 **IAM 및 관리자 &gt; IAM**을 선택합니다.
+2. **+ 액세스 권한 부여**를 클릭합니다.
+3. **새 주 구성원** 필드에 현재 프로젝트 계정 ID를 붙여넣습니다.
+4. **역할 선택** 필드에서 **BigQuery 데이터 편집자, BigQuery 데이터 사용자, Vertex AI 사용자** 역할을 추가합니다.
+5. **저장**을 클릭합니다
 
 ### **고객리뷰 테이블을 cymbal 데이터세트 내에 생성하기**
 
@@ -830,7 +843,7 @@ Checkpoint 4.
 
 ### **\[옵션\] 데이터 인사이트와 데이터 캔버스를 활용한 탐색적 데이터 분석**
 
-다음은 데이터 인사이트와 데이터 캔버스를 어떻게 생성하고 다루는지 기능 소개합니다.
+다음은 데이터 인사이트와 데이터 캔버스를 어떻게 생성하고 다루는지 기능을 소개합니다. 이후 과정에서 자유롭게 분석하는 데에 활용해보세요.
 
 1. 데이터 인사이트 다루기  
    1. BigQuery의 왼쪽 패널에서 <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_028.png" alt="task4_img_028.png" />클릭 후 분석하고자 데이터세트에 진입 한 후 테이블을 클릭합니다.  
