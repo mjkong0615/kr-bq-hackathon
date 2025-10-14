@@ -1564,15 +1564,15 @@ Create and publish Application Integration
 * Job type으로 Continuous을 선택합니다.
 * **Create**를 클릭합니다.
 * bq-continuous-queries-reservation 예약 옆의 화살표를 확장하여 projects/Project ID로 표시되는 새 할당을 볼 수 있습니다.
+
 ##### 4.3 Bigeuery에서 ML의 결과물 미리보기
 핵심 SELECT 쿼리를 실행하여, Pub/Sub으로 전송될 최종 결과물을 화면에서 직접 확인합니다.
 
-이 쿼리는 Continuous Query 모드가 아닌 일반 쿼리 모드에서 실행하시면 됩니다.
+* 다음 쿼리를 복사하여 연속 쿼리를 생성합니다. **아직 실행(run)을 클릭하지 마세요.**
 
 ```sql
---- 미리보기용 쿼리: EXPORT 부분을 제외하고 최종 결과물(JSON)만 조회합니다.
+--- 미리보기용 쿼리
 --- PROJECT_ID를 실제 값으로 변경해주세요.
-
 SELECT
    TO_JSON_STRING(
      STRUCT(
@@ -1582,7 +1582,7 @@ SELECT
      )
    ) AS pubsub_message
  FROM ML.GENERATE_TEXT(
-   MODEL `PROJECT_ID.continuous_queries.gemini_2_0_flash`,  -- 사용자의 모델 경로
+   MODEL `PROJECT_ID.continuous_queries.gemini_2_0_flash`,  
    (
      SELECT
        ncs.customer_name,
@@ -1595,7 +1595,6 @@ SELECT
          ncs.recommended_products,           ". Keep the tone supportive and encouraging."
        ) AS prompt
      FROM
-       -- 1단계에서 추가된 행을 감지합니다.
       APPENDS(TABLE `continuous_queries.negative_customer_segment_products`,
                CURRENT_TIMESTAMP() - INTERVAL 10 MINUTE) as ncs
    ),
@@ -1606,7 +1605,39 @@ SELECT
  )
 ```
 
-위 쿼리를 실행하면, 쿼리 결과 창에 다음 쿼리를 통해서, Pub/Sub으로 전송될 데이터와 똑같은 형식의 JSON 문자열이 표시됩니다. 이 내용을 보고 이메일 메시지가 의도대로 잘 생성되는지 검토할 수 있습니다.
+
+1. 쿼리 창 위에서 **추가 작업**(세로 점 3개) &gt; **더보기**(톱니바퀴 아이콘)를 클릭하고 **쿼리 모드 선택**에서 **연속 쿼리**를 선택합니다.
+2. 메시지가 표시되면 **확인**을 클릭합니다.
+3. 다시 **추가 작업**(세로 점 3개) &gt; **더보기**(톱니바퀴 아이콘)를 클릭하고 **쿼리 설정**을 선택합니다.
+4. **연속 쿼리** 아래의 **서비스 계정**에서 커스텀 서비스 계정(bq-continuous-query-sa@Project ID.iam.gserviceaccount.com)을 선택합니다.
+5. **저장**을 클릭하여 쿼리 설정을 종료합니다.
+6. 쿼리 창에서 **실행**을 클릭하여 연속 쿼리를 시작합니다.
+
+* 연속 쿼리가 시작되는 데 몇 분 정도 걸릴 수 있습니다.
+
+7. 쿼리 창 상단에 **작업이 계속 실행 중(Job running continuously)** 상태가 표시되면 다음 태스크로 진행할 수 있습니다.
+
+
+8. BigQuery에서 **제목 없는 쿼리** 오른쪽에 있는 **+** 아이콘(**SQL 쿼리**)을 클릭하여 새 쿼리 창을 엽니다.
+9. 다음 쿼리를 복사하여 새로운 추천 더미 데이터를 테이블에 테스트로 삽입하고, student_username을 수정한 후, **실행**을 클릭합니다.
+
+이 쿼리를 실행하면, 쿼리 결과 창에 다음 쿼리를 통해서, Pub/Sub으로 전송될 데이터와 똑같은 형식의 JSON 문자열이 표시됩니다. 이 내용을 보고 이메일 메시지가 의도대로 잘 생성되는지 검토할 수 있습니다.
+
+```sql
+-- 'negative_customer_segment_products' 테이블에 테스트 데이터를 삽입합니다.
+INSERT INTO continuous_queries.negative_customer_segment_products
+(
+    customer_id,
+    customer_name,
+    customer_email,
+    segment,
+    top_products,
+    recommended_products
+)
+VALUES
+(1001, 'Alice Johnson', '{student-username}', 'negative', 'Smart Thermostat, Wireless Headphones', 'Smart Lighting Kit, Portable Speaker');
+```
+
 
 ##### 4.3 BigQuery에서 continuous query 만들기
 
@@ -1667,7 +1698,7 @@ SELECT
 
 내 진행 상황 확인(Check my progress)을 클릭하여 목표를 확인합니다 
 
-#### 5. 연속 쿼리를 테스트하기 위해 Task3와 데이터와 Task6의 데이터를 가공하여 'negative_customer_segment_products' 테이블에 데이터 추가하기
+#### 5. 연속 쿼리를 테스트하기 위해 테스트 데이터를 'negative_customer_segment_products' 테이블에 데이터 추가하기
 
 마지막 태스크에서는 negative_customer_segment_products 테이블에 일부 데이터를 추가하여, 고객에게 개인화된 이메일을 보내는 Application integration 작업을 시작함으로써 연속 쿼리를 테스트합니다.
 
@@ -1686,7 +1717,7 @@ INSERT INTO continuous_queries.negative_customer_segment_products
     recommended_products
 )
 VALUES
-(1001, 'Alice Johnson', '{student-username}', 'negative', 'Smart Thermostat, Wireless Headphones', 'Smart Lighting Kit, Portable Speaker');
+(1002, 'David Kim', '{stduent-username}', 'Low-Engagement', 'Coffee Grinder, Yoga Mat', 'Electric Kettle, Foam Roller');
 ```
 
 결과창에 **이 문(statement)이 negative_customer_segment_products에 1개의 행을 추가했습니다**라는 메시지가 표시되면 이 태스크를 완료한 것입니다.
