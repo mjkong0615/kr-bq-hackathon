@@ -1,4 +1,4 @@
-# method description
+# method description #not used
 def check_18(handles:, maximum_score:, resources:)
   bigquery = handles['project_0.BigqueryV2']
   ret_hash = { :score => 0, :message => "", :student_message => "" }
