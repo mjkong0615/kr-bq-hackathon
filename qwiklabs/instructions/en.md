@@ -1346,7 +1346,7 @@ Create Gemin_2_0_flash Model
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
-3. **External connections**를 확장하고, **Region.continuous-queries-connection**을 클릭합니다.
+3. **connections**를 확장하고, **Region.continuous-queries-connection**을 클릭합니다.
 4. **Connection info** 페이지에서 **Share**를 클릭합니다.
 5. **Add principal**을 클릭합니다.
 6. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다:  
@@ -1549,7 +1549,7 @@ Create and publish Application Integration
 * Google Cloud 콘솔에서 **Navigation 메뉴**() &gt; **BigQuery** &gt; **Capacity Management**를 클릭합니다.
 * **Create reservation**을 클릭합니다.
 * 예약 이름(reservation name)에 다음을 입력합니다: bq-continuous-queries-reservation
-* 위치(Location)에서 **Region**을 선택합니다.
+* 위치(Location)에서 **us-central1**을 선택합니다.
 * 버전(Edition)에서 **Enterprise**를 선택합니다.
 * Max reservation size selector에서 Extra Small (50 slots)을 선택합니다.
 * Baseline slots에 **50**을 입력합니다.
