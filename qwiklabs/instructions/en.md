@@ -1143,39 +1143,25 @@ ON t1.customer_review_id = t2.customer_review_id
 * **DATASET\_NAME** : cymbal  
 4. <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_024.png" alt="task4_img_024.png" /> 클릭 후 <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_025.png" alt="task4_img_025.png" />로 저장합니다. 이후, 파일명은 customer\_review\_enf\_result.csv 로 수정합니다.
 
-#### **CHALLENGE 3 : 제품 테이블에 제품의 장점, 단점 그리고 특성을 정의한 데이터 보강을 진행하세요. 결과는 product\_enf\_result.csv로 저장한 후 qwiklabs-gcp-01-416cbdc92d8c-bucket 버킷에서 task4\_result 폴더 생성하여 그 안에 저장합니다. 그 후, 위에서 생성한 customer\_review\_enf\_result.csv 도 함께 저장합니다.** 
+#### **CHALLENGE 3 : 제품 테이블에 제품의 장점, 단점 그리고 특성을 정의한 데이터 보강을 진행하세요. 결과는 product\_enf\_result.csv로 저장한 후 여러분들의 프로젝트 명으로 생성되는 버킷에서 task4\_result 폴더 생성하여 그 안에 저장합니다. 그 후, 위에서 생성한 customer\_review\_enf\_result.csv 도 함께 저장합니다.** 
 
 **Hint 1\.** 위에서 배운 **AI.GENERATE\_TABLE** 또는 **ML.GENERATE\_TEXT** 활용하는 방법이 있습니다.
 
 **Hint 2\.** 결과 저장하는 방법은 다음을 참고할 수 있습니다.
 
 1. <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_026.png" alt="task4_img_026.png" />을 클릭합니다.  
-2. <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_027.png" alt="task4_img_027.png" /> 다음 버튼을 클릭하여 저장 후 파일명을 조건에 맞춰 수정합니다.
+2. <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_027.png" alt="task4_img_027.png" /> 다음 버튼을 클릭합니다.
+3. <img src="https://github.com/mjkong0615/kr-bq-hackathon/raw/main/qwiklabs/instructions/images/task4_img_027_2.png" alt="task4_img_027_2.png" /> 위치 설정 및 저장 후 저장된 위치에서 파일명을 수정합니다.
 
 Click Check my progress to verify the objective.
 
 \<ql-activitiy-tracking **step=25**\>
 
-Check product\_enf\_result.csv과 customer\_review\_enf\_result이 해당 버킷 경로에 존재하는지
+Check product\_enf\_result.csv과 customer\_review\_enf\_result.csv가 해당 버킷 경로에 존재하는지
 
 \</ql-activitiy-tracking\>
 
  
-
-
-Checkpoint Logs
-
-Checkpoint 1\.
-
-Challenge 1을 위한 쿼리에 order by similarity\_score desc, limit 5 가 위 쿼리에 있는지
-
-Checkpoint 2\.
-
-Challenge 2를 위한 것으로 improv\_table 테이블 생성 및 테이블 내 improvement\_points 컬럼 생성 여부 확인
-
-Checkpoint 3\.
-
-Challenge 3을 위한 것으로 생성되는 프로젝트의 버킷에서 task4\_result 폴더 생성 확인과 product\_enf\_result.csv와 customer\_review\_enf\_result 가 그 폴더 내에 존재하는지 확인
 
 
 ## **Task5: 상품 추천 모델**
@@ -1254,11 +1240,6 @@ Upload a file ‘task5\_result’ to Bucket
 
 \</ql-activitiy-tracking\>
 
-Checkpoint Logs
-
-Checkpoint 1\.
-
-생성된 프로젝트 내 버킷에서 Task5\_result 폴더 내 task5\_result.ipynb가 존재하는지 확인
 
 
 ## Task 6: 다중 소스 데이터를 결합한 지능형 고객 리인게이지먼트
