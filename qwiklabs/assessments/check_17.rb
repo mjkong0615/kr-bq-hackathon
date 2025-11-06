@@ -11,7 +11,7 @@ def check_17(handles:, maximum_score:, resources:)
 
   log_filters = [
     'timestamp>"' + lab_start_time.utc.iso8601 + '"',
-    'protoPayload.serviceData.jobCompletedEvent.extract.destinationUris="gs://'+ logging.project + '-bucket/task5/task5_result"'
+    'protoPayload.resourceName="projects/_/buckets/'+logging.project+'-bucket/objects/task5/task5_result.ipynb"'
   ]
 
   # Build log filter
@@ -28,7 +28,7 @@ def check_17(handles:, maximum_score:, resources:)
 
   # Validate if logs > 0 found
   if query_logs.count > 0
-    ret_hash = { :score => maximum_score, :message => '성공적으로 task5_result이 생성되었습니다.', :student_message => '성공적으로 task5_result이 생성되었습니다.' }
+    ret_hash = { :score => maximum_score, :message => '성공적으로 task5_result파일이 저장되었습니다.', :student_message => '성공적으로 task5_result파일이 저장되었습니다.' }
   else
     error_message = "다시 한 번 절차를 확인해보세요!"
     ret_hash[:message] = error_message
