@@ -1,4 +1,3 @@
-
 def check_20(handles:, maximum_score:, resources:)
   # Service handle initialization
   logging = handles['project_0.LoggingV2']
@@ -35,6 +34,3 @@ def check_20(handles:, maximum_score:, resources:)
     ret_hash[:message] = error_message
     ret_hash[:student_message] = error_message
   end
- 
-  return ret_hash
-end
