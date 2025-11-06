@@ -80,7 +80,7 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 실습의 분석 작업을 진행하기 전에 이 파일들을 자유롭게 둘러보며 콘텐츠에 익숙해지세요.
 
-#### **1.1.BigQuery Cloud 리소스 연결 생성**
+#### **1.1. BigQuery Cloud 리소스 연결 생성**
 
 먼저, BigQuery가 Gemini 모델과 작동할 수 있도록 Cloud 리소스 연결을 생성합니다.
 
@@ -410,7 +410,8 @@ Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 �
 **노트북 업로드**
 
 1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" /> 
+
 2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb를 입력합니다.
 3. Region: us-central-1을 선택합니다.
 4. "Upload" 버튼을 누른 후, 화면 하단의 "Go to notebook" 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 2를 진행하겠습니다.
@@ -433,18 +434,18 @@ Upload a Notebook on BigQuery Studio
 
 Task 1의 다중 모달 리뷰 분석 결과와 고객 인구통계 데이터를 결합하고, 결합된 데이터에 대한 EDA를 수행하여 고객 세분화를 위한 핵심 속성을 식별합니다. 이 인사이트를 바탕으로 다음과 같은 세그먼트 기준을 정의합니다:
 
-age_group: 40세 미만은 'Younger_Adult', 40세 이상은 'Older_Adult'
-gender_segment: gender 컬럼의 값을 대문자로 변환 (예: 'MALE', 'FEMALE')
-loyalty_status: loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'
-text_sentiment: sentiment_json_string 컬럼에서 '$.sentiment'를 추출
+* age_group: 40세 미만은 'Younger_Adult', 40세 이상은 'Older_Adult' 
+* gender_segment: gender 컬럼의 값을 대문자로 변환 (예: 'MALE', 'FEMALE')
+* loyalty_status: loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL' 
+* text_sentiment: sentiment_json_string 컬럼에서 '$.sentiment'를 추출 
 
-결과 테이블명 및 컬럼명 규칙:
+* 결과 테이블명 및 컬럼명 규칙:  
 생성되는 최종 고객 세그먼트 프로파일 테이블은 cymbal.unique_segment_profiles여야 합니다.
-이 테이블에는 customer_id, age, gender, loyalty_member, text_sentiment, age_group, gender_segment, loyalty_status, 그리고 이들을 결합한 persona_age_group_profile 컬럼이 포함되어야 합니다.
-persona_age_group_profile 컬럼은 age_group, gender_segment, loyalty_status 값을 밑줄로 연결하여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 생성되어야 합니다.
+이 테이블에는 customer_id, age, gender, loyalty_member, text_sentiment, age_group, gender_segment, loyalty_status, 그리고 이들을 결합한 persona_age_group_profile 컬럼이 포함되어야 합니다.  
+persona_age_group_profile 컬럼은 age_group, gender_segment, loyalty_status 값을 밑줄로 연결하여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 생성되어야 합니다.  
 
-
-> **Note**: 이번 단계(2.1 고객 데이터 EDA 및 세분화 로직 정의)는 Option 1. Notebooks 와 Option 2. Data Canvas 두 가지 옵션 중 하나를 선택해 수행하는 단계입니다. 두 옵션 중 하나로 태스크를 완성하면 통과입니다!
+| **Note** : 이번 단계(2.1 고객 데이터 EDA 및 세분화 로직 정의)는 Option 1. Notebooks 와 Option 2. Data Canvas 두 가지 옵션 중 하나를 선택해 수행하는 단계입니다. 두 옵션 중 하나로 태스크를 완성하면 통과입니다!|
+| :---- |
 
 **옵션 1: Notebook**
 
@@ -453,16 +454,18 @@ Notebook을 선택해 태스크를 수행하는 경우, 이전 단계에서 사�
 
 **2.1.1 고객 세그먼트 프로파일 식별**
 
-노트북에 적힌 지침에 따라 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id를 기준으로 조인하고, 위에서 정의한 age_group, gender_segment, loyalty_status, text_sentiment 컬럼을 생성합니다.
+노트북에 적힌 지침에 따라 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id를 기준으로 조인하고, 위에서 정의한 age_group, gender_segment, loyalty_status, text_sentiment 컬럼을 생성합니다.  
+
 최종적으로 persona_age_group_profile 컬럼을 포함하는 cymbal.unique_segment_profiles 테이블을 생성합니다.
 
-힌트: Python 클라이언트를 사용하여 BigQuery 쿼리를 실행하거나, 노트북 내에서 %%bigquery 매직 명령어를 활용할 수 있습니다.
+**힌트**: Python 클라이언트를 사용하여 BigQuery 쿼리를 실행하거나, 노트북 내에서 `%%bigquery` 매직 명령어를 활용할 수 있습니다.
 
-Gemini 활용 가이드: Gemini에게 테이블 조인, 새로운 컬럼 생성 (조건부 로직 포함), 그리고 최종적으로 persona_age_group_profile 컬럼을 생성하는 SQL 쿼리를 요청할 수 있습니다.
+**Gemini 활용 가이드**: Gemini에게 테이블 조인, 새로운 컬럼 생성 (조건부 로직 포함), 그리고 최종적으로 persona_age_group_profile 컬럼을 생성하는 SQL 쿼리를 요청할 수 있습니다.
 
-결과 확인: 생성된 cymbal.unique_segment_profiles 테이블의 스키마와 데이터를 샘플링하여 예상대로 컬럼이 생성되었는지, persona_age_group_profile의 형식이 올바른지 확인합니다.
+**결과 확인**: 생성된 cymbal.unique_segment_profiles 테이블의 스키마와 데이터를 샘플링하여 예상대로 컬럼이 생성되었는지, persona_age_group_profile의 형식이 올바른지 확인합니다.
 
-> **Note**: 노트북에서 새 코드 셀을 추가하신 다음, 이 주제를 시각화하는 Python 코드를 Gemini를 통해 작성해보세요. Gemini에게 위의 예시와 비슷한 형태의 시각화 코드를 생성하도록 요청할 수 있습니다.
+| **Note**: 노트북에서 새 코드 셀을 추가하신 다음, 이 주제를 시각화하는 Python 코드를 Gemini를 통해 작성해보세요. Gemini에게 위의 예시와 비슷한 형태의 시각화 코드를 생성하도록 요청할 수 있습니다.|
+| :---- |
 
 셀 사이의 공간에 마우스를 대고, 새로 나타난 "+ Code" 버튼을 누릅니다.
 
@@ -495,10 +498,10 @@ Gemini 활용 가이드: Gemini에게 테이블 조인, 새로운 컬럼 생성 
 
 다음과 같은 주제로 EDA를 자유롭게 수행해봅니다 :
 
-주제 1: 연령대와 충성도 간의 관계 분석
+**주제 1**: 연령대와 충성도 간의 관계 분석
 age_group과 loyalty_status의 조합이 어떻게 고객 수에 영향을 미치는지 시각화하여, 특정 연령대의 고객이 더 충성도가 높은 경향이 있는지 등을 분석합니다.
 
-주제 2: 세그먼트별 지리적 분포 시각화
+**주제 2**: 세그먼트별 지리적 분포 시각화
 address_city 정보를 활용하여 각 persona_age_group_profile별 고객들이 특정 도시에 집중되어 있는지 또는 넓게 분포되어 있는지 시각화하여 지리적 특성을 파악합니다.
 
 
@@ -557,10 +560,10 @@ customers 테이블 노드를 클릭한 후 나타나는 Join 옵션을 선택�
 * gender 컬럼의 값을 대문자로 변환하여 'gender_segment'라는 컬럼으로 만듭니다.
 * loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가합니다.
 
-Gemini 활용 가이드: \
-Gemini에게 자연어 프롬프트를 사용하여 위 요구사항을 만족하는 SQL 쿼리 생성을 요청할 수 있습니다. \
-예를 들어: "gender 컬럼의 값은 대문자로 'gender_segment'라는 칼럼으로 만들고, loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가해 줘." \
-쿼리를 실행하여 결과를 확인하고, 예상대로 새로운 컬럼들이 생성되었는지 검토합니다.
+**Gemini 활용 가이드**:   
+Gemini에게 자연어 프롬프트를 사용하여 위 요구사항을 만족하는 SQL 쿼리 생성을 요청할 수 있습니다.   
+예를 들어: "gender 컬럼의 값은 대문자로 'gender_segment'라는 칼럼으로 만들고, loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가해 줘."   
+쿼리를 실행하여 결과를 확인하고, 예상대로 새로운 컬럼들이 생성되었는지 검토합니다.  
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/bbb2804f0f932c0e.png" alt="bbb2804f0f932c0e.png"  width="624.00" />
 
@@ -623,7 +626,8 @@ Create tables for Customer Personas
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image6.png" alt="task2_image6.png"  width="624.00" />
 
-> **참고**: 이후 단계는 BigQuery ML의 ML.GENERATE_TEXT 함수를 반복적으로 호출하는 로직이 필요하며, 현재 BigQuery Data Canvas 인터페이스 내에서 직접적으로 이 반복 호출을 구성하기 어렵습니다. 따라서 남은 태스크는 BigQuery Studio의 Python 노트북 셀에서 실행하는 것을 권장합니다.
+| **참고**: 이후 단계는 BigQuery ML의 ML.GENERATE_TEXT 함수를 반복적으로 호출하는 로직이 필요하며, 현재 BigQuery Data Canvas 인터페이스 내에서 직접적으로 이 반복 호출을 구성하기 어렵습니다. 따라서 남은 태스크는 BigQuery Studio의 Python 노트북 셀에서 실행하는 것을 권장합니다.|
+| :---- |
 
 앞에서 정의한 각각의 페르소나에 대해 BigQuery ML의 ML.GENERATE_TEXT 함수와 Gemini 모델을 사용해 다각적인 페르소나 분석을 생성하고, 출력값을 cymbal.segment_level_gemini_analysis 테이블에 저장합니다.
 
@@ -640,8 +644,6 @@ Create tables for Customer Personas
 <ql-activity-tracking step=9>
 Create tables for Persona Segment Descriptions
 </ql-activity-tracking>
-
- <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/337a056e391e2839.png" alt="337a056e391e2839.png"  width="455.95" />
 
 
 
@@ -662,14 +664,14 @@ Task 3에서는 Task 1에서 식별된 불만족 리뷰와 Task 2에서 정의�
 * Gemini를 사용해 제품 추천을 평가하는 Python 코드 및 SQL 쿼리 작성
 
 <div><ql-warningbox>
-
-**참고**: Task 3은 Task 1, 2에 의존도를 가지고 있어 Task 1, 2를 반드시 완수한 후에 시작해야 합니다.
+참고: Task 3은 Task 1, 2에 의존도를 가지고 있어 Task 1, 2를 반드시 완수한 후에 시작해야 합니다.
 </ql-warningbox></div>
 
 **노트북 업로드**
 
 1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
+
 2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task3.ipynb를 입력합니다.
 3. Region: us-central-1을 선택합니다.
 4. "Upload" 버튼을 누른 후, 화면 하단의 "Go to notebook" 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 3을 진행하겠습니다.
@@ -699,19 +701,20 @@ customers 테이블에서 address_city를 추출하고, final_customer_insights�
 
 각 불만족 고객이 속한 세그먼트(persona_age_group_profile)와 거주 도시(address_city) 내에서 다른 고객들이 가장 많이 구매한 제품을 조회하여 이 제품들을 개인화된 상품 추천에 활용합니다. 각 세그먼트별 상위 2개 인기 제품과 각 도시별 상위 2개 인기 제품을 각각 cymbal.segment_top_products_ranked 테이블과 cymbal.city_top_products_ranked 테이블로 저장하는 SQL 쿼리를 직접 작성합니다.
 
-요구사항:
-* cymbal.segment_top_products_ranked 테이블:
-컬럼명: persona_age_group_profile, segment_top1_product, segment_top2_product \
-final_customer_insights 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다. \
-ROW_NUMBER() 윈도우 함수를 사용하여 persona_age_group_profile별로 productId의 구매 횟수(COUNT(product_id))에 따라 순위를 매깁니다. \
-상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 segment_top1_product, segment_top2_product 컬럼에 저장합니다. \
-* cymbal.city_top_products_ranked 테이블:
-컬럼명: address_city, city_top1_product, city_top2_product \
-customers 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다. \
-ROW_NUMBER() 윈도우 함수를 사용하여 address_city별로 product_id의 구매 횟수(COUNT(product_id))에 따라 순위를 매깁니다. \
-상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 city_top1_product, city_top2_product 컬럼에 저장합니다. \
+* 요구사항:
 
-힌트: 두 쿼리 모두 WITH 절을 사용하여 순위가 매겨진 중간 결과를 생성하고, 이후 MAX(CASE WHEN ... END) 패턴을 사용하여 피벗하여 최종 컬럼을 만들 수 있습니다.
+* cymbal.segment_top_products_ranked 테이블:  
+컬럼명: persona_age_group_profile, segment_top1_product, segment_top2_product. 
+final_customer_insights 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다.  
+ROW_NUMBER() 윈도우 함수를 사용하여 persona_age_group_profile별로 productId의 구매 횟수. (COUNT(product_id))에 따라 순위를 매깁니다.   
+상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 segment_top1_product,   segment_top2_product 컬럼에 저장합니다.   
+* cymbal.city_top_products_ranked 테이블:  
+컬럼명: address_city, city_top1_product, city_top2_product.  
+customers 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다.   
+ROW_NUMBER() 윈도우 함수를 사용하여 address_city별로 product_id의 구매 횟수(COUNT(product_id))에 따라 순위를 매깁니다.   
+상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 city_top1_product, city_top2_product 컬럼에 저장합니다.   
+
+**힌트**: 두 쿼리 모두 WITH 절을 사용하여 순위가 매겨진 중간 결과를 생성하고, 이후 MAX(CASE WHEN ... END) 패턴을 사용하여 피벗하여 최종 컬럼을 만들 수 있습니다.
 
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
@@ -733,34 +736,37 @@ Create tables for Personalized Recommendations
 
 이제 고객별로 추천한 상품의 적합도를 평가합니다. 이 평가는 BigQuery에서 Gemini를 활용하며, 고객 세그먼트 페르소나, 추천 상품 이름, 카테고리 정보를 기반으로 합니다.
 
-요구사항:
-1. cymbal.temp_recommendation_details 테이블 생성 (제공된 코드 실행): 이 테이블을 먼저 생성하여 필요한 데이터를 준비합니다.
-2. 평가 프롬프트 생성 (Python 코드 작성): 각 추천 사항(테이블의 행)마다 Gemini 평가 프롬프트를 동적으로 생성하는 Python 코드를 작성합니다. GEMINI_EVALUATION_PROMPT_TEMPLATE 변수를 활용하여 prompt 컬럼을 만드세요.
-* GEMINI_EVALUATION_PROMPT_TEMPLATE:
+* 요구사항:  
+1. cymbal.temp_recommendation_details 테이블 생성 (제공된 코드 실행): 이 테이블을 먼저 생성하여 필요한 데이터를 준비합니다.  
+2. 평가 프롬프트 생성 (Python 코드 작성): 각 추천 사항(테이블의 행)마다 Gemini 평가 프롬프트를 동적으로 생성하는 Python 코드를 작성합니다. GEMINI_EVALUATION_PROMPT_TEMPLATE 변수를 활용하여 prompt 컬럼을 만드세요.  
 
-```python
-GEMINI_EVALUATION_PROMPT_TEMPLATE = """
-당신은 고객 세그먼트 분석가입니다. 다음 정보를 기반으로, 추천 상품이 고객 세그먼트 페르소나에 얼마나 적합한지 평가하는 JSON 객체를 생성하세요.
+    * GEMINI_EVALUATION_PROMPT_TEMPLATE:  
 
-1.  고객 세그먼트 페르소나 (분석 결과): {persona_analysis}
-2.  추천 상품 이름: {product_title}
-3.  추천 상품 카테고리: {product_categories}
+      ```python
+      GEMINI_EVALUATION_PROMPT_TEMPLATE = """
+      당신은 고객 세그먼트 분석가입니다. 다음 정보를 기반으로, 추천 상품이 고객 세그먼트 페르소나에 얼마나 적합한지 평가하는 JSON 객체를 생성하세요.
 
-JSON 형식 제약조건:
-* "product_title" (상품 이름)
-* "product_categories" (상품 카테고리)
-* "compatibility_score" (페르소나 대비 적합성 점수, 1에서 100 사이의 정수)
-* "reasoning" (점수를 부여한 근거, 50단어 이내)
-* 출력은 JSON 객체 하나여야 합니다.
-"""
-```
+      1.  고객 세그먼트 페르소나 (분석 결과): {persona_analysis}
+      2.  추천 상품 이름: {product_title}
+      3.  추천 상품 카테고리: {product_categories}
 
-* 결과: 생성된 프롬프트 DataFrame은 customer_id, recommendation_rank, product_title, prompt 컬럼을 포함해야 합니다.
+      JSON 형식 제약조건:
+      * "product_title" (상품 이름)
+      * "product_categories" (상품 카테고리)
+      * "compatibility_score" (페르소나 대비 적합성 점수, 1에서 100 사이의 정수)
+      * "reasoning" (점수를 부여한 근거, 50단어 이내)
+      * 출력은 JSON 객체 하나여야 합니다.
+      """
+      ```
+
+    * 결과: 생성된 프롬프트 DataFrame은 customer_id, recommendation_rank, product_title, prompt 컬럼을 포함해야 합니다.
+
 3. 프롬프트 저장: 생성된 프롬프트 DataFrame을 temp_gemini_evaluation_prompts라는 임시 BigQuery 테이블에 저장합니다.
 4. Gemini 모델 호출 및 평가 테이블 생성 (SQL 쿼리 작성): temp_gemini_evaluation_prompts 테이블의 프롬프트를 사용하여 BigQuery ML의 ML.GENERATE_TEXT 함수를 호출하는 SQL 쿼리를 작성합니다.
-* JSON 결과 파싱 및 최종 테이블 (cymbal.gemini_recommendation_evaluation) 생성 로직은 제공되니 이를 활용하여 쿼리를 완성하세요.
-* 모델 이름: GEMINI_MODEL_NAME 변수를 사용합니다.
-* STRUCT 옵션: STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)를 사용합니다.
+
+  * JSON 결과 파싱 및 최종 테이블 (cymbal.gemini_recommendation_evaluation) 생성 로직은 제공되니 이를 활용하여 쿼리를 완성하세요.
+  * 모델 이름: GEMINI_MODEL_NAME 변수를 사용합니다.
+  * STRUCT 옵션: STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)를 사용합니다.
 
 모든 과정을 마치고, Gemini의 평가 내용을 조회합니다. 추후 다른 Task(Task 6)에서 이번 태스크의 내용을 일부 활용할 수 있도록 BigQuery 테이블로 저장되었는지 확인합니다.
 
@@ -768,27 +774,6 @@ JSON 형식 제약조건:
 <ql-activity-tracking step=13>
 Create tables for Recommendation Evaluations
 </ql-activity-tracking>
-
-
-**Checkpoint Logs**
-
-Checkpoint 1.
-
-* Table ‘cymbal.negative_customers_list', ‘cymbal.negative_customer_segment_data' 생성 여부 확인
-
-Checkpoint 2.
-
-* Table ‘cymbal.segment_top_products_ranked', ‘cymbal.city_top_products_ranked' 생성 여부 확인
-
-Checkpoint 3.
-
-* Table ‘cymbal.final_personalized_recommendations' 생성 여부 확인
-
-Checkpoint 4. 
-
-* Table ‘cymbal.gemini_recommendation_evaluation' 생성 여부 확인
-* Column ‘gemini_raw_evaluation'의 값 !=None 여부 확인
-
 
 ## **Task4: 추가적인 탐색적 데이터 분석(EDA)**
 
