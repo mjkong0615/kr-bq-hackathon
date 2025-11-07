@@ -1137,7 +1137,7 @@ ON t1.customer_review_id = t2.customer_review_id
 * **DATASET\_NAME** : cymbal  
 4. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_024.png" alt="task4_img_024.png" /> 클릭 후 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_025.png" alt="task4_img_025.png" />로 저장합니다. 이후, 파일명은 customer\_review\_enf\_result.csv 로 수정합니다.
 
-#### **CHALLENGE 3 : 제품 테이블에 제품의 장점, 단점 그리고 특성을 정의한 데이터 보강을 진행하세요. 결과는 product\_enf\_result.csv로 저장한 후 qwiklabs-gcp-01-416cbdc92d8c-bucket 버킷에서 task4\_result 폴더 생성하여 그 안에 저장합니다. 그 후, 위에서 생성한 customer\_review\_enf\_result.csv 도 함께 저장합니다.** 
+#### **CHALLENGE 3 : 제품 테이블에 제품의 장점, 단점 그리고 특성을 정의한 데이터 보강을 진행하세요. 결과는 product\_enf\_result.csv로 저장한 후 여러분들의 프로젝트 명으로 생성되는 버킷에서 task4\_result 폴더 생성하여 그 안에 저장합니다. 그 후, 위에서 생성한 customer\_review\_enf\_result.csv 도 함께 저장합니다.** 
 
 **Hint 1\.** 위에서 배운 **AI.GENERATE\_TABLE** 또는 **ML.GENERATE\_TEXT** 활용하는 방법이 있습니다.
 
