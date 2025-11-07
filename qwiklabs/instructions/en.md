@@ -10,10 +10,10 @@
 
 ## Objective
 
-* **데이터 분석 (Analysis):** BQ와 Gemini를 함께 사용하여 이미지, 비디오, 텍스트 등 **멀티모달(multimodal) 고객 리뷰**의 감성(Sentiment)을 분석합니다.
-* **세분화 및 타겟팅 (Segment & Target):** EDA를 통해 고객을 세분화(Segmentation)하고, 특히 **부정적인 피드백을 남긴 고객**을 식별하여 이들을 위한 맞춤형 프로모션 메시지를 생성합니다.
+* **데이터 분석 (Analysis):** BQ와 Gemini를 함께 사용하여 이미지, 비디오, 텍스트 등 멀티모달(multimodal) 고객 리뷰의 감성(Sentiment)을 분석합니다.
+* **세분화 및 타겟팅 (Segment & Target):** EDA를 통해 고객을 세분화(Segmentation)하고, 특히 부정적인 피드백을 남긴 고객을 식별하여 이들을 위한 맞춤형 프로모션 메시지를 생성합니다.
 * **모델링 및 예측 (Model & Predict):** 더 나은 제품 추천 모델을 만들기 위해 추가 EDA를 진행하고 피처(feature)를 도출한 뒤, BigQuery Studio의 Data Science Agent(DSA)를 활용해 고급 추천 모델을 구축하고 예측 결과를 BigQuery 테이블로 저장합니다.
-* **자동화 및 실행 (Automate & Activate):** BigQuery의 고객 경험 기반의 데이터 분석 결과를 **Application Integration**을 통해 맞춤형 이메일을 자동으로 전송하는 워크플로우를 구축하여 확보된 인사이트를 즉각적인 마케팅 활동으로 연결합니다.
+* **자동화 및 실행 (Automate & Activate):** BigQuery의 고객 경험 기반의 데이터 분석 결과를 Application Integration을 통해 맞춤형 이메일을 자동으로 전송하는 워크플로우를 구축하여 확보된 인사이트를 즉각적인 마케팅 활동으로 연결합니다.
 
 ## Scenario
 
@@ -400,24 +400,25 @@ Visualize Sentiment Trends
 
 ## Task 2: 고객 세분화를 통한 타겟 마케팅
 
-
-**개요**
+#### Overview
 
 Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 다음 단계인 고객 세분화를 진행합니다. 이번 태스크에서는 태스크 1에서 얻은 인사이트와 고객 인구통계 데이터를 결합합니다. 이어서 Gemini를 사용하여 각 고객 세그먼트에 대한 상세한 페르소나를 동적으로 생성하고, 이를 타겟 마케팅에 활용합니다.
 
 이번 태스크에서는 BigQuery Studio의 **Notebook** 또는 **Data Canvas**를 활용하는 **두 가지 방법 중 하나를 선택**해 태스크를 진행합니다.
 
-**목표**
+#### Objective
 
 * 멀티모달 리뷰 분석과 고객 인구통계 데이터 결합
 * 연령, 성별, 충성도를 기준으로 고객 세그먼트 정의
 * Gemini를 사용하여 각 세그먼트에 대한 풍부하고 상세한 페르소나 생성
 * 상세한 세그먼트 인사이트와 페르소나 정의를 담은 결과 테이블 생성
 
-**노트북 업로드**
+### 1. 태스크 환경 준비
+
+### 1.1 노트북 업로드
 
 1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" /> 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" /> 
 
 2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb를 입력합니다.
 3. Region: us-central-1을 선택합니다.
@@ -428,14 +429,15 @@ Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 �
 Upload a Notebook on BigQuery Studio
 </ql-activity-tracking>
 
-**1. Task 2 환경 초기화**
+### 1.2 환경 초기화
 
 태스크 셋업을 위해 초기 설정 셀을 실행합니다. 이 셀은 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며, 이 랩에서 사용될 주요 변수(예: PROJECT_ID, DATASET_ID)를 정의합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image2.png" alt="task2_image2.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image2.png" alt="task2_image2.png"  width="624.00" />
 
-이때 반드시 Project ID를 Qwiklabs 환경에서 주어진 Project ID로 변경해줍니다.
+이때 반드시 Project ID를 Qwiklabs 환경에서 주어진 Project ID로 변경해줍니다.  
 
-**2. 고객 데이터 EDA 및 고객 세그먼트 세분화 로직 정의**
+
+### 2. 고객 데이터 EDA 및 고객 세그먼트 세분화 로직 정의
 
 이 단계는 Task 1의 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id를 기준으로 조인하고, 이를 바탕으로 고객 세분화를 위한 핵심 속성을 탐색하는 과정입니다. 여러분은 이 탐색을 통해 발견된 유의미한 패턴을 기반으로 세분화 기준과 로직을 자유롭게 정의할 수 있습니다.
 
@@ -451,15 +453,15 @@ Task 1의 다중 모달 리뷰 분석 결과와 고객 인구통계 데이터를
 이 테이블에는 customer_id, age, gender, loyalty_member, text_sentiment, age_group, gender_segment, loyalty_status, 그리고 이들을 결합한 persona_age_group_profile 컬럼이 포함되어야 합니다.  
 persona_age_group_profile 컬럼은 age_group, gender_segment, loyalty_status 값을 밑줄로 연결하여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 생성되어야 합니다.  
 
-| **Note** : 이번 단계(2.1 고객 데이터 EDA 및 세분화 로직 정의)는 Option 1. Notebooks 와 Option 2. Data Canvas 두 가지 옵션 중 하나를 선택해 수행하는 단계입니다. 두 옵션 중 하나로 태스크를 완성하면 통과입니다!|
+| **Note** : 이번 단계(2.1 고객 데이터 EDA 및 세분화 로직 정의)는 Option 1. Notebook 과 Option 2. Data Canvas 두 가지 옵션 중 하나를 선택해 수행하는 단계입니다. 두 옵션 중 하나로 태스크를 완성하면 통과입니다! Option 2. Data Canvas로 태스크를 수행하려면 Option 1. Notebook 부분을 건너 뛰고 아래로 스크롤합니다. |
 | :---- |
 
-**옵션 1: Notebook**
+### 옵션 1: Notebook
 
-Notebook을 선택해 태스크를 수행하는 경우, 이전 단계에서 사용한 Notebook에서 태스크를 이어갑니다. 
+Notebook을 선택해 태스크를 수행하는 경우, 이전 단계에서 사용한 Notebook에서 태스크를 이어갑니다.  
 인구통계 정보가 포함된 customers 테이블을 사용합니다. 먼저 테이블 구조를 간단히 살펴보겠습니다.
 
-**2.1.1 고객 세그먼트 프로파일 식별**
+### 2.1 고객 세그먼트 프로파일 식별
 
 노트북에 적힌 지침에 따라 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id를 기준으로 조인하고, 위에서 정의한 age_group, gender_segment, loyalty_status, text_sentiment 컬럼을 생성합니다.  
 
@@ -476,22 +478,22 @@ Notebook을 선택해 태스크를 수행하는 경우, 이전 단계에서 사�
 
 셀 사이의 공간에 마우스를 대고, 새로 나타난 "+ Code" 버튼을 누릅니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image3.png" alt="task2_image3.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image3.png" alt="task2_image3.png"  width="624.00" />
 
 "generate"을 클릭한 후, 나타난 입력창에 Gemini에게 요청할 프롬프트를 입력합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image4.png" alt="task2_image4.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image4.png" alt="task2_image4.png"  width="624.00" />
 
 예시 프롬프트:
 "BigQuery에서 cymbal.multimodal_customer_reviews 테이블과 cymbal.customers 테이블을 customer_id로 조인하는 코드를 만들어줘."
 
 프롬프트를 입력한 후, 엔터 키를 눌러 프롬프트를 전송합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image5.png" alt="task2_image5.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image5.png" alt="task2_image5.png"  width="624.00" />
 
 요청한 프롬프트에 대해 Gemini가 생성한 코드를 실행할 수 있습니다.
 
-**2.1.2 시각화**
+### 2.2 시각화
 
 이 단계에서는 자유롭게 데이터 탐색을 하시면서, 앞선 단계에서 생성한 unique_segment_profiles 테이블, customers 테이블을 살펴봅니다. 
 
@@ -501,7 +503,7 @@ Notebook을 선택해 태스크를 수행하는 경우, 이전 단계에서 사�
 
 위와 같은 Bar Chart로 고객 세그먼트의 집계를 조회할 수 있습니다.
 
-**2.1.3 추가 시각화**
+### 2.3 추가 시각화
 
 다음과 같은 주제로 EDA를 자유롭게 수행해봅니다 :
 
@@ -511,12 +513,15 @@ age_group과 loyalty_status의 조합이 어떻게 고객 수에 영향을 미�
 **주제 2**: 세그먼트별 지리적 분포 시각화
 address_city 정보를 활용하여 각 persona_age_group_profile별 고객들이 특정 도시에 집중되어 있는지 또는 넓게 분포되어 있는지 시각화하여 지리적 특성을 파악합니다.
 
-
-**옵션 2: Data Canvas**
+| "2. 고객 데이터 EDA 및 고객 세그먼트 세분화 로직 정의"를 완료했습니다. 이제 아래로 스크롤하여 "3. Gemini로 상세 페르소나 생성" 스텝으로 이동합니다. |
+| :---- |
+  
+  
+### 옵션 2: Data Canvas
 
 BigQuery Data Canvas는 시각적인 인터페이스를 통해 복잡한 데이터 조인, 변환, 집계 및 시각화를 수행할 수 있는 도구입니다. 이 옵션을 통해 고객 데이터의 EDA 및 세그먼트 생성 작업을 시각적으로 진행합니다.
 
-**2.2.1 Data Canvas에 테이블 추가 및 조인 수행**
+### 2.1 Data Canvas에 테이블 추가 및 조인 수행
 
 화면 왼쪽 탐색 패널에서 Data Canvas를 클릭하거나, + 버튼을 눌러 새 Canvas를 생성합니다.
 Data Canvas를 처음 사용하는 경우, API 사용 설정 버튼이 나타납니다. "" 버튼을 클릭하여 Data Canvas API를 활성화합니다.
@@ -526,7 +531,7 @@ Data Canvas 화면의 Recents 아래 multimodal_customer_reviews 테이블과 cu
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/f50d21a3cf64f30.png" alt="f50d21a3cf64f30.png"  width="621.50" />
 
     
-Recents &gt; customers 테이블을 클릭합니다.   
+Recents &gt; customers 테이블을 클릭합니다.  
 만약 Recents 아래에 customers 테이블이 조회되지 않는 경우, "Search for data"  버튼 클릭합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/a5f278cbd310a6cb.png" alt="a5f278cbd310a6cb.png"  width="511.50" />
@@ -538,13 +543,13 @@ Recents &gt; customers 테이블을 클릭합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/585217364ecd80bc.png" alt="585217364ecd80bc.png"  width="299.50" />
 
 화면 우측 하단의 "+" 버튼을 누르고, "New search"를 클릭한 후 캔버스 내의 빈 공간을 클릭합니다. (클릭한 빈 공간에 테이블을 추가하게 됩니다.)  
-같은 방법으로 multimodal_customer_reviews 테이블을 추가합니다.   
+같은 방법으로 multimodal_customer_reviews 테이블을 추가합니다.  
 customer 테이블의 구조를 간단히 살펴보겠습니다. "Preview"란을 클릭하면 테이블의 데이터를 일부 조회할 수 있습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/99c8631e4ad02846.png" alt="99c8631e4ad02846.png"  width="624.00" />
 
       
-**2.2.2 고객 세그먼트 프로파일 식별**
+### 2.2 고객 세그먼트 프로파일 식별
 
 customers 테이블 노드를 클릭한 후 나타나는 Join 옵션을 선택합니다. 이어서 On this canvas 아래 multimodal_customer_reviews 테이블 노드를 클릭 후 OK로 확정합니다.
 
@@ -568,8 +573,8 @@ customers 테이블 노드를 클릭한 후 나타나는 Join 옵션을 선택�
 * loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가합니다.
 
 **Gemini 활용 가이드**:   
-Gemini에게 자연어 프롬프트를 사용하여 위 요구사항을 만족하는 SQL 쿼리 생성을 요청할 수 있습니다.   
-예를 들어: "gender 컬럼의 값은 대문자로 'gender_segment'라는 칼럼으로 만들고, loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가해 줘."   
+Gemini에게 자연어 프롬프트를 사용하여 위 요구사항을 만족하는 SQL 쿼리 생성을 요청할 수 있습니다.  
+예를 들어: "gender 컬럼의 값은 대문자로 'gender_segment'라는 칼럼으로 만들고, loyalty_member가 True면 'LOYAL', False이면 'NON_LOYAL'인 'loyalty_status' 컬럼을 추가해 줘."  
 쿼리를 실행하여 결과를 확인하고, 예상대로 새로운 컬럼들이 생성되었는지 검토합니다.  
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/bbb2804f0f932c0e.png" alt="bbb2804f0f932c0e.png"  width="624.00" />
@@ -582,15 +587,15 @@ Run 버튼으로 쿼리를 실행해 결과를 확인합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/371f475802604197.png" alt="371f475802604197.png"  width="544.50" />
 
-이제 위에서 생성한 ‘age_group, gender_segment, loyalty_status' 칼럼을 이어 붙여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 고객 세그먼트를 나타내는 새로운 칼럼을 생성합니다.
+이제 위에서 생성한 ‘age_group, gender_segment, loyalty_status' 칼럼을 이어 붙여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 고객 세그먼트를 나타내는 새로운 칼럼을 생성합니다.  
 
-Gemini에게 자연어 프롬프트를 사용하여 그룹화 및 프로파일 생성 쿼리를 요청하거나 직접 SQL을 작성합니다.
+Gemini에게 자연어 프롬프트를 사용하여 그룹화 및 프로파일 생성 쿼리를 요청하거나 직접 SQL을 작성합니다.  
 
-쿼리를 실행하여 의도한 형식에 맞게 고유한 페르소나 프로파일 칼럼이 생성되었는지 확인합니다.
+쿼리를 실행하여 의도한 형식에 맞게 고유한 페르소나 프로파일 칼럼이 생성되었는지 확인합니다.  
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/c3c46a68c5b74c68.png" alt="c3c46a68c5b74c68.png"  width="624.00" />
 
-**2.2.3 결과 테이블 저장** 
+### 2.3 결과 테이블 저장
 
 최종 쿼리 결과(Query Results) 블록을 클릭합니다.
 
@@ -606,9 +611,9 @@ Dataset은 cymbal을, Table name은 unique_segment_profiles로 지정합니다.
 
 Save 버튼을 눌러 테이블을 저장합니다.
 
-이 작업은 Data Canvas를 통해 정의된 고유 세그먼트 프로파일을 포함하는 cymbal.unique_segment_profiles 테이블을 BigQuery에 생성합니다.
+이 작업은 Data Canvas를 통해 정의된 고유 세그먼트 프로파일을 포함하는 cymbal.unique_segment_profiles 테이블을 BigQuery에 생성합니다.  
 
-**2.2.4 시각화 블록 추가 (선택 사항)**
+### 2.4 시각화 블록 추가 (선택 사항)
 
 최종 쿼리 결과 블록을 클릭하고 Visualize를 선택합니다.
 
@@ -618,20 +623,20 @@ Save 버튼을 눌러 테이블을 저장합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/86ffa77b507ffa68.png" alt="86ffa77b507ffa68.png"  width="491.10" />
 
-위의 예시는 Auto-generate 기능을 사용해 자동으로 생성된 차트로 LOYAL, NON_LOYAL 고객의 세그먼트별 분포를 나타냅니다.
+위의 예시는 Auto-generate 기능을 사용해 자동으로 생성된 차트로 LOYAL, NON_LOYAL 고객의 세그먼트별 분포를 나타냅니다.  
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=8>
 Create tables for Customer Personas
 </ql-activity-tracking>
 
-**2.3 Gemini로 상세 페르소나 생성**
+### 3. Gemini로 상세 페르소나 생성
 
 이전 단계에서 Data Canvas 또는 BigQuery Studio를 통해 cymbal.unique_segment_profiles 테이블을 성공적으로 생성했다면, 이제 이 테이블을 기반으로 Gemini 모델을 호출하여 각 세그먼트의 상세 페르소나를 생성합니다.
 
 노트북에서 "Gemini를 사용한 상세 페르소나 생성" 이라는 헤더 블록 아래의 셀부터 실행하여, 앞에서 정의한 각각의 페르소나에 대해 BigQuery ML의 ML.GENERATE_TEXT 함수와 Gemini 모델을 사용해 다각적인 페르소나 분석을 생성하고, 출력값을 cymbal.segment_level_gemini_analysis 테이블에 저장합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image6.png" alt="task2_image6.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image6.png" alt="task2_image6.png"  width="624.00" />
 
 | **참고**: 이후 단계는 BigQuery ML의 ML.GENERATE_TEXT 함수를 반복적으로 호출하는 로직이 필요하며, 현재 BigQuery Data Canvas 인터페이스 내에서 직접적으로 이 반복 호출을 구성하기 어렵습니다. 따라서 남은 태스크는 BigQuery Studio의 Python 노트북 셀에서 실행하는 것을 권장합니다.|
 | :---- |
@@ -640,10 +645,10 @@ Create tables for Customer Personas
 
 
 
-**2.4 최종 고객 인사이트 및 페르소나 정의 테이블 생성**
+### 4. 최종 고객 인사이트 및 페르소나 정의 테이블 생성
 
-마지막으로, 주요 인사이트를 담은 테이블과 정리된 페르소나 설명을 담은 테이블을 생성합니다.
-해당 부분의 코드는 제공됩니다.
+마지막으로 주요 인사이트를 담은 테이블과 정리된 페르소나 설명을 담은 테이블을 생성합니다.
+해당 부분의 코드는 제공되어 있어 노트북에서 코드를 실행합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/bdf6585a0a125882.png" alt="bdf6585a0a125882.png"  width="624.00" />
 
@@ -657,12 +662,11 @@ Create tables for Persona Segment Descriptions
 ## Task 3: 불만족 고객을 위한 맞춤형 프로모션 상품 추천 및 평가
 
 
-
-**개요**
+#### Overview
 
 Task 3에서는 Task 1에서 식별된 불만족 리뷰와 Task 2에서 정의된 고객 세그먼트 및 페르소나 정보를 활용하여, 불만족한 고객의 재참여를 유도하기 위해 개인화된 상품 추천을 수행하고, 이 추천을 평가합니다.
 
-**목표**
+#### Objective
 
 * 감성 분석 기반 부정적 피드백 고객 식별
 * 식별된 고객의 세그먼트 프로파일 및 지리 정보 검색
@@ -674,48 +678,50 @@ Task 3에서는 Task 1에서 식별된 불만족 리뷰와 Task 2에서 정의�
 참고: Task 3은 Task 1, 2에 의존도를 가지고 있어 Task 1, 2를 반드시 완수한 후에 시작해야 합니다.
 </ql-warningbox></div>
 
-**노트북 업로드**
+### 1. 태스크 환경 설정
+
+### 1.1 노트북 업로드
 
 1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/instr-task2/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
 
 2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task3.ipynb를 입력합니다.
 3. Region: us-central-1을 선택합니다.
 4. "Upload" 버튼을 누른 후, 화면 하단의 "Go to notebook" 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 3을 진행하겠습니다.
 
-**1. Task 3 환경 초기화**
+### 1.2 환경 초기화
 
 태스크 셋업을 위해 초기 설정 셀을 실행합니다. 이 셀은 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며, 이 랩에서 사용될 주요 변수(예: PROJECT_ID, DATASET_ID)를 정의합니다.
 
-**2. 불만족 리뷰 고객 식별**
+### 2. 불만족 리뷰 고객 식별
 
 이 단계에서는 final_customer_insights 테이블의 sentiment_json_string 칼럼에서 감성 분석 결과가 "negative" 혹은 "neutral"인 고객의 customer_id 목록을 추출하고, negative_customers_list라는 BigQuery 테이블로 저장합니다.
 제공된 코드를 실행하여 다음 단계로 넘어갑니다.
 
-**3. 불만족 고객의 세그먼트 및 지리적 데이터 검색**
+### 3. 불만족 고객의 세그먼트 및 지리적 데이터 검색**
 
-Step 2에서 식별된 불만족 고객에 대한 데이터를 가져옵니다. 
-
+Step 2에서 식별된 불만족 고객에 대한 데이터를 가져옵니다.  
+  
 customers 테이블에서 address_city를 추출하고, final_customer_insights에서 persona_age_group_profile 정보를 추출해 negative_customer_segment_data 테이블에 저장합니다.
-
-
+  
+  
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=10>
   Create tables for Negative Customer Segments
 </ql-activity-tracking>
 
-**4. 세그먼트, 도시별 인기 제품 추출 및 최종 추천 상품 결정**
+## 4. 세그먼트, 도시별 인기 제품 추출 및 최종 추천 상품 결정
 
 각 불만족 고객이 속한 세그먼트(persona_age_group_profile)와 거주 도시(address_city) 내에서 다른 고객들이 가장 많이 구매한 제품을 조회하여 이 제품들을 개인화된 상품 추천에 활용합니다. 각 세그먼트별 상위 2개 인기 제품과 각 도시별 상위 2개 인기 제품을 각각 cymbal.segment_top_products_ranked 테이블과 cymbal.city_top_products_ranked 테이블로 저장하는 SQL 쿼리를 직접 작성합니다.
 
-* 요구사항:
+**요구사항**:
 
-* cymbal.segment_top_products_ranked 테이블:  
+* **cymbal.segment_top_products_ranked** 테이블:  
 컬럼명: persona_age_group_profile, segment_top1_product, segment_top2_product. 
 final_customer_insights 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다.  
 ROW_NUMBER() 윈도우 함수를 사용하여 persona_age_group_profile별로 productId의 구매 횟수. (COUNT(product_id))에 따라 순위를 매깁니다.   
 상위 1위(rn=1)와 2위(rn=2) 제품의 product_id를 추출하여 각각 segment_top1_product,   segment_top2_product 컬럼에 저장합니다.   
-* cymbal.city_top_products_ranked 테이블:  
+* **cymbal.city_top_products_ranked** 테이블:  
 컬럼명: address_city, city_top1_product, city_top2_product.  
 customers 테이블과 customer_reviews_external 테이블을 조인하여 사용합니다.   
 ROW_NUMBER() 윈도우 함수를 사용하여 address_city별로 product_id의 구매 횟수(COUNT(product_id))에 따라 순위를 매깁니다.   
@@ -739,13 +745,13 @@ Create tables for Top Products
 Create tables for Personalized Recommendations
 </ql-activity-tracking>
 
-**5. Gemini로 개인화된 추천 콘텐츠 평가**
+### 5. Gemini로 개인화된 추천 콘텐츠 평가
 
 이제 고객별로 추천한 상품의 적합도를 평가합니다. 이 평가는 BigQuery에서 Gemini를 활용하며, 고객 세그먼트 페르소나, 추천 상품 이름, 카테고리 정보를 기반으로 합니다.
 
-* 요구사항:  
-1. cymbal.temp_recommendation_details 테이블 생성 (제공된 코드 실행): 이 테이블을 먼저 생성하여 필요한 데이터를 준비합니다.  
-2. 평가 프롬프트 생성 (Python 코드 작성): 각 추천 사항(테이블의 행)마다 Gemini 평가 프롬프트를 동적으로 생성하는 Python 코드를 작성합니다. GEMINI_EVALUATION_PROMPT_TEMPLATE 변수를 활용하여 prompt 컬럼을 만드세요.  
+**요구사항**:   
+1. **cymbal.temp_recommendation_details 테이블 생성 (제공된 코드 실행)**: 이 테이블을 먼저 생성하여 필요한 데이터를 준비합니다.  
+2. **평가 프롬프트 생성 (Python 코드 작성)**: 각 추천 사항(테이블의 행)마다 Gemini 평가 프롬프트를 동적으로 생성하는 Python 코드를 작성합니다. GEMINI_EVALUATION_PROMPT_TEMPLATE 변수를 활용하여 prompt 컬럼을 만드세요.  
 
     * GEMINI_EVALUATION_PROMPT_TEMPLATE:  
 
@@ -768,16 +774,16 @@ Create tables for Personalized Recommendations
 
     * 결과: 생성된 프롬프트 DataFrame은 customer_id, recommendation_rank, product_title, prompt 컬럼을 포함해야 합니다.
 
-3. 프롬프트 저장: 생성된 프롬프트 DataFrame을 temp_gemini_evaluation_prompts라는 임시 BigQuery 테이블에 저장합니다.
-4. Gemini 모델 호출 및 평가 테이블 생성 (SQL 쿼리 작성): temp_gemini_evaluation_prompts 테이블의 프롬프트를 사용하여 BigQuery ML의 ML.GENERATE_TEXT 함수를 호출하는 SQL 쿼리를 작성합니다.
+3. **프롬프트 저장**: 생성된 프롬프트 DataFrame을 temp_gemini_evaluation_prompts라는 임시 BigQuery 테이블에 저장합니다.
+4. **Gemini 모델 호출 및 평가 테이블 생성 (SQL 쿼리 작성)**: temp_gemini_evaluation_prompts 테이블의 프롬프트를 사용하여 BigQuery ML의 `ML.GENERATE_TEXT` 함수를 호출하는 SQL 쿼리를 작성합니다.
 
-  * JSON 결과 파싱 및 최종 테이블 (cymbal.gemini_recommendation_evaluation) 생성 로직은 제공되니 이를 활용하여 쿼리를 완성하세요.
-  * 모델 이름: GEMINI_MODEL_NAME 변수를 사용합니다.
-  * STRUCT 옵션: STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)를 사용합니다.
+* JSON 결과 파싱 및 최종 테이블 (cymbal.gemini_recommendation_evaluation) 생성 로직은 제공되니 이를 활용하여 쿼리를 완성하세요.
+* 모델 이름: `GEMINI_MODEL_NAME` 변수를 사용합니다.
+* STRUCT 옵션: `STRUCT(0.5 AS temperature, 1024 AS max_output_tokens, TRUE AS flatten_json_output)`를 사용합니다.
 
-모든 과정을 마치고, Gemini의 평가 내용을 조회합니다. 추후 다른 Task(Task 6)에서 이번 태스크의 내용을 일부 활용할 수 있도록 BigQuery 테이블로 저장되었는지 확인합니다.
+모든 과정을 마치고, Gemini의 평가 내용을 조회합니다.  
 
-목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
+**진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=13>
 Create tables for Recommendation Evaluations
 </ql-activity-tracking>
