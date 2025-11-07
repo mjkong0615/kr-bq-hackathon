@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 def check_19(handles:, maximum_score:, resources:)
   # Service handle initialization
@@ -40,4 +41,3 @@ def check_19(handles:, maximum_score:, resources:)
  
   return ret_hash
 end
-
