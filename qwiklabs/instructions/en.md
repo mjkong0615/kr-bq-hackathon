@@ -788,9 +788,9 @@ Create tables for Personalized Recommendations
 Create tables for Recommendation Evaluations
 </ql-activity-tracking>
 
-## **Task4: 추가적인 탐색적 데이터 분석(EDA)**
+## Task4: 추가적인 탐색적 데이터 분석(EDA)
 
-**개요**
+#### Overview
 
 이전 불만족스러운 경험을 한 고객들을 위해 맞춤형 추천 서비스의 개선을 진행하고자 합니다. 더 나은 상품 추천을 수행할 수 있는 모델 생성 및 훈련을 위해 탐색적 데이터 분석을 수행하기로 결정했고, 다음과 같은 방법을 활용하여 진행하기로 했습니다.
 
@@ -799,18 +799,17 @@ Create tables for Recommendation Evaluations
 
 분석 업무를 맡은 여러분들은 불만족한 고객들이 만족할 수 있도록 상품 추천 모델을 만들기 위한 탐색적 데이터 분석을 진행해야 합니다. 아래 과정에서 챌린지를 해결하고 그 과정에서 자유롭게 탐색적 데이터 분석을 진행합니다.
 
-| Note: 이번 단계는 Task 5 상품 추천 모델을 위한 데이터 분석을 목표합니다. 아래 가이드는 어떻게 사용하는지 방법을 알려드리는 예시일 뿐이며 방법을 숙지 후 비즈니스에 어떻게 적용할지 역할에 몰입 하여 자유롭게 데이터 분석을 진행합니다. 또한, 옵션에 제한되지 않고 자유롭게 조합해 데이터 분석을 진행해도 됩니다. |
+| Note: 이번 단계는 Task 5 상품 추천 모델을 위한 데이터 분석을 목표합니다. 아래 가이드는 어떻게 사용하는지 방법을 알려드리는 예시일 뿐이며 방법을 숙지 후 비즈니스에 어떻게 적용할지 역할에 몰입 하여 자유롭게 데이터 분석을 진행합니다. 또한, 옵션에 제한되지 않고 자유롭게 조합해 데이터 분석을 진행합니다. |
 | :---- |
 
-	
 
-**목표**
+#### Objective
 
 * BigQuery Studio와 ML Model을 활용한 데이터 분석을 위해 다양한 모델과 활용방법을 경험합니다.  
 * \[옵션\] 데이터 인사이트와 데이터 캔버스를 활용한 데이터 분석을 경험합니다.  
 * 분석 결과를 CSV 파일로 Google Cloud Storage 내 Bucket에 저장합니다. 
 
-### **서비스 계정에 IAM 역할 부여**
+### 1. 서비스 계정에 IAM 역할 부여
 
 빅쿼리를 활용할 수 있는 권한이 필요합니다.
 
@@ -824,36 +823,60 @@ Create tables for Recommendation Evaluations
 4. **역할 선택** 필드에서 **BigQuery 데이터 편집자, BigQuery 사용자, Vertex AI 사용자** 역할을 추가합니다.
 5. **저장**을 클릭합니다
 
-### **고객리뷰 테이블을 cymbal 데이터세트 내에 생성하기**
+### 2. 고객리뷰 테이블을 cymbal 데이터세트 내에 생성하기
 
 다음은 고객리뷰 테이블을 cymbal 데이터세트 내에 생성하는 과정입니다. 이때, 테이블명은 **customer\_review**로 생성합니다.
 
-1. 빅쿼리 콘솔에서 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" /> 다음 버튼을 클릭합니다.  
-2. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />  
-   1. Google Cloud Storage에서 your-project-id-bucket/review/customer\_reviews.csv 경로를 지정합니다.  
-   (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식)
-   2. Schema는 Auto Detect를 설정합니다.  
-3. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_003.png" alt="task4_img_003.png" />  
-   1. Advanced options에서 Quoted newlines를 체크합니다.  
-4. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_004.png" alt="task4_img_004.png" />클릭하여 테이블 생성을 완료합니다.  
-5. 결과로는 이렇게 구성이 되어야합니다.  
-   <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_005.png" alt="task4_img_005.png" />
 
-### **[옵션] 데이터 인사이트와 데이터 캔버스를 활용한 탐색적 데이터 분석**
+
+1. 빅쿼리 콘솔에서 아래와 같이 Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다. 
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
+
+2. 아래와 같이 값을 설정합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />
+
+   * **Source** : Google Cloud Storage 설정 후 위 Browse를 클릭하여  your-project-id-bucket/review/customer\_reviews.csv 경로를 지정합니다.  
+   (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식)  
+   * **Destination** : Table명을 요구사항에 맞춰 **customer_review**로 작성합니다.  
+   * **Schema** : Schema는 Auto Detect으로 설정합니다.  
+
+3. 위 이미지에서 보이는 Advanced options을 클릭한 후 아래와 같이 설정한 후 테이블 생성을 완료합니다.  
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_003.png" alt="task4_img_003.png" />  
+
+  
+4. 결과로는 아래와 같이 cymbal 아래에 customer_review가 나타납니다.    
+   
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_004.png" alt="task4_img_004.png" />
+
+
+### [옵션] 데이터 인사이트와 데이터 캔버스를 활용한 탐색적 데이터 분석
 
 다음은 데이터 인사이트와 데이터 캔버스를 어떻게 생성하고 다루는지 기능을 소개합니다. 이후 과정에서 자유롭게 분석하는 데에 활용해보세요.
 
 1. 데이터 인사이트 다루기  
-   1. BigQuery의 왼쪽 패널에서 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_028.png" alt="task4_img_028.png" />클릭 후 분석하고자 데이터세트에 진입 한 후 테이블을 클릭합니다.  
-   2. 이후 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_029.png" alt="task4_img_029.png" />버튼을 클릭합니다.  
-   3. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_030.png" alt="task4_img_030.png" />클릭해 API 활성화합니다.  
-      1. Gemini for Google Cloud API  
-      2. BigQuery Unified API   
+   * 왼쪽 패널 customer_reivew 테이블을 클릭 후 아래 이미지에 보이는 것과 같이 **Insights** 버튼을 클릭후 나타나는 **Generate Insights for free**를 클릭합니다.  
 
-   4. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_031.png" alt="task4_img_031.png" />클릭 후 리전 **us-central1** 설정 후 생성합니다.   
-   5. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_032.png" alt="task4_img_032.png" />  
-   6. 인사이트 결과의 쿼리를 복사해 실행하면 다음처럼 결과가 나옵니다.  
-   7. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_033.png" alt="task4_img_033.png" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_005.png" alt="task4_img_005.png" />  
+
+
+   * 이후 아래와 같이 결과가 나옵니다. 이때, 결과는 각기 다를 수 있습니다.  
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_006.png" alt="task4_img_006.png" />  
+   
+   
+   * 분석하고자 하는 항목에서 복사 버튼을 클릭한 후 쿼리창을 생서합니다. 
+   
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_007.png" alt="task4_img_007.png" />  
+
+
+   * 쿼리창에 복사한 쿼리를 붙여넣기 한 후 Run 버튼을 클릭하면 결과를 확인합니다.  
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_008.png" alt="task4_img_008.png" />  
+
+
 2. 데이터 캔버스 다루기  
    1. BigQuery Studio(<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_034.png" alt="task4_img_034.png" />)에서 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_035.png" alt="task4_img_035.png" />클릭합니다.  
    2. <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_036.png" alt="task4_img_036.png" />을 클릭해 활성화합니다.  
