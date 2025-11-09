@@ -1549,15 +1549,14 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 이전 섹션의 1~12단계를 반복하여 다음 정보를 사용하여 두 개의 변수를 더 만듭니다:
 
 
-
 | GET_PROPERTY()의 값 | 출력 이름 |
 | --- | --- |
 | customer_email | customer_email |
 | customer_name | customer_name |
 
-<div><ql-infobox>
 
-**참고:** JSON 함수가 추가되었기 때문에 **Output**의 기본 데이터 유형은 JSON이므로, 이 두 변수 모두에 대해 **Output**의 데이터 유형을 **String**으로 변경해야 합니다.
+<div><ql-infobox>
+참고: JSON 함수가 추가되었기 때문에 Output의 기본 데이터 유형은 JSON이므로, 이 두 변수 모두에 대해 Output의 데이터 유형을 String으로 변경해야 합니다.
 </ql-infobox></div>
 
 이제 이 Application Integration 트리거에 대해 message_output, customer_message, customer_email, customer_name 네 개의 데이터 매핑 변수가 구성되었습니다.
