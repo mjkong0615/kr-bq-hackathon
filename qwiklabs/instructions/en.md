@@ -1467,10 +1467,14 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.  
 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_location.png" alt="task6_location.png"  width="541.50" />
+
 3. **Quick setup**을 클릭하여 필요한 API를 활성화합니다.  
 
 4. **Create integration**을 클릭하고, 통합에 다음 이름을 지정합니다.   
 `recommend-customer-products-integration`
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_integration.png" alt="task6_create_integration.png"  width="541.50" />
 
 5. **CREATE**를 클릭합니다.  
 
@@ -1615,7 +1619,8 @@ Create and publish Application Integration
 
 * Google Cloud 콘솔에서 **Navigation 메뉴**() &gt; **BigQuery** &gt; **Capacity Management**를 클릭합니다.
 
-[설정 이미지 최종 결과 첨부]
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_reservation_button.png" alt="task6_email.png"  width="541.50" />
+
 
 * **Create reservation**을 클릭합니다.
 * 예약 이름(reservation name)에 다음을 입력합니다: bq-continuous-queries-reservation
@@ -1625,9 +1630,14 @@ Create and publish Application Integration
 * Baseline slots에 **50**을 입력합니다.
 * **저장**을 클릭합니다.
 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_reservation.png" alt="task6_reservation.png"  width="541.50" />
+
+
 ### 4.2 Assignment 만들기
 
 예약이 생성된 후, slot reservation table에서 bq-continuous-queries-reservation 이름의 예약 행을 찾습니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_assignment.png" alt="task6_assignment.png"  width="541.50" />
 
 * **Actions** (세로 점 3개) 아래에서 **Reservation actions**을 클릭하고 **Create assignment**를 선택합니다.
 * **Select an Organization, folder or project**에서 를 클릭하고 이 프로젝트(**Project ID**)를 선택합니다.
