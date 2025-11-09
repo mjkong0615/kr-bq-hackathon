@@ -1018,10 +1018,10 @@ MODEL `PROJECT_ID.DATASET_NAME.MODEL_NAME`,
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_021.png" alt="task4_img_021.png" />
 
-목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
+<!-- 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=14>
 CHALLENGE 요구한 쿼리를 동작했는지
-</ql-activity-tracking>
+</ql-activity-tracking> -->
 
 ### **각 리뷰별 카테고리 군집화 데이터 보강하기**
 
@@ -1184,7 +1184,7 @@ STRUCT(
 위 쿼리 결과를 ‘improv\_table’이라는 이름으로 테이블 생성하세요. 이때, 데이터 보강되는 컬럼명은 ‘improvement\_points’로 지정합니다.  
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
-<ql-activity-tracking step=15 text="체크">
+<ql-activity-tracking step=14 text="체크">
 Check improv\_table 존재하는지
 </ql-activity-tracking>
 
@@ -1228,8 +1228,8 @@ ON t1.customer_review_id = t2.customer_review_id
 
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
-<ql-activity-tracking step=16>
-Check product\_enf\_result.csv과 customer\_review\_enf\_result이 해당 버킷 경로에 존재하는지
+<ql-activity-tracking step=15>
+customer\_review\_enf\_result파일이 해당 버킷 경로에 존재하는지
 </ql-activity-tracking>
 
 
@@ -1331,7 +1331,7 @@ Check product\_enf\_result.csv과 customer\_review\_enf\_result이 해당 버킷
 
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
-<ql-activity-tracking step=17 text=체크>
+<ql-activity-tracking step=16 text=체크>
 Upload a file ‘task5\_result’ to Bucket 
 </ql-activity-tracking>
 
@@ -1448,7 +1448,7 @@ bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 8. **Save**를 클릭합니다.
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
-<ql-activity-tracking step=19>
+<ql-activity-tracking step=17>
 Check Pub/Sub role
 </ql-activity-tracking>
 
@@ -1601,7 +1601,7 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 위와 같은 Autogenerate integration description 창이 뜨는 경우, `NO, JUST PUBLISH`를 클릭합니다.
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
-<ql-activity-tracking step=20>
+<ql-activity-tracking step=18>
 Create and publish Application Integration
 </ql-activity-tracking>
 
