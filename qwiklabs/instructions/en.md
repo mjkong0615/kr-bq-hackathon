@@ -788,7 +788,7 @@ Create tables for Personalized Recommendations
 Create tables for Recommendation Evaluations
 </ql-activity-tracking>
 
-## Task4: 추가적인 탐색적 데이터 분석(EDA)
+## Task 4: 추가적인 탐색적 데이터 분석(EDA)
 
 #### Overview
 
@@ -1243,7 +1243,7 @@ customer\_review\_enf\_result파일이 해당 버킷 경로에 존재하는지
 
 
 
-## Task5: 상품 추천 모델
+## Task 5: 상품 추천 모델
 
 #### Overview
 
