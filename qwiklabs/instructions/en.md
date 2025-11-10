@@ -417,12 +417,14 @@ Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 �
 
 ### 1.1 노트북 업로드
 
-1. BigQuery Studio 탐색기 창에서 Notebooks 옆의 점 3개(⋮) 아이콘을 클릭한 후 'URL에서 노트북 업로드(Upload notebook from URL)'를 선택합니다.
+1. BigQuery Studio 탐색기 창에서 **Notebooks** 옆의 점 3개(⋮) 아이콘을 클릭한 후 **URL에서 노트북 업로드(Upload to Notebooks)**를 선택합니다.
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image7.png" alt="task2_image7.png"  width="624.00" /> 
+
+2. Upload from 에서 **URL**을 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb 를 입력합니다.
+3. Region: **us-central-1**을 선택합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" /> 
 
-2. Upload from 에서 URL 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb를 입력합니다.
-3. Region: us-central-1을 선택합니다.
-4. "Upload" 버튼을 누른 후, 화면 하단의 "Go to notebook" 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 2를 진행하겠습니다.
+4. **Upload** 버튼을 누른 후, 화면 하단의 **Go to notebook** 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 2를 진행하겠습니다.
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=7>
