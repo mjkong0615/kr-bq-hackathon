@@ -80,7 +80,7 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 실습의 분석 작업을 진행하기 전에 이 파일들을 자유롭게 둘러보며 콘텐츠에 익숙해지세요.
 
-### 1. Bigqquery 환경 설정
+### 1. Bigquery 환경 설정
 
 ### **1.1 BigQuery Cloud 리소스 연결 생성**
 
