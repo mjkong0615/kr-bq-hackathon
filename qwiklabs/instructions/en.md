@@ -841,10 +841,9 @@ Create tables for Recommendation Evaluations
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_000.png" alt="task4_img_000.png" />  
 
 
-
 2. 빅쿼리 콘솔 내 Explorer 패널에서 아래와 같이 Tree 모양의 아이콘을 클릭 후 이미지와 같이 나타납니다. 이때, Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
 
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
 
 3. 아래와 같이 값을 설정합니다.
 
