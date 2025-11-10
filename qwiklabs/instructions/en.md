@@ -834,18 +834,15 @@ Create tables for Recommendation Evaluations
 
 
 1. 접속하면 나타나는 메인 상단 중앙에 위치한 검색창에서 bigquery를 검색 후 클릭합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_000.png" alt="task4_img_000.png" />  
 
 
 
 2. 빅쿼리 콘솔 내 Explorer 패널에서 아래와 같이 Tree 모양의 아이콘을 클릭 후 이미지와 같이 나타납니다. 이때, Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
 
 
 3. 아래와 같이 값을 설정합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />
 
    * **Source** : Google Cloud Storage 설정 후 위 Browse를 클릭하여  your-project-id-bucket/review/customer\_reviews.csv 경로를 지정합니다.  
@@ -854,12 +851,10 @@ Create tables for Recommendation Evaluations
    * **Schema** : Schema는 Auto Detect으로 설정합니다.  
 
 4. 이후, Advanced options을 클릭한 후 아래와 같이 설정한 후 테이블 생성을 완료합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_003.png" alt="task4_img_003.png" />  
 
   
 5. 결과로는 아래와 같이 cymbal 아래에 customer_review가 나타납니다.    
-   
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_004.png" alt="task4_img_004.png" />
 
 
@@ -869,7 +864,6 @@ Create tables for Recommendation Evaluations
 
 1. 데이터 인사이트 다루기  
    * 왼쪽 패널 customer_reivew 테이블을 클릭 후 아래 이미지에 보이는 것과 같이 **Insights** 버튼을 클릭후 나타나는 **Generate Insights for free**를 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_005.png" alt="task4_img_005.png" />  
 
 
@@ -890,29 +884,23 @@ Create tables for Recommendation Evaluations
 
 2. 데이터 캔버스 다루기  
    * BigQuery Studio 홈에서 Data Canvas 버튼을 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_009.png" alt="task4_img_009.png" />
 
 
    * Region을 us-central1로 설정한 후 Save을 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_010.png" alt="task4_img_010.png" />  
 
 
    * 이후, 데이터 캔버스의 초기화면을 볼 수 있습니다. 해당 예제에선 간단하게 테이블을 자연어로 쿼리합니다. 우선, Search for data를 클릭합니다.   
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_011.png" alt="task4_img_011.png" />  
 
    * customer_rievew를 검색 후 체크한 뒤 Query 버튼을 클릭합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_012.png" alt="task4_img_012.png" />  
 
    * 부정적인 리뷰를 남긴 고객들을 보고싶어 라는 자연어 질의를 남긴 후 Generate 버튼을 클릭합니다. 이후, 나타난 쿼리를 보고 Run 버튼을 통해 결과를 확인합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_013.png" alt="task4_img_013.png" />  
 
    * 빨간 박스에 있는 버튼들을 활용해 추가적인 데이터 분석에 활용하여 확장할 수 있습니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_014.png" alt="task4_img_014.png" />  
 
 
@@ -938,16 +926,13 @@ Create tables for Recommendation Evaluations
 
 
 1. BigQuery Studio 메인화면에서 ML model를 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_015.png" alt="task4_img_015.png" />
 
 2. 데이터세트(Dataset name)는 cymbal로 지정 및 모델명은 embedding\_model 로 작성 후 Continue 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_016.png" alt="task4_img_016.png" />  
 
 
 3. Creation method에서 **Connect to Vertex AI LLM service and CloudAI services** 체크 후 Continue 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_017.png" alt="task4_img_017.png" />  
 
 
@@ -964,12 +949,10 @@ Create tables for Recommendation Evaluations
 
 
 5. 빨간 박스 내에 있는 버튼을 클릭해 새 쿼리창을 연 후 아래 단계를 진행합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_019.png" alt="task4_img_019.png" />  
 
 
 6. 다음 쿼리에서 **PROJECT\_ID, DATASET\_NAME, MODEL\_NAME, TABLE\_NAME** 값을 수정해 임베딩한 테이블을 생성합니다.
-
 ```sql
 CREATE OR REPLACE TABLE `PROJECT_ID.DATASET_NAME.NEW_TABLE_NAME` AS
 SELECT * FROM ML.GENERATE_EMBEDDING(
@@ -987,7 +970,6 @@ FROM `PROJECT_ID.DATASET_NAME.TABLE_NAME`)
 
 7. Run 버튼을 클릭하여 동작합니다.  
 8. 이후 임베딩 결과 테이블을 바탕으로 벡터 검색을 수행합니다. 아래 쿼리는 품질 불량으로 추측되는 항목을 유사도에 따라 보입니다. 동작 후 실제로 해당하는지 검증합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_020.png" alt="task4_img_020.png" />  
 
 | Note: 컬럼의 양이 많다면 벡터 색인을 사용할 수 있습니다. 자세한 정보는 [링크](https://cloud.google.com/bigquery/docs/vector-index?hl=ko) 참조하세요.  |
@@ -1033,16 +1015,13 @@ CHALLENGE 요구한 쿼리를 동작했는지
 ### **각 리뷰별 카테고리 군집화 데이터 보강하기**
 
 1. BigQuery Studio 메인화면에서 ML model를 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_015.png" alt="task4_img_015.png" />
 
 2. 데이터세트(Dataset name)는 cymbal로 지정 및 모델명은 gemini\_model 로 작성 후 Continue 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_022.png" alt="task4_img_022.png" />  
 
 
 3. Creation method에서 **Connect to Vertex AI LLM service and CloudAI services** 체크 후 Continue 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_017.png" alt="task4_img_017.png" />  
 
 
@@ -1212,7 +1191,6 @@ ON t1.customer_review_id = t2.customer_review_id
 * **DATASET\_NAME** : cymbal  
 
 2. 쿼리 결과를 저장합니다. Save results를 클릭한 후 CSV 타입으로 저장합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_026.png" alt="task4_img_026.png" />  
 
 3. 저장한 파일은 customer\_review\_enf\_result.csv 로 이름을 수정합니다.
@@ -1226,11 +1204,9 @@ ON t1.customer_review_id = t2.customer_review_id
 **힌트** 결과 저장하는 방법은 위에서 실습한 방법을 활용할 수 있지만 다음과 방식으로도 활용할 수 있습니다.  
 
 1. 쿼리 결과창에서 Save results을 클릭 후 Cloud Storage를 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_027.png" alt="task4_img_027.png" />  
 
 2. Challenge 조건에 맞춰서 Borswer를 클릭하여 경로와 파일명을 설정 후 저장합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_028.png" alt="task4_img_028.png" />  
 
 
@@ -1265,18 +1241,15 @@ customer\_review\_enf\_result파일이 해당 버킷 경로에 존재하는지
 ### TASK 4에서 생성한 파일 추가하기
 
 1. 노트북 콘솔 왼쪽 하단에서 terminal 버튼을 클릭합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_002.png" alt="task5_img_002.png" />  
 
 2. 터미널 창에서 명령어를 입력합니다. 이때, your-budcket-name은 여러분의 프로젝트에 생성되는 버킷명으로 수정합니다.  
-  
    * gsutil cp \- r gs://YOUR\_BUCKET/ .
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_003.png" alt="task5_img_003.png" />  
 
 
 3. 아래 이미지와 같은 경로에 파일이 추가됐음을 확인합니다.   
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_004.png" alt="task5_img_004.png" />  
 
 
@@ -1318,16 +1291,13 @@ customer\_review\_enf\_result파일이 해당 버킷 경로에 존재하는지
 ###  노트북 파일 GCS에 저장하기
 
 1. File \> Download \> Download .ipynb 클릭하여 다운로드 합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_009.png" alt="task5_img_009.png" />
 
 2. Google Cloud 콘솔에서 탐색 메뉴(☰)로 이동하여 Cloud Storage \> 버킷을 선택합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_011.png" alt="task5_img_011.png" />
 
 3. 실습 환경에 제공된 버킷 이름을 클릭한 후 task5 폴더로 진입합니다.    
 4. Upload \> Upload files 을 클릭하여 노트북 파일을 업로드합니다. 이때 업로드할 파일명은 **task5\_result.ipynb** 로 지정합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_010.png" alt="task5_img_010.png" />  
 
 
@@ -1435,7 +1405,6 @@ bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 1. **Explorer** 창에서 고객 리뷰 테이블을 포함하는 데이터세트의 이름인 continuous_queries를 클릭합니다.
 2. **Dataset info** 페이지에서 **Sharing**을 클릭하고 **Permissions**를 선택합니다.
 3. **Add principal**을 클릭합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_view_permission.png" alt="6848190bb9b4107c.png"  width="541.50" />
 
 4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
@@ -1473,14 +1442,12 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 1. Google Cloud 콘솔 검색창(페이지 상단)에 **Application Integration**을 입력한 다음, 결과 목록에서 **Application Integration**을 클릭합니다.  
 
 2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.  
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_location.png" alt="task6_location.png"  width="541.50" />
 
 3. **Quick setup**을 클릭하여 필요한 API를 활성화합니다.  
 
 4. **Create integration**을 클릭하고, 통합에 다음 이름을 지정합니다.   
 `recommend-customer-products-integration`
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_integration.png" alt="task6_create_integration.png"  width="541.50" />
 
 5. **CREATE**를 클릭합니다.  
@@ -1527,8 +1494,6 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 6. **Data type**에서 **String**을 선택합니다.
 7. **Blank default value means**에서 **Empty string**을 활성화합니다.
 8. **Create**를 클릭합니다.
-
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_applicationintegration2.png" alt="task6_applicationintegration2.png"  width="541.50" />
 
 - **[변수 2] customer_message** 
@@ -1540,7 +1505,6 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 4. 두 번째 변수에 대해 **Add a function**(+ 아이콘)을 다시 클릭하고, **GET_PROPERTY(String) -&gt; JSON**을 선택합니다.
 5. **.GET_PROPERTY** 옆에서 **Variable or Value**를 클릭합니다.
 6. **Value**를 선택하고 customer_message를 입력합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_value.png" alt="task6_value.png"  width="541.50" />
 
 7. 이 변수와 동일한 행에서, **Output** 아래에서 **Create a new one**을 클릭합니다.
@@ -1549,7 +1513,6 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 10. **Data type**에서 **String**을 선택합니다. **참고:** JSON 함수가 추가되었기 때문에 기본값은 JSON이므로, 데이터 유형을 지침대로 **String**으로 변경해야 합니다.
 11. **Blank default value means**에서 **Empty string**을 활성화합니다.
 12. **Create**를 클릭합니다.
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_variable.png" alt="task6_variable.png"  width="541.50" />
 
 - **[변수 3 및 4] customer_email 및 customer_name** 
@@ -1605,8 +1568,6 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 17.  **Configure Connector** 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
 18. **Set entities/actions**에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
 19. recommend-customer-products-integration  페이지의 오른쪽 상단에서 Publish(게시)를 클릭합니다.
-
-
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_justpublish.png" alt="task6_justpublish.png"  width="541.50" />
 
 위와 같은 Autogenerate integration description 창이 뜨는 경우, `NO, JUST PUBLISH`를 클릭합니다.
@@ -1815,4 +1776,4 @@ VALUES
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_email.png" alt="task6_email.png"  width="541.50" />
 
 워크플로우 구축을 완료 하면, 위와 같이 이메일이 제작됩니다.
-이메일로 전송될 추천 제품 테이블에 새 행을 삽입함으로써, negative sentiment을 가진 사용자에 대한 맞춤형 이메일을 보내는 워크플로우를 구축했습니다. 
+이메일로 전송될 추천 제품 테이블에 새 행을 삽입함으로써, negative sentiment을 가진 사용자에 대한 맞춤형 이메일을 보내는 워크플로우를 구축했습니다.  
