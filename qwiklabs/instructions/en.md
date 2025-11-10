@@ -4,41 +4,40 @@
 ## **Overview**
 
 
-본 챌린지 랩은 Google Cloud의 데이터 분석 기능(BQML, Gemini in Bigquery 등)과 ML기능을 활용하여, 고객 데이터 분석부터 실행(action)까지 이어지는 엔드투엔드(end-to-end) 개인화 마케팅 파이프라인을 구축하는 실습 경험을 제공합니다.
+본 챌린지 랩은 Google Cloud의 데이터 분석 솔루션(BQML, Gemini in Bigquery 등)과 머신 러닝 솔루션을 활용하여, 고객 데이터 분석부터 실행까지 이어지는 엔드투엔드(end-to-end) 개인화 마케팅 파이프라인을 구축하는 실습 형태의 해커톤입니다.
 
-팀 단위의 챌린지 랩(Team Assignments)를 위해, 하나의 챌린지 랩 시나리오에 3명의 팀원들에게 추가적으로 사용자 계정을 부여한 다음, 그에 따라 총 4명의 팀원에게 작업을 할당하게 됩니다.
+해커톤은 팀 단위로 운영하여 총 4명이 한 팀이 됩니다: 관리자가 3명의 팀원들에게 사용자 계정을 부여하여 총 4명의 팀원이 작업을 수행합니다.
 
 ## Objective
 
-* **데이터 분석 (Analysis):** BQ와 Gemini를 함께 사용하여 이미지, 비디오, 텍스트 등 멀티모달(multimodal) 고객 리뷰의 감성(Sentiment)을 분석합니다.
+* **데이터 분석 (Analysis):** BigQuery와 Gemini를 함께 사용하여 이미지, 비디오, 텍스트 등 멀티모달(multimodal) 고객 리뷰의 감성(Sentiment)을 분석합니다.
 * **세분화 및 타겟팅 (Segment & Target):** EDA를 통해 고객을 세분화(Segmentation)하고, 특히 부정적인 피드백을 남긴 고객을 식별하여 이들을 위한 맞춤형 프로모션 메시지를 생성합니다.
-* **모델링 및 예측 (Model & Predict):** 더 나은 제품 추천 모델을 만들기 위해 추가 EDA를 진행하고 피처(feature)를 도출한 뒤, BigQuery Studio의 Data Science Agent(DSA)를 활용해 고급 추천 모델을 구축하고 예측 결과를 BigQuery 테이블로 저장합니다.
+* **모델링 및 예측 (Model & Predict):** 고도화된 제품 추천 모델을 만들기 위해 추가 EDA를 진행하고 피처(feature)를 도출한 뒤, BigQuery Studio의 Data Science Agent를 활용해 고급 추천 모델을 구축하고 예측 결과를 BigQuery 테이블로 저장합니다.
 * **자동화 및 실행 (Automate & Activate):** BigQuery의 고객 경험 기반의 데이터 분석 결과를 Application Integration을 통해 맞춤형 이메일을 자동으로 전송하는 워크플로우를 구축하여 확보된 인사이트를 즉각적인 마케팅 활동으로 연결합니다.
 
 ## Scenario
 
-온라인 리테일러인 Cymbal E-Commerce는 온라인 플랫폼을 강화하여 변화하는 고객 요구에 신속하게 적응하는 것을 목표로 합니다. 이를 달성하기 위해, 고객의 데이터를 분석하고, BigQuery와 Gemini를 활용해서 고객 이탈률을 최소화하는 방안을 구축하고 있습니다.
+온라인 리테일 플랫폼을 운영하는 Cymbal E-Commerce는 온라인 플랫폼을 강화하여 변화하는 고객 니즈에 빠르게 대응하고자 합니다. 이를 달성하기 위해 고객의 데이터를 분석하고, BigQuery와 Gemini를 활용해서 고객 이탈률을 최소화하는 방안을 구축하고 있습니다.
 
-이러한 계획은 고객 피드백과 선호도를 신속하게 분석해야 할 필요성에 따라 추진되었으며, 이를 통해 Cymbal E-Commerce는 부정적인 피드백을 남긴 고객에 대한 프로모션 전략을 수립하고, 변화하는 고객의 요구 사항에 빠르게 대응할 수 있습니다. 개인화된 제품에 대한 감성 분석 기반의 제품 추천을 제공하여 온라인 쇼핑 여정을 더욱 매력적으로 만들 것입니다.
+이러한 계획은 고객 피드백과 선호도를 신속하게 분석해야 할 필요성에 따라 추진되었습니다. Cymbal E-Commerce는 이 분석 결과를 바탕으로 부정적인 피드백을 남긴 고객에게 맞춤형 프로모션 전략을 적용하고, 변화하는 고객 니즈에 기민하게 대처할 수 있습니다. 또한, 감성 분석 기반의 개인화된 제품 추천을 제공하여 고객의 온라인 쇼핑 경험을 한층 매력적으로 만들고자 합니다.
 
-Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지하고 Google Cloud를 선택했습니다. Google Cloud의 최첨단 AI 기술은 이 지능형 솔루션을 개발하고 확장하는 데 필요한 강력한 기반을 제공하며, 리테일 산업에서 Cymbal E-Commerce의 선도적인 입지를 공고히 할 것입니다.
+Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative AI)가 핵심적인 역할을 할 것이라 판단하고 Google Cloud를 선택했습니다. Google Cloud의 최첨단 AI 기술은 이러한 지능형 솔루션을 개발하고 확장하는 데 필요한 강력한 토대를 제공함으로써, 리테일 업계에서 Cymbal E-Commerce의 선도적인 위치를 확고히 다져줄 것입니다.
 
 ## Your Challenge
 
-여러분의 핵심 과제는 이 전략적 계획을 신속하게 발전시키는 것입니다. 여기에는 BigQuery를 사용하여 고객 피드백을 신속하게 분석하는 작업이 포함되며, 이는 맞춤형 캠페인 전략을 수립하고 구체화하는 데 활용됩니다. 여러분은 다양한 채널에서 이러한 캠페인을 실행해야 하며, 이때에도 BigQuery의 여러 기능을 활용하여 각 채널에 맞는 매력적인 콘텐츠를 제작해야 합니다.
+이 실습에서는 Cymbal E-Commerce의 전략적 목표를 신속하게 구현합니다. 여러분은 BigQuery를 활용하여 고객 피드백을 빠르게 분석하고, 이 결과를 바탕으로 맞춤형 캠페인 전략을 수립하고 구체화하게 됩니다. 더 나아가, BigQuery의 여러 기능을 활용하여 각 채널에 최적화된 매력적인 콘텐츠를 제작하고, 이를 다양한 마케팅 채널에서 실행하는 과정을 경험합니다.
 
-캠페인 외에도, 제품 카탈로그 관리를 개선하고 캠페인을 통해 고객 이탈률을 최소화 하기 위한 추천 모델을 향상시키는 임무를 맡게 됩니다. 무엇보다 중요한 것은, BQML를 기반으로 데이터를 분석하고 철저하게 테스트해야 한다는 것입니다.
-
-특히, 이 BQML를 사용하여 마케팅 전략을 수립하고 실행 및 테스트 프로세스 속도를 획기적으로 높일 수 있습니다.
+캠페인 실행 외에도, 여러분은 제품 카탈로그 관리 기능을 개선하고 고객 이탈률(Churn Rate) 최소화를 위한 추천 모델을 고도화해야 합니다. 무엇보다, BigQuery ML(BQML)을 기반으로 데이터를 정확하게 분석하고, 모델의 성능을 테스트 및 검증하는 것이 중요합니다.
+특히, BQML을 사용하면 마케팅 전략의 수립, 실행, 테스트 프로세스 속도를 획기적으로 단축할 수 있습니다.
 
 ## Task Outline
 
-* Task 1: Analyzing Multimodal Customer Reviews for Marketing Insights
-* Task 2: Segmenting Customers for Targeted Marketing  
-* Task 3: Creating Tailored email message including promotions  for unsatisfied customers 
-* Task 4: Additional Exploratory Data Analysis
-* Task 5: Enhancing Product Recommendations ML model
-* Task 6: Sending a customized email with Application Integrations
+* Task 1: 마케팅 인사이트를 위한 고객 리뷰 멀티모달 분석
+* Task 2: 고객 세분화를 통한 타겟 마케팅  
+* Task 3: 불만족 고객을 위한 맞춤형 프로모션 상품 추천 및 평가
+* Task 4: 추가적인 탐색적 데이터 분석(EDA)
+* Task 5: 상품 추천 모델 생성 및 활용
+* Task 6: 멀티 소스 데이터를 활용한 고객 리타겟팅
 
 ## Task Dependencies
 
@@ -51,34 +50,34 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 
 #### **Overview**
 
-고객 리뷰 분석 실습에 오신 것을 환영합니다! 이 작업에서는 텍스트뿐만 아니라 이미지와 동영상을 포함하는 멀티모달 고객 리뷰 데이터를 다루게 됩니다. 우리의 목표는 BigQuery와 Vertex AI의 Gemini Pro 모델의 강력한 기능을 활용하여 이 다양한 데이터를 처리하고, 그 결과로 얻은 인사이트를 통합하여 고객 경험에 대한 이해를 얻고 이를 적용 할 수 있게 하는 것입니다.
+고객 리뷰 분석 실습에 오신 것을 환영합니다! 본 태스크에서는 텍스트 뿐 아니라 이미지와 동영상을 포함하는 멀티모달 고객 리뷰 데이터를 다룹니다. 목표는 BigQuery와 Vertex AI의 Gemini Pro 모델이 제공하는 강력한 기능을 활용하여 이 다양한 형태의 데이터를 처리하는 것입니다. 분석 결과를 통합하여 고객 경험에 대한 깊이 있는 인사이트를 도출하고, 이를 비즈니스에 실질적으로 적용하는 방법을 학습합니다.
 
 #### **Objective**
 
 * BigQuery Studio에서 챌린지 실습 Notebook을 설정하고 실행합니다.
 * 외부 테이블을 생성하여 Cloud Storage에 저장된 파일의 데이터를 직접 쿼리합니다.
 * Gemini 모델을 호출하여 텍스트, 이미지, 비디오 리뷰의 콘텐츠를 분석합니다.
-* 모든 분석 결과를 하나의 포괄적인 테이블로 통합합니다.
-* 감성 분포와 시간 경과에 따른 추세를 시각화하여 실행 가능한 비즈니스 인사이트를 도출합니다.
+* 모든 분석 결과를 하나의 통합 테이블로 결합합니다.
+* 감성 분포와 시간 경과에 따른 트렌드를 시각화하여 실행 가능한 비즈니스 인사이트로 도출합니다.
 
 #### **Setup**
 
-이 초기 설정은 BigQuery와 Cloud Storage가 Vertex AI Gemini 모델과 통신할 수 있도록 권한을 구성하는 과정을 포함합니다.
+이 초기 환경 설정 단계에서는 BigQuery와 Cloud Storage가 Vertex AI Gemini 모델과 원활하게 데이터를 주고받을 수 있도록 필요한 권한을 구성합니다.
 
 #### **시작하기 전: Cloud Storage의 샘플 데이터 탐색**
 
-실습 단계를 시작하기 전에 작업할 샘플 데이터를 간단히 살펴보겠습니다. Cloud Storage Bucket에서 고객 리뷰 텍스트, 이미지, 비디오에 직접 액세스하여 볼 수 있습니다. 이를 통해 멀티모달 데이터를 더 잘 이해할 수 있습니다.
+실습 단계를 시작하기 전에 작업할 샘플 데이터를 간단히 살펴봅니다. Cloud Storage Bucket에서 고객 리뷰 텍스트, 이미지, 비디오에 직접 액세스합니다. 이를 통해 멀티모달 데이터를 이해합니다.
 
 1. Google Cloud 콘솔에서 **Navigation Menu**(☰)로 이동하여 **Cloud Storage &gt; Bucket**을 선택합니다.
 2. 실습 환경에 제공된 Bucket 이름을 클릭합니다 (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식).
 3. **Bucket** 내부에서 review/ 폴더로 이동합니다.
-4. 다음 항목을 찾을 수 있습니다:
+4. 해당 폴더에서는 다음 항목을 확인합니다:
 
 * **고객 리뷰 (CSV):** customer_reviews.csv를 클릭하여 원시 텍스트 리뷰 데이터를 미리 봅니다.
-* **리뷰 이미지:** images/ 폴더로 들어가 샘플 이미지 파일을 확인합니다. 개별 이미지를 클릭하여 직접 볼 수 있습니다.
-* **리뷰 비디오:** videos/ 폴더로 들어가 샘플 비디오 파일을 확인합니다. 개별 비디오를 클릭하여 콘솔 내에서 재생할 수 있습니다.
+* **리뷰 이미지:** images/ 폴더로 들어가 샘플 이미지 파일을 확인합니다. 개별 이미지를 클릭하여 조회합니다.
+* **리뷰 비디오:** videos/ 폴더로 들어가 샘플 비디오 파일을 확인합니다. 개별 비디오를 클릭하여 콘솔 내에서 재생합니다.
 
-실습의 분석 작업을 진행하기 전에 이 파일들을 자유롭게 둘러보며 콘텐츠에 익숙해지세요.
+본격적인 분석 작업을 진행하기 전에 이 파일들을 자유롭게 탐색하여 데이터 내용에 충분히 익숙해집니다.
 
 ### 1. Bigquery 환경 설정
 
@@ -100,7 +99,7 @@ Cymbal E-Commerce는 이러한 혁신에 생성형 AI가 필수적임을 인지�
 _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 <ql-activity-tracking step=1>
 BigQuery External Connection 생성     
-</ql-activity-tracking>      
+</ql-activity-tracking>  
 
 
 ### **1.2 서비스 계정에 IAM 역할 부여**
@@ -119,7 +118,7 @@ BigQuery External Connection 생성
 
 _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 <ql-activity-tracking step=2>
-생성된 BigQuery External Connection을 위햔 서비스 어카운트에 권한 추가
+생성된 BigQuery External Connection을 위한 서비스 어카운트에 권한 추가
 </ql-activity-tracking>
 
 ### **1.3 Notebook 업로드**
@@ -131,7 +130,7 @@ _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 1. Google Cloud 콘솔에서 **BigQuery**로 이동합니다.
 2. **Explorer** 창에서 **Notebook** 옆에 있는 점 3개(⋮) 아이콘을 클릭하고 **URL에서 Notebook 업로드**를 선택합니다.
 3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1.ipynb 를 입력합니다.
-4. Notebook이 새 탭에서 열리면 셀을 순서대로 실행할 준비가 된 것입니다.
+4. Notebook을 새 탭에서 엽니다.
 
 ### 2. Notebook 설정
 
@@ -140,14 +139,13 @@ _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook1.png" alt="task1_notebook1.png" />
 
 
-먼저 설정 쉘을 실행합니다. 이 셀은 필요한 모든 라이브러리를 가져오고, BigQuery에 대한 연결을 초기화하며, 실습 전반에 걸쳐 사용할 주요 변수(프로젝트 ID 및 GCS Bucket 경로 등)를 정의합니다.  알맞은 프로젝트 ID로 변경해주세요
+먼저 설정 쉘을 실행합니다. 이 셀은 필요한 모든 라이브러리를 가져오고, BigQuery에 대한 연결을 초기화하며, 실습 전반에 걸쳐 사용할 주요 변수(프로젝트 ID 및 GCS Bucket 경로 등)를 정의합니다. 이때 꼭 알맞은 프로젝트 ID로 변경합니다.
 
-그리고 다음 셀을 실행하세요. 
+그리고 다음 셀을 실행합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_setting.png" alt="task1_project_setting.png" />
 
-이 셀은 실행 완료 시 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며,
-분석을 위한 전역 변수를 설정합니다.
+이 셀은 실행 완료 시 필요한 라이브러리를 가져오고, BigQuery 클라이언트를 초기화하며, 분석을 위한 전역 변수를 설정합니다.
 
 
 ### **2.2 텍스트 리뷰 외부 테이블 생성**
@@ -698,7 +696,7 @@ Task 3에서는 Task 1에서 식별된 불만족 리뷰와 Task 2에서 정의�
 이 단계에서는 final_customer_insights 테이블의 sentiment_json_string 칼럼에서 감성 분석 결과가 "negative" 혹은 "neutral"인 고객의 customer_id 목록을 추출하고, negative_customers_list라는 BigQuery 테이블로 저장합니다.
 제공된 코드를 실행하여 다음 단계로 넘어갑니다.
 
-### 3. 불만족 고객의 세그먼트 및 지리적 데이터 검색**
+### 3. 불만족 고객의 세그먼트 및 지리적 데이터 검색
 
 Step 2에서 식별된 불만족 고객에 대한 데이터를 가져옵니다.  
   
@@ -1217,7 +1215,7 @@ customer\_review\_enf\_result파일이 해당 버킷 경로에 존재하는지
 
 
 
-## Task 5: 상품 추천 모델
+## Task 5: 상품 추천 모델 생성 및 활용
 
 #### Overview
 
