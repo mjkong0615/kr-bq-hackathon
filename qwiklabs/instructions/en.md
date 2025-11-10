@@ -421,7 +421,7 @@ Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 �
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image7.png" alt="task2_image7.png"  width="624.00" /> 
 
 2. Upload from 에서 **URL**을 선택 후 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task2.ipynb 를 입력합니다.
-3. Region: **us-central-1**을 선택합니다.
+3. Region에서 **us-central-1**을 선택합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" /> 
 
 4. **Upload** 버튼을 누른 후, 화면 하단의 **Go to notebook** 알림 버튼을 눌러 새로운 노트북 탭을 엽니다. 이 노트북의 셀들을 실행하여 태스크 2를 진행하겠습니다.
@@ -585,7 +585,7 @@ Run 버튼으로 쿼리를 실행해 결과를 확인합니다.
 
 이제 위에서 생성한 ‘age_group, gender_segment, loyalty_status' 칼럼을 이어 붙여 "Older_Adult_FEMALE_LOYAL"과 같은 형태로 고객 세그먼트를 나타내는 새로운 칼럼을 생성합니다.
 
-다시 해당 노드(마지막으로 작업을 수행한 노드)를 ㄷ마지막으로 작업한 노드를 클릭한 후 하단의 Query these results 버튼을 클릭합니다.
+다시 해당 노드(마지막으로 작업을 수행한 노드)를 클릭한 후 하단의 Query these results 버튼을 클릭합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/371f475802604197.png" alt="371f475802604197.png"  width="544.50" />
 
