@@ -526,27 +526,20 @@ BigQuery Data Canvas는 시각적인 인터페이스를 통해 복잡한 데이�
 ### 2.1 Data Canvas에 테이블 추가 및 조인 수행
 
 화면 왼쪽 탐색 패널에서 Data Canvas를 클릭하거나, + 버튼을 눌러 새 Canvas를 생성합니다.
-Data Canvas를 처음 사용하는 경우, API 사용 설정 버튼이 나타납니다. "" 버튼을 클릭하여 Data Canvas API를 활성화합니다.
 
-Data Canvas 화면의 Recents 아래 multimodal_customer_reviews 테이블과 customers 테이블을 각각 캔버스에 추가합니다.
+Data Canvas 화면의 Recents 아래 multimodal_customer_reviews 테이블과 customers 테이블을 각각 캔버스에 추가합니다. 테이블을 추가하는 방법은 아래에 바로 이어집니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/f50d21a3cf64f30.png" alt="f50d21a3cf64f30.png"  width="621.50" />
 
     
 Recents &gt; customers 테이블을 클릭합니다.  
-만약 Recents 아래에 customers 테이블이 조회되지 않는 경우, "Search for data"  버튼 클릭합니다.
+만약 Recents 아래에 customers 테이블이 조회되지 않는 경우, 화면 좌측 패널을 열어 Classic Explorer 아래 **cymbal** 데이터셋을 펼칩니다.  
+**customers** 테이블 옆의 **액션 버튼(세로 점 세 개) > Open in > Current data canvas** 를 클릭합니다.  
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image8" alt="task2_image8"  width="511.50" />
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/a5f278cbd310a6cb.png" alt="a5f278cbd310a6cb.png"  width="511.50" />
-
-검색창에 "customers"를 입력한 다음 엔터키를 누르고, ‘project_id'.cymbal.customers 우측의 "Add to canvas" 버튼을 클릭합니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/ff3d9b3a0d051e05.png" alt="ff3d9b3a0d051e05.png"  width="624.00" />
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/585217364ecd80bc.png" alt="585217364ecd80bc.png"  width="299.50" />
-
-화면 우측 하단의 "+" 버튼을 누르고, "New search"를 클릭한 후 캔버스 내의 빈 공간을 클릭합니다. (클릭한 빈 공간에 테이블을 추가하게 됩니다.)  
 같은 방법으로 multimodal_customer_reviews 테이블을 추가합니다.  
-customer 테이블의 구조를 간단히 살펴보겠습니다. "Preview"란을 클릭하면 테이블의 데이터를 일부 조회할 수 있습니다.
+
+customers 테이블의 구조를 간단히 살펴봅니다. "Preview"란을 클릭하면 테이블의 데이터를 일부 조회할 수 있습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/99c8631e4ad02846.png" alt="99c8631e4ad02846.png"  width="624.00" />
 
