@@ -68,9 +68,9 @@ Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative A
 
 실습 단계를 시작하기 전에 작업할 샘플 데이터를 간단히 살펴봅니다. Cloud Storage Bucket에서 고객 리뷰 텍스트, 이미지, 비디오에 직접 액세스합니다. 이를 통해 멀티모달 데이터를 이해합니다.
 
-1. Google Cloud 콘솔에서 **Navigation Menu**(☰)로 이동하여 **Cloud Storage &gt; Bucket**을 선택합니다.
+1. Google Cloud 콘솔에서 **Navigation Menu**(☰)로 이동하여 **Cloud Storage &gt; Buckets**를 선택합니다.
 2. 실습 환경에 제공된 Bucket 이름을 클릭합니다 (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식).
-3. **Bucket** 내부에서 review/ 폴더로 이동합니다.
+3. **Buckets** 내부에서 review/ 폴더로 이동합니다.
 4. 해당 폴더에서는 다음 항목을 확인합니다:
 
 * **고객 리뷰 (CSV):** customer_reviews.csv를 클릭하여 원시 텍스트 리뷰 데이터를 미리 봅니다.
