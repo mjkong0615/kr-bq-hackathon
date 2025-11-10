@@ -79,7 +79,7 @@ Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative A
 
 본격적인 분석 작업을 진행하기 전에 이 파일들을 자유롭게 탐색하여 데이터 내용에 충분히 익숙해집니다.
 
-### 1. Bigquery 환경 설정
+### 1. BigQuery 환경 설정
 
 ### **1.1 BigQuery Cloud 리소스 연결 생성**
 
@@ -89,8 +89,8 @@ Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative A
 2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
 3. **connection ID**에 **gemini_conn**을 입력합니다.
 4. **리전 유형**으로 **리전**을 선택한 다음, 드롭다운에서 **us-central1**을 선택합니다.
-5. **CREATE CONNECTION**를 클릭합니다.
-6. 확인 창이 나타납니다. **GO TO Connections**을 클릭합니다.
+5. **CREATE CONNECTION**을 클릭합니다.
+6. 확인 창이 나타납니다. **Go to connection**을 클릭합니다.
 7. **Connection info** 창(us-central1.gemini_conn)에서 **Service account ID**를 찾아 텍스트 편집기에 복사합니다. 다음 단계에서 필요합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_gotoconnection.png" alt="gotoconnection.png"  width="348.90" />
@@ -400,9 +400,11 @@ Visualize Sentiment Trends
 
 #### Overview
 
-Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 다음 단계인 고객 세분화를 진행합니다. 이번 태스크에서는 태스크 1에서 얻은 인사이트와 고객 인구통계 데이터를 결합합니다. 이어서 Gemini를 사용하여 각 고객 세그먼트에 대한 상세한 페르소나를 동적으로 생성하고, 이를 타겟 마케팅에 활용합니다.
+Task 1에서 심층 분석을 통한 리뷰 데이터가 준비되었으므로 다음 단계인 고객 세분화를 진행합니다. 이번 태스크에서는 Task 1에서 얻은 인사이트와 고객 인구통계 데이터를 결합합니다. 이어서 Gemini를 사용하여 각 고객 세그먼트에 대한 상세한 페르소나를 생성하여 이를 타겟 마케팅에 활용합니다.
 
+<div><ql-warningbox>
 이번 태스크에서는 BigQuery Studio의 **Notebook** 또는 **Data Canvas**를 활용하는 **두 가지 방법 중 하나를 선택**해 태스크를 진행합니다.
+</ql-warningbox></div>
 
 #### Objective
 
