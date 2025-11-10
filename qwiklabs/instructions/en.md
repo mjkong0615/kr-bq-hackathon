@@ -69,13 +69,13 @@ Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative A
 실습 단계를 시작하기 전에 작업할 샘플 데이터를 간단히 살펴봅니다. Cloud Storage Bucket에서 고객 리뷰 텍스트, 이미지, 비디오에 직접 액세스합니다. 이를 통해 멀티모달 데이터를 이해합니다.
 
 1. Google Cloud 콘솔에서 **Navigation Menu**(☰)로 이동하여 **Cloud Storage &gt; Buckets**를 선택합니다.
-2. 실습 환경에 제공된 Bucket 이름을 클릭합니다 (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식).
-3. **Buckets** 내부에서 review/ 폴더로 이동합니다.
+2. 실습 환경에 제공된 Bucket 이름을 클릭합니다 ({your-project-id}-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket).
+3. **Buckets** 안에서 review/ 폴더로 이동합니다.
 4. 해당 폴더에서는 다음 항목을 확인합니다:
 
 * **고객 리뷰 (CSV):** customer_reviews.csv를 클릭하여 원시 텍스트 리뷰 데이터를 미리 봅니다.
-* **리뷰 이미지:** images/ 폴더로 들어가 샘플 이미지 파일을 확인합니다. 개별 이미지를 클릭하여 조회합니다.
-* **리뷰 비디오:** videos/ 폴더로 들어가 샘플 비디오 파일을 확인합니다. 개별 비디오를 클릭하여 콘솔 내에서 재생합니다.
+* **리뷰 이미지:** images/ 폴더로 들어가 샘플 이미지 파일을 확인합니다. 각 이미지 > Public URL/Authenticated URL을 클릭하여 조회합니다.
+* **리뷰 비디오:** videos/ 폴더로 들어가 샘플 비디오 파일을 확인합니다. 각 비디오 > Public URL/Authenticated URL을 클릭하여 콘솔에서 재생합니다.
 
 본격적인 분석 작업을 진행하기 전에 이 파일들을 자유롭게 탐색하여 데이터 내용에 충분히 익숙해집니다.
 
@@ -843,8 +843,8 @@ Create tables for Recommendation Evaluations
 3. 아래와 같이 값을 설정합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />
 
-   * **Source** : Google Cloud Storage 설정 후 위 Browse를 클릭하여  your-project-id-bucket/review/customer\_reviews.csv 경로를 지정합니다.  
-   (일반적으로 your-project-id-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket 형식)  
+   * **Source** : Google Cloud Storage 설정 후 위 Browse를 클릭하여 your-project-id-bucket/review/customer\_reviews.csv 경로를 지정합니다.  
+   ({your-project-id}-bucket, 예: qwiklabs-gcp-xx-xxxxx-bucket)  
    * **Destination** : Table명을 요구사항에 맞춰 **customer_review**로 작성합니다.  
    * **Schema** : Schema는 Auto Detect으로 설정합니다.  
 
