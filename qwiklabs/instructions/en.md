@@ -813,29 +813,38 @@ Create tables for Recommendation Evaluations
 
 빅쿼리를 활용할 수 있는 권한이 필요합니다.
 
-* **BigQuery 데이터 편집자(****roles/bigquery.DataEditor****)**
-* **BigQuery 사용자(****roles/bigquery.User****)**
-* **Vertex AI 사용자(****roles/aiplatform.user****)**
+* **BigQuery Data Editor(****roles/bigquery.DataEditor****)**
+* **BigQuery User(****roles/bigquery.User****)**
+* **Vertex AI User(****roles/aiplatform.user****)**
 
-1. **탐색 메뉴**(☰)로 이동하여 **IAM 및 관리자 &gt; IAM**을 선택합니다.
-2. **+ 액세스 권한 부여**를 클릭합니다.
-3. **새 주 구성원** 필드에 현재 프로젝트 계정 ID를 붙여넣습니다.
-4. **역할 선택** 필드에서 **BigQuery 데이터 편집자, BigQuery 사용자, Vertex AI 사용자** 역할을 추가합니다.
-5. **저장**을 클릭합니다
+1. **탐색 메뉴**(☰)로 이동하여 **IAM & Admin &gt; IAM**을 선택합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_029.png" alt="task4_img_029.png" />  
+
+2. **Grant access**를 클릭합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_030.png" alt="task4_img_030.png" />  
+
+
+3. **Add Principals** 필드에 해당 랩 실행시 부여된 student 계정를 붙여넣은 후 Assign roles에서 **BigQuery Data Editor, BigQuery User, Vertex AI User**을 추가 한후 저장합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_031.png" alt="task4_img_031.png" />  
+
 
 ### 2. 고객리뷰 테이블을 cymbal 데이터세트 내에 생성하기
 
 다음은 고객리뷰 테이블을 cymbal 데이터세트 내에 생성하는 과정입니다. 이때, 테이블명은 **customer\_review**로 생성합니다.
 
 
-1. 접속하면 나타나는 메인 상단 중앙에 위치한 검색창에서 bigquery를 검색 후 클릭합니다.  
+1. 접속하면 나타나는 메인 상단 중앙에 위치한 검색창에서 bigquery를 검색 후 클릭합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_000.png" alt="task4_img_000.png" />  
 
 
-2. 빅쿼리 콘솔 내 Explorer 패널에서 아래와 같이 Tree 모양의 아이콘을 클릭 후 이미지와 같이 나타납니다. 이때, Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다.   
 
+2. 빅쿼리 콘솔 내 Explorer 패널에서 아래와 같이 Tree 모양의 아이콘을 클릭 후 이미지와 같이 나타납니다. 이때, Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
+
 
 3. 아래와 같이 값을 설정합니다.
 
