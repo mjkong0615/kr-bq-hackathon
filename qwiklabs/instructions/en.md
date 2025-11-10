@@ -1344,7 +1344,7 @@ customer\_review\_enf\_result파일이 해당 버킷 경로에 존재하는지
 Upload a file ‘task5\_result’ to Bucket 
 </ql-activity-tracking>
 
-## Task 6: 다중 소스 데이터를 결합한 지능형 고객 리인게이지먼트
+## Task 6: 멀티 소스 데이터를 활용한 고객 리타겟팅
 
 #### Overview
 
