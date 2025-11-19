@@ -835,10 +835,9 @@ BigQuery를 활용할 수 있는 권한이 필요합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_000.png" alt="task4_img_000.png" />  
 
 
+2. 빅쿼리 콘솔 내 Explorer 패널에서 아래와 같이 Tree 모양의 아이콘을 클릭 후 이미지와 같이 나타납니다. 이때, Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다.
 
-2. BigQuery 콘솔의 **Explorer** 패널에서 `cymbal` 데이터셋 옆의 점 3개(⋮) 아이콘을 클릭하고 **Create table**을 선택합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
-
 
 3. 아래와 같이 값을 설정합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />
@@ -1517,15 +1516,14 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 이전 섹션의 1~12단계를 반복하여 다음 정보를 사용하여 두 개의 변수를 더 만듭니다:
 
 
-
 | GET_PROPERTY()의 값 | 출력 이름 |
 | --- | --- |
 | customer_email | customer_email |
 | customer_name | customer_name |
 
-<div><ql-infobox>
 
-**참고:** JSON 함수가 추가되었기 때문에 **Output**의 기본 데이터 유형은 JSON이므로, 이 두 변수 모두에 대해 **Output**의 데이터 유형을 **String**으로 변경해야 합니다.
+<div><ql-infobox>
+참고: JSON 함수가 추가되었기 때문에 Output의 기본 데이터 유형은 JSON이므로, 이 두 변수 모두에 대해 Output의 데이터 유형을 String으로 변경해야 합니다.
 </ql-infobox></div>
 
 이제 이 Application Integration 트리거에 대해 message_output, customer_message, customer_email, customer_name 네 개의 데이터 매핑 변수가 구성되었습니다.
