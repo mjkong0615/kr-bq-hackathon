@@ -464,6 +464,8 @@ Notebook을 선택한 경우, 이전 단계에서 사용한 Notebook에서 작�
 
 ### 2.1 고객 세그먼트 프로파일 식별
 
+**Challenge**: 이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 **Challenge** 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
+
 Notebook의 지침에 따라 `cymbal.multimodal_customer_reviews` 테이블과 `cymbal.customers` 테이블을 `customer_id`를 기준으로 조인하고, 위에서 정의한 age_group, gender_segment, loyalty_status, text_sentiment 컬럼을 생성합니다.  
 
 최종적으로 `persona_age_group_profile` 컬럼을 포함하는 `cymbal.unique_segment_profiles` 테이블을 생성합니다.
@@ -474,7 +476,7 @@ Notebook의 지침에 따라 `cymbal.multimodal_customer_reviews` 테이블과 `
 
 **결과 확인:** 생성된 `cymbal.unique_segment_profiles` 테이블의 스키마와 데이터를 샘플링하여 컬럼이 예상대로 생성되었는지, `persona_age_group_profile` 형식이 올바른지 확인합니다.
 
-| **Note:** Notebook에서 새 코드 셀을 추가한 다음, Gemini를 통해 시각화 Python 코드를 작성해 봅니다. Gemini에게 위 예시와 유사한 시각화 코드를 요청할 수 있습니다.|
+| **Note:** Notebook에서 새 코드 셀을 추가한 다음, Gemini를 통해 시각화 Python 코드를 작성해 봅니다. Gemini에게 위 예시와 유사한 시각화 코드를 요청할 수 있습니다. **Option 1**으로 진행 시, **Task Checkpoint**는 **3. Gemini로 상세 페르소나 생성** 단계 직전에 위치합니다.|
 | :---- |
 
 셀 사이 공간에 마우스를 올리고, 나타나는 **+ Code** 버튼을 클릭합니다.
@@ -514,7 +516,7 @@ Notebook의 지침에 따라 `cymbal.multimodal_customer_reviews` 테이블과 `
 **주제 2**: 세그먼트별 지리적 분포 시각화
 `address_city` 정보를 활용하여 각 `persona_age_group_profile`별 고객의 지리적 분포(특정 도시 집중 여부 등)를 파악합니다.
 
-| **2. 고객 데이터 EDA 및 고객 세그먼트 세분화 로직 정의**를 완료했습니다. 이제 아래로 이동하여 **3. Gemini로 상세 페르소나 생성** 단계를 진행합니다. |
+| **2. 고객 데이터 EDA 및 고객 세그먼트 세분화 로직 정의**를 완료했습니다. **Option 2. Data Canvas** 내용은 건너뛰고, 아래로 스크롤하여 **3. Gemini로 상세 페르소나 생성** 단계를 진행합니다. |
 | :---- |
   
   
@@ -529,8 +531,8 @@ BigQuery Data Canvas는 시각적 인터페이스를 통해 복잡한 데이터 
 Data Canvas 화면의 **Recents** 아래에서 `multimodal_customer_reviews` 테이블과 `customers` 테이블을 각각 캔버스에 추가합니다. 테이블 추가 방법은 다음과 같습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/f50d21a3cf64f30.png" alt="f50d21a3cf64f30.png"  width="621.50" />
+<!-- #TODO: Update table screenshot -->
 
-    
 **Recents** > **customers** 테이블을 클릭합니다.  
 **Recents**에 `customers` 테이블이 보이지 않는 경우, 좌측 패널의 **Classic Explorer**에서 **cymbal** 데이터셋을 펼칩니다.  
 **customers** 테이블 옆의 **더보기(세로 점 3개) > Open in > Current data canvas**를 클릭합니다.  
@@ -580,7 +582,8 @@ Gemini에게 자연어 프롬프트로 위 요구사항을 충족하는 SQL 쿼�
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/371f475802604197.png" alt="371f475802604197.png"  width="544.50" />
 
-앞서 생성한 `age_group`, `gender_segment`, `loyalty_status` 컬럼을 연결하여 `Older_Adult_FEMALE_LOYAL` 형태의 새 컬럼을 생성합니다.  
+앞서 생성한 `age_group`, `gender_segment`, `loyalty_status` 컬럼을 연결하여 `Older_Adult_FEMALE_LOYAL` 형태의 새 컬럼을 생성합니다. 
+이때 최종 컬럼명은 반드시 `persona_age_group_profile`이어야 합니다.  
 
 Gemini에게 자연어 프롬프트로 그룹화 및 프로파일 생성 쿼리를 요청하거나 직접 SQL을 작성합니다.  
 
@@ -625,7 +628,7 @@ Create tables for Customer Personas
 
 ### 3. Gemini로 상세 페르소나 생성
 
-이전 단계에서 `cymbal.unique_segment_profiles` 테이블을 생성했다면, 이제 이 테이블을 기반으로 Gemini 모델을 호출하여 각 세그먼트의 상세 페르소나를 생성합니다.
+이전 단계에서 `cymbal.unique_segment_profiles` 테이블을 생성했다면, 이제 이 테이블을 기반으로 Gemini 모델을 호출하여 각 세그먼트의 상세 페르소나를 생성합니다. 페르소나를 생성함으로써 단순한 인구통계학적 분류를 넘어, 고객의 행동 패턴과 성향을 깊이 있게 이해하고 이를 바탕으로 더욱 정교한 개인화 마케팅 전략을 수립할 수 있습니다.
 
 Notebook의 'Gemini를 사용한 상세 페르소나 생성' 헤더 아래 셀부터 실행합니다. 앞서 정의한 각 페르소나에 대해 BigQuery ML의 `ML.GENERATE_TEXT` 함수와 Gemini 모델을 활용하여 다각적인 분석을 수행하고, 결과를 `cymbal.segment_level_gemini_analysis` 테이블에 저장합니다.
 
@@ -683,7 +686,7 @@ Task 3에서는 Task 1의 불만족 리뷰와 Task 2의 고객 세그먼트 및 
 1. BigQuery Studio 탐색기 창에서 **Notebooks** 옆의 점 3개(⋮) 아이콘을 클릭하고 **URL에서 Notebook 업로드(Upload notebook from URL)**를 선택합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task2_image1.png" alt="task2_image1.png"  width="624.00" />
 
-2. **Upload from**에서 **URL**을 선택하고 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task6.ipynb를 입력합니다.
+2. **Upload from**에서 **URL**을 선택하고 https://github.com/cheeunlim/dnpursuit_da_hackathon/blob/main/task3.ipynb 를 입력합니다.
 3. Region: us-central-1을 선택합니다.
 4. **Upload** 버튼을 클릭한 후, 화면 하단의 **Go to notebook** 알림을 클릭하여 새 탭에서 Notebook을 엽니다. 이 Notebook의 셀을 실행하여 Task 6을 진행합니다.
 
@@ -710,6 +713,8 @@ Step 2에서 식별한 불만족 고객 데이터를 가져옵니다.
 
 ### 4. 세그먼트, 도시별 인기 제품 추출 및 최종 추천 상품 결정
 
+**Challenge**: 이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 **Challenge** 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
+
 불만족 고객이 속한 세그먼트(`persona_age_group_profile`)와 거주 도시(`address_city`)에서 다른 고객들이 가장 많이 구매한 제품을 조회하여 개인화 추천에 활용합니다. 각 세그먼트별 상위 2개 인기 제품과 도시별 상위 2개 인기 제품을 각각 `cymbal.segment_top_products_ranked` 테이블과 `cymbal.city_top_products_ranked` 테이블에 저장하는 SQL 쿼리를 작성합니다.
 
 **요구사항**:
@@ -733,6 +738,8 @@ Step 2에서 식별한 불만족 고객 데이터를 가져옵니다.
 Create tables for Top Products
 </ql-activity-tracking>
 
+<!-- #TODO: Add screenshot of final recommendation table example -->
+
 각 상품 테이블을 병합하고, 고객이 이미 리뷰를 남긴 상품과의 중복을 확인합니다. 고객이 리뷰한 상품이 추천 목록에 있다면 제외하고, 없다면 거주 도시 기반의 두 번째 추천 상품을 제외하여 총 3개의 추천 상품 목록으로 정리합니다.
 
 이 단계의 코드는 제공되므로 그대로 실행하여 `cymbal.final_personalized_recommendations` 테이블을 생성합니다.
@@ -744,6 +751,8 @@ Create tables for Personalized Recommendations
 </ql-activity-tracking>
 
 ### 5. Gemini로 개인화된 추천 콘텐츠 평가
+
+**Challenge**: 이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 **Challenge** 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
 
 이제 고객별 추천 상품의 적합도를 평가합니다. 평가는 BigQuery에서 Gemini를 활용하며, 고객 세그먼트 페르소나, 추천 상품 이름, 카테고리 정보를 기반으로 진행합니다.
 
@@ -785,6 +794,14 @@ Create tables for Personalized Recommendations
 <ql-activity-tracking step=13>
 Create tables for Recommendation Evaluations
 </ql-activity-tracking>
+
+### **Evaluation 결과 확인 및 다음 단계**
+
+생성된 `compatibility_score`를 확인해 보면, 점수가 예상보다 높지 않거나(예: 60~70점대) 추천의 정확도가 다소 부족할 수 있습니다. 이는 룰 베이스(Rule-based) 추천이나 단순한 통계적 접근의 한계일 수 있습니다.
+
+따라서 우리는 더 정교하고 개인화된 추천을 위해 **Machine Learning** 기반의 추천 모델을 도입할 필요가 있습니다. 다음 **Task 4**와 **Task 5**에서는 BQML을 활용하여 고도화된 상품 추천 모델을 구축하고, 이를 통해 추천의 품질을 획기적으로 개선해 보겠습니다.
+
+마지막으로 `cymbal.gemini_recommendation_evaluation` 테이블에서 `compatibility_score`를 기준으로 내림차순 정렬하여 결과를 미리 확인해 봅니다.
 
 ## Task 4: 추가적인 탐색적 데이터 분석(EDA)
 
