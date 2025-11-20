@@ -464,7 +464,8 @@ Notebook을 선택한 경우, 이전 단계에서 사용한 Notebook에서 작�
 
 ### 2.1 고객 세그먼트 프로파일 식별
 
-**Challenge**: 이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 **Challenge** 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
+### [CHALLENGE]
+이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 Challenge 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
 
 Notebook의 지침에 따라 `cymbal.multimodal_customer_reviews` 테이블과 `cymbal.customers` 테이블을 `customer_id`를 기준으로 조인하고, 위에서 정의한 age_group, gender_segment, loyalty_status, text_sentiment 컬럼을 생성합니다.  
 
@@ -713,7 +714,8 @@ Step 2에서 식별한 불만족 고객 데이터를 가져옵니다.
 
 ### 4. 세그먼트, 도시별 인기 제품 추출 및 최종 추천 상품 결정
 
-**Challenge**: 이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 **Challenge** 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
+### [CHALLENGE] 
+이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 Challenge 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
 
 불만족 고객이 속한 세그먼트(`persona_age_group_profile`)와 거주 도시(`address_city`)에서 다른 고객들이 가장 많이 구매한 제품을 조회하여 개인화 추천에 활용합니다. 각 세그먼트별 상위 2개 인기 제품과 도시별 상위 2개 인기 제품을 각각 `cymbal.segment_top_products_ranked` 테이블과 `cymbal.city_top_products_ranked` 테이블에 저장하는 SQL 쿼리를 작성합니다.
 
@@ -752,7 +754,8 @@ Create tables for Personalized Recommendations
 
 ### 5. Gemini로 개인화된 추천 콘텐츠 평가
 
-**Challenge**: 이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 **Challenge** 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
+### [CHALLENGE]
+이 단계는 여러분이 직접 코드를 작성하여 해결해야 하는 Challenge 단계입니다. 가이드에서 제공하는 힌트를 참고하여 문제를 해결해 보세요.
 
 이제 고객별 추천 상품의 적합도를 평가합니다. 평가는 BigQuery에서 Gemini를 활용하며, 고객 세그먼트 페르소나, 추천 상품 이름, 카테고리 정보를 기반으로 진행합니다.
 
