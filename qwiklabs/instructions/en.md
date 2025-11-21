@@ -1266,47 +1266,48 @@ ON t1.customer_review_id = t2.customer_review_id
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_002.png" alt="task5_img_002.png" />  
 
 2. 터미널 창에 다음 명령어를 입력합니다. `your-bucket-name`은 본인 프로젝트의 버킷 이름으로 수정합니다.  
-    * gsutil cp \-r gs://YOUR\_BUCKET/ .
+    ```bash
+    gsutil cp -r gs://YOUR_BUCKET/ .
+    ```
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_003.png" alt="task5_img_003.png" />  
 
 
 3. 아래 이미지와 같이 경로에 파일이 추가되었는지 확인합니다.   
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_004.png" alt="task5_img_004.png" />  
 
-
 ### 데이터 사이언스 에이전트 활용하기
 
-1. Notebook 우측 상단의 **Gemini** 버튼을 클릭합니다. 프롬프트 창이 나타나면, 추가할 파일에 커서를 올렸을 때 표시되는 Gemini 아이콘을 클릭합니다. 이 예제에서는 다음 파일을 추가합니다.  
+1. Notebook 우측 상단의 **Gemini** 버튼을 클릭합니다. 프롬프트 창이 나타나면, 추가할 파일에 커서를 올렸을 때 표시되는 Gemini 아이콘을 클릭합니다. 이 예제에서는 다음 파일을 추가합니다.
 
-   * bq_data/alchemy_data1.csv  
-   * task4_result/customer_review_enf_result.csv  
-   * task4_result/product_enf_result.csv  
+   * bq_data/alchemy_data1.csv
+   * task4_result/customer_review_enf_result.csv
+   * task4_result/product_enf_result.csv
 
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_005.png" alt="task5_img_005.png" />
 
+    **참고:**
+    * 아래 이미지의 1번 버튼(패널로 이동)을 클릭하면 채팅 대화상자를 Notebook 외부의 별도 패널로 이동할 수 있습니다.
+    * 파일을 직접 업로드하려면 아래 이미지의 2번 버튼을 클릭합니다.
 
-**참고:** 
-   * 아래 이미지의 1번 버튼(패널로 이동)을 클릭하면 채팅 대화상자를 Notebook 외부의 별도 패널로 이동할 수 있습니다.  
-   * 파일을 직접 업로드하려면 아래 이미지의 2번 버튼을 클릭합니다.  
-
-    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_006.png" alt="task5_img_006.png" />  
-
-
-2. 채팅 대화상자에 프롬프트를 입력하고 **보내기**를 클릭합니다. 프롬프트 아이디어는 [데이터 과학 에이전트 기능](https://cloud.google.com/colab/docs/use-data-science-agent?hl=ko#capabilities)과 [샘플 프롬프트](https://cloud.google.com/colab/docs/use-data-science-agent?hl=ko#sample-prompts)를 참고합니다.  
-
-| **Note:** 예를 들어 '업로드한 데이터를 분석하고 Matrix Factorization 모델을 생성하여 평가해 줘. 그리고 불만족 고객이 만족할 만한 상품을 추천하여 테이블 형태로 만들어 줘'라고 입력할 수 있습니다. 모델 설명은 다음 [링크](https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-create-matrix-factorization)를 참조합니다. |
-| :---- |
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_006.png" alt="task5_img_006.png" />
 
 
+2. 채팅 대화상자에 프롬프트를 입력하고 **보내기**를 클릭합니다. 프롬프트 아이디어는 [데이터 과학 에이전트 기능](https://cloud.google.com/colab/docs/use-data-science-agent?hl=ko#capabilities)과 [샘플 프롬프트](https://cloud.google.com/colab/docs/use-data-science-agent?hl=ko#sample-prompts)를 참고합니다.
+
+    | **Note:** 예를 들어 '업로드한 데이터를 분석하고 Matrix Factorization 모델을 생성하여 평가해 줘. 그리고 불만족 고객이 만족할 만한 상품을 추천하여 테이블 형태로 만들어 줘'라고 입력할 수 있습니다. 모델 설명은 다음 [링크](https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-create-matrix-factorization)를 참조합니다. |
+    | :---- |
+    
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_007.png" alt="task5_img_007.png" />
 
-3. Gemini가 프롬프트에 응답합니다. 응답에는 실행 가능한 코드 스니펫, 프로젝트 조언, 다음 단계, 데이터 또는 코드 문제에 대한 정보가 포함될 수 있습니다.  
-   응답을 평가한 후 다음 작업을 수행할 수 있습니다.  
-   * **Accept & Run**을 클릭하여 Notebook에 코드를 추가하고 실행합니다.  
-   * **Cancel**을 선택하여 추천 코드를 삭제합니다.  
-   * 필요에 따라 후속 질문을 하며 작업을 계속합니다.  
-| **Note:** 각 단계마다 **Run** 을 클릭하여 작업을 진행할 수 있도록합니다. 현재 데이터 사이언스 에이전트는 초기단계로 작업 실행 시 오류가 발생하는 경우 자동으로 오류 해결을 시도하지만 해결에 실패할 수 있습니다. 이땐, 다시 동작을 시도하고 후에도 실패시 프롬프트를 수정하는 방법을 사용합니다. |
-| :---- |
+3. Gemini가 프롬프트에 응답합니다. 응답에는 실행 가능한 코드 스니펫, 프로젝트 조언, 다음 단계, 데이터 또는 코드 문제에 대한 정보가 포함될 수 있습니다.
+   응답을 평가한 후 다음 작업을 수행할 수 있습니다.
+   * **Accept & Run**을 클릭하여 Notebook에 코드를 추가하고 실행합니다.
+   * **Cancel**을 선택하여 추천 코드를 삭제합니다.
+   * 필요에 따라 후속 질문을 하며 작업을 계속합니다.
+   
+    | **Note:** 각 단계마다 **Run** 을 클릭하여 작업을 진행할 수 있도록합니다. 현재 데이터 사이언스 에이전트는 초기단계로 작업 실행 시 오류가 발생하는 경우 자동으로 오류 해결을 시도하지만 해결에 실패할 수 있습니다. 이땐, 다시 동작을 시도하고 후에도 실패시 프롬프트를 수정하는 방법을 사용합니다. |
+    | :---- |
+    
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_008.png" alt="task5_img_008.png" />
 
 
