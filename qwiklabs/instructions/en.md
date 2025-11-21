@@ -1265,11 +1265,13 @@ ON t1.customer_review_id = t2.customer_review_id
 1. Notebook 콘솔 왼쪽 하단의 **Terminal** 버튼을 클릭합니다.  
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_002.png" alt="task5_img_002.png" />  
 
-2. 터미널 창에 다음 명령어를 입력합니다. `your-bucket-name`은 본인 프로젝트의 버킷 이름으로 수정합니다.  
+2. 터미널 창에 다음 명령어를 입력합니다. `your-bucket-name`은 본인 프로젝트의 버킷 이름으로 수정합니다.
+    
     ```bash
     gsutil cp -r gs://YOUR_BUCKET/ .
     ```
-    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_003.png" alt="task5_img_003.png" />  
+    
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_003.png" alt="task5_img_003.png" />
 
 
 3. 아래 이미지와 같이 경로에 파일이 추가되었는지 확인합니다.   
@@ -1278,17 +1280,16 @@ ON t1.customer_review_id = t2.customer_review_id
 ### 데이터 사이언스 에이전트 활용하기
 
 1. Notebook 우측 상단의 **Gemini** 버튼을 클릭합니다. 프롬프트 창이 나타나면, 추가할 파일에 커서를 올렸을 때 표시되는 Gemini 아이콘을 클릭합니다. 이 예제에서는 다음 파일을 추가합니다.
-
    * bq_data/alchemy_data1.csv
    * task4_result/customer_review_enf_result.csv
    * task4_result/product_enf_result.csv
-
+    
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_005.png" alt="task5_img_005.png" />
-
+    
     **참고:**
     * 아래 이미지의 1번 버튼(패널로 이동)을 클릭하면 채팅 대화상자를 Notebook 외부의 별도 패널로 이동할 수 있습니다.
     * 파일을 직접 업로드하려면 아래 이미지의 2번 버튼을 클릭합니다.
-
+    
     <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_006.png" alt="task5_img_006.png" />
 
 
