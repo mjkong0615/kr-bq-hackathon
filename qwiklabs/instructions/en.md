@@ -1253,21 +1253,25 @@ ON t1.customer_review_id = t2.customer_review_id
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_001.png" alt="task5_img_001.png" />
 
 1. BigQuery Studio에서 **Notebook**을 클릭합니다.  
-2. Notebook이 생성되면 **Connect** 버튼을 클릭하여 런타임을 연결합니다.
+2. **Region**을 **us-central1**로 설정 후 **Select** 버튼을 클릭합니다.
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_017.png" alt="task5_img_017.png" />  
+3. Notebook이 생성되면 **Connect** 버튼을 클릭하여 런타임을 연결합니다.  
+4. 인증 팝업창이 나타나면 **Open** 버튼을 클릭합니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_018.png" alt="task5_img_018.png" />  
+5. 나타나는 qwiklabs.net 계정을 선택합니다. 
 
 ### TASK 4에서 생성한 파일 추가하기
 
 1. Notebook 콘솔 왼쪽 하단의 **Terminal** 버튼을 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_002.png" alt="task5_img_002.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_002.png" alt="task5_img_002.png" />  
 
 2. 터미널 창에 다음 명령어를 입력합니다. `your-bucket-name`은 본인 프로젝트의 버킷 이름으로 수정합니다.  
-   * gsutil cp \- r gs://YOUR\_BUCKET/ .
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_003.png" alt="task5_img_003.png" />  
+    * gsutil cp \-r gs://YOUR\_BUCKET/ .
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_003.png" alt="task5_img_003.png" />  
 
 
 3. 아래 이미지와 같이 경로에 파일이 추가되었는지 확인합니다.   
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_004.png" alt="task5_img_004.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_004.png" alt="task5_img_004.png" />  
 
 
 ### 데이터 사이언스 에이전트 활용하기
@@ -1278,14 +1282,14 @@ ON t1.customer_review_id = t2.customer_review_id
    * task4_result/customer_review_enf_result.csv  
    * task4_result/product_enf_result.csv  
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_005.png" alt="task5_img_005.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_005.png" alt="task5_img_005.png" />
 
 
 **참고:** 
    * 아래 이미지의 1번 버튼(패널로 이동)을 클릭하면 채팅 대화상자를 Notebook 외부의 별도 패널로 이동할 수 있습니다.  
    * 파일을 직접 업로드하려면 아래 이미지의 2번 버튼을 클릭합니다.  
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_006.png" alt="task5_img_006.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_006.png" alt="task5_img_006.png" />  
 
 
 2. 채팅 대화상자에 프롬프트를 입력하고 **보내기**를 클릭합니다. 프롬프트 아이디어는 [데이터 과학 에이전트 기능](https://cloud.google.com/colab/docs/use-data-science-agent?hl=ko#capabilities)과 [샘플 프롬프트](https://cloud.google.com/colab/docs/use-data-science-agent?hl=ko#sample-prompts)를 참고합니다.  
@@ -1294,28 +1298,29 @@ ON t1.customer_review_id = t2.customer_review_id
 | :---- |
 
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_007.png" alt="task5_img_007.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_007.png" alt="task5_img_007.png" />
 
 3. Gemini가 프롬프트에 응답합니다. 응답에는 실행 가능한 코드 스니펫, 프로젝트 조언, 다음 단계, 데이터 또는 코드 문제에 대한 정보가 포함될 수 있습니다.  
    응답을 평가한 후 다음 작업을 수행할 수 있습니다.  
    * **Accept & Run**을 클릭하여 Notebook에 코드를 추가하고 실행합니다.  
    * **Cancel**을 선택하여 추천 코드를 삭제합니다.  
    * 필요에 따라 후속 질문을 하며 작업을 계속합니다.  
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_008.png" alt="task5_img_008.png" />
+| **Note:** 각 단계마다 **Run** 을 클릭하여 작업을 진행할 수 있도록합니다. 현재 데이터 사이언스 에이전트는 초기단계로 작업 실행 시 오류가 발생하는 경우 자동으로 오류 해결을 시도하지만 해결에 실패할 수 있습니다. 이땐, 다시 동작을 시도하고 후에도 실패시 프롬프트를 수정하는 방법을 사용합니다. |
+| :---- |
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_008.png" alt="task5_img_008.png" />
 
 
 ### Notebook 파일을 GCS에 저장하기
 
 1. **File > Download > Download .ipynb**를 클릭하여 다운로드합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_009.png" alt="task5_img_009.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_009.png" alt="task5_img_009.png" />
 
 2. Google Cloud 콘솔의 **탐색 메뉴**(☰)에서 **Cloud Storage > Buckets**를 선택합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_011.png" alt="task5_img_011.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_011.png" alt="task5_img_011.png" />
 
 3. 실습 환경에서 제공된 버킷 이름을 클릭하고 `task5` 폴더로 진입합니다.    
 4. **Upload > Upload files**를 클릭하여 Notebook 파일을 업로드합니다. 이때 파일명은 `task5_result.ipynb`로 지정합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_010.png" alt="task5_img_010.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task5_img_010.png" alt="task5_img_010.png" />  
 
 
 
