@@ -824,101 +824,77 @@ Create tables for Recommendation Evaluations
 #### Objective
 
 * BigQuery Studio와 ML Model을 활용한 데이터 분석을 위해 다양한 모델과 활용 방법을 경험합니다.  
-* \[옵션\] Data Insights와 Data Canvas를 활용한 데이터 분석을 경험합니다.  
+* \[선택사항\] Data Insights와 Data Canvas를 활용한 데이터 분석을 경험합니다.  
 * 분석 결과를 CSV 파일로 Google Cloud Storage 버킷(Bucket)에 저장합니다. 
 
-### 1. 서비스 계정에 IAM 역할 부여
 
-BigQuery를 활용할 수 있는 권한이 필요합니다.
-
-* **BigQuery Data Editor(****roles/bigquery.DataEditor****)**
-* **BigQuery User(****roles/bigquery.User****)**
-* **Vertex AI User(****roles/aiplatform.user****)**
-
-1. **탐색 메뉴**(☰)에서 **IAM & Admin &gt; IAM**을 선택합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_029.png" alt="task4_img_029.png" />  
-
-2. **Grant access**를 클릭합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_030.png" alt="task4_img_030.png" />  
-
-
-3. **Add Principals** 필드에 실습 환경에서 제공된 Student 계정을 입력합니다. **Assign roles**에서 **BigQuery Data Editor, BigQuery User, Vertex AI User** 역할을 추가한 후 저장합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_031.png" alt="task4_img_031.png" />  
-
-
-### 2. 고객 리뷰 테이블을 cymbal 데이터세트 내에 생성하기
+### 1. 고객 리뷰 테이블을 cymbal 데이터세트 내에 생성하기
 
 다음은 고객 리뷰 테이블을 `cymbal` 데이터셋에 생성하는 과정입니다. 테이블명은 `customer_review`로 지정합니다.
 
-
 1. 메인 상단 중앙의 검색창에서 **BigQuery**를 검색하고 클릭합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_000.png" alt="task4_img_000.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_000.png" alt="task4_img_000.png" />  
 
 
 2. 빅쿼리 콘솔 내 Explorer 패널에서 아래와 같이 Tree 모양의 아이콘을 클릭 후 이미지와 같이 나타납니다. 이때, Cymbal 옆 점 3개(⋮) 아이콘을 클릭 후 Create table 버튼을 클릭합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_001.png" alt="task4_img_001.png" />  
 
 3. 아래와 같이 값을 설정합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_002.png" alt="task4_img_002.png" />  
 
-   * **Source**: **Google Cloud Storage**를 선택하고, **Browse**를 클릭하여 `your-project-id-bucket/review/customer_reviews.csv` 경로를 지정합니다.  
-   (`{your-project-id}-bucket`, 예: `qwiklabs-gcp-xx-xxxxx-bucket`)  
-   * **Destination**: **Table** 이름을 `customer_review`로 입력합니다.  
-   * **Schema**: **Auto detect**를 선택합니다.  
+    > **Source**: **Google Cloud Storage**를 선택하고, **Browse**를 클릭하여 `your-project-id-bucket/review/customer_reviews.csv` 경로를 지정합니다.  
+    > (`{your-project-id}-bucket`, 예: `qwiklabs-gcp-xx-xxxxx-bucket`)  
+    > **Destination**: **Table** 이름을 `customer_review`로 입력합니다.  
+    > **Schema**: **Auto detect**를 선택합니다.  
 
-4. **Advanced options**를 클릭하여 아래와 같이 설정한 후 테이블을 생성합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_003.png" alt="task4_img_003.png" />  
 
-  
+4. **Advanced options**를 클릭하여 아래와 **Quoted newlines**만 설정한 후 테이블을 생성합니다. 그 외 옵션은 default로 둡니다. 
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_003.png" alt="task4_img_003.png" />  
+
+    | **Note:** Quoted newlines는 데이터 무결성을 확보하는 데 중요한 옵션입니다. 따옴표\(""\)로 감싸진 데이터 내 줄개행을 행의 끝으로 인식하지 않고 텍스트 자체에 줄바꿈을 할 수 있도록 합니다.  |
+    | :---- |
+
 5. 결과적으로 `cymbal` 데이터셋 아래에 `customer_review` 테이블이 생성됩니다.    
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_004.png" alt="task4_img_004.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_004.png" alt="task4_img_004.png" />
 
 
-### [옵션] Data Insights와 Data Canvas를 활용한 탐색적 데이터 분석
+### [선택사항] Data Insights와 Data Canvas를 활용한 탐색적 데이터 분석
 
 다음은 Data Insights와 Data Canvas의 생성 및 사용 방법을 소개합니다. 이후 분석 과정에서 자유롭게 활용해 봅니다. 해당 단계를 건너뛰려면 아래 단계로 이동합니다.  
 
 1. Data Insights 다루기  
-   * 왼쪽 패널에서 `customer_review` 테이블을 클릭합니다. 아래 이미지와 같이 **Insights** 버튼을 클릭하고 **Generate Insights for free**를 선택합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_005.png" alt="task4_img_005.png" />  
+    > 왼쪽 패널에서 `customer_review` 테이블을 클릭합니다. 아래 이미지와 같이 **Insights** 버튼을 클릭하고 **Generate Insights for free**를 선택합니다. 이때, 시간이 다소 소요될 수 있습니다. 
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_005.png" alt="task4_img_005.png" />  
 
+    > 다음과 같은 결과가 나타납니다. 결과는 실행 시점마다 다를 수 있습니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_006.png" alt="task4_img_006.png" />  
 
-   * 다음과 같은 결과가 나타납니다. 결과는 실행 시점마다 다를 수 있습니다.  
+    > 분석하고자 하는 항목의 복사 버튼을 클릭하여 쿼리를 복사합니다. 
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_007.png" alt="task4_img_007.png" />  
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_006.png" alt="task4_img_006.png" />  
-   
-   
-   * 분석하고자 하는 항목의 복사 버튼을 클릭하여 쿼리를 복사합니다. 
-   
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_007.png" alt="task4_img_007.png" />  
-
-
-   * 쿼리 창에 복사한 쿼리를 붙여넣고 **Run** 버튼을 클릭하여 결과를 확인합니다.  
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_008.png" alt="task4_img_008.png" />  
+    > 쿼리 창에 복사한 쿼리를 붙여넣고 **Run** 버튼을 클릭하여 결과를 확인합니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_008.png" alt="task4_img_008.png" />  
 
 
 2. Data Canvas 다루기  
-   * BigQuery Studio 홈에서 **Data Canvas** 버튼을 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_009.png" alt="task4_img_009.png" />
+    > BigQuery Studio 홈에서 **Data Canvas** 버튼을 클릭합니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_009.png" alt="task4_img_009.png" />  
 
+    > \[해당하는 경우\] **Region**을 `us-central1`로 설정하고 **Save**를 클릭합니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_010.png" alt="task4_img_010.png" />  
 
-   * **Region**을 `us-central1`로 설정하고 **Save**를 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_010.png" alt="task4_img_010.png" />  
+    > Data Canvas 초기 화면이 나타납니다. 이 예제에서는 자연어로 테이블을 쿼리합니다. 먼저 **Search for data**를 클릭합니다.   
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_011.png" alt="task4_img_011.png" />  
 
+    > `customer_review`를 검색하여 선택한 뒤 **Query** 버튼을 클릭합니다.
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_012.png" alt="task4_img_012.png" />  
 
-   * Data Canvas 초기 화면이 나타납니다. 이 예제에서는 자연어로 테이블을 쿼리합니다. 먼저 **Search for data**를 클릭합니다.   
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_011.png" alt="task4_img_011.png" />  
+    > '부정적인 리뷰를 남긴 고객들을 보고 싶어'라고 자연어 질의를 입력한 후 **Generate** 버튼을 클릭합니다. 생성된 쿼리를 확인하고 **Run** 버튼을 클릭하여 결과를 확인합니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_013.png" alt="task4_img_013.png" />  
 
-   * `customer_review`를 검색하여 선택한 뒤 **Query** 버튼을 클릭합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_012.png" alt="task4_img_012.png" />  
-
-   * '부정적인 리뷰를 남긴 고객들을 보고 싶어'라고 자연어 질의를 입력한 후 **Generate** 버튼을 클릭합니다. 생성된 쿼리를 확인하고 **Run** 버튼을 클릭하여 결과를 확인합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_013.png" alt="task4_img_013.png" />  
-
-   * 빨간 박스 안의 버튼들을 활용하여 추가적인 데이터 분석을 진행할 수 있습니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_014.png" alt="task4_img_014.png" />  
+    > 빨간 박스 안의 버튼들을 활용하여 추가적인 데이터 분석을 진행할 수 있습니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_014.png" alt="task4_img_014.png" />
 
 
 ### BigQuery Studio와 ML Model을 활용한 탐색적 데이터 분석
@@ -928,93 +904,86 @@ BigQuery를 활용할 수 있는 권한이 필요합니다.
 #### Overview 
 
 1. 고객, 고객 리뷰, 상품 데이터 분석을 진행합니다.  
-* 옵션인 Data Insights와 Data Canvas도 활용해 봅니다.  
-* 임베딩을 활용하여 품질 문제, 배송 문제 등을 검색하고 분석합니다.  
-
-
+    > 옵션인 Data Insights와 Data Canvas도 활용해 봅니다.  
+    > 임베딩을 활용하여 품질 문제, 배송 문제 등을 검색하고 분석합니다.  
+    
 2. 이 예제에서는 다음 데이터를 추가합니다.  
-* 다음과 같이 데이터를 보강합니다.  
-  **품질 문제, 배송 문제 등으로 군집화된 분류 데이터**
-  **고객들의 리뷰에서 개선점과 고객이 좋아할 특성을 정의한 데이터**
-  **제품 테이블에 제품의 장점, 단점 그리고 특성을 정의한 데이터**
+    > 다음과 같이 데이터를 보강합니다.  
+    > **품질 문제, 배송 문제 등으로 군집화된 분류 데이터**  
+    > **고객들의 리뷰에서 개선점과 고객이 좋아할 특성을 정의한 데이터**  
+    > **제품 테이블에 제품의 장점, 단점 그리고 특성을 정의한 데이터**  
 
 
 ### **임베딩과 유사도 검색을 활용한 분석**
 
 
 1. BigQuery Studio 메인 화면에서 **ML Models**를 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_015.png" alt="task4_img_015.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_015.png" alt="task4_img_015.png" />
 
 2. **Dataset name**은 `cymbal`, **Model ID**는 `embedding_model`로 지정하고 **Continue**를 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_016.png" alt="task4_img_016.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_016.png" alt="task4_img_016.png" />  
 
 
 3. **Creation method**에서 **Connect to Vertex AI LLM service and CloudAI services**를 선택하고 **Continue**를 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_017.png" alt="task4_img_017.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_017.png" alt="task4_img_017.png" />  
 
 
 4. **Model options**에서 다음과 같이 설정한 후 **Create model**을 클릭합니다.  
-* **Model type** : Google and Partner Models  
-* **Remote Connection** : Default connection  
-* **REMOTE\_SERVICE\_TYPE** : text-multilingual-embedding-002
+    > **Model type** : Google and Partner Models  
+    > **Remote Connection** : Default connection  
+    > **ENDPOINT** : text-multilingual-embedding-002
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_018.png" alt="task4_img_018.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_018.png" alt="task4_img_018.png" />  
 
-
-| Note: text-multilingual-embedding-002는 다국어 대상으로 임베딩을 생성하는 모델입니다. 텍스트 임베딩 지원 모델에 관한 자세한 내용은 [링크](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api?hl=ko) 참조하세요. |
-| :---- |
+    | Note: text-multilingual-embedding-002는 다국어 대상으로 임베딩을 생성하는 모델입니다. 텍스트 임베딩 지원 모델에 관한 자세한 내용은 [링크](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api?hl=ko) 참조하세요. |
+    | :---- |
 
 
 5. 빨간 박스 안의 버튼을 클릭하여 새 쿼리 창을 열고 다음 단계를 진행합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_019.png" alt="task4_img_019.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_019.png" alt="task4_img_019.png" />  
 
 
-6. 다음 쿼리에서 `PROJECT_ID`, `DATASET_NAME`, `MODEL_NAME`, `TABLE_NAME` 값을 수정하여 임베딩 테이블을 생성합니다.
-```sql
-CREATE OR REPLACE TABLE `PROJECT_ID.DATASET_NAME.NEW_TABLE_NAME` AS
-SELECT * FROM ML.GENERATE_EMBEDDING(
-MODEL `PROJECT_ID.DATASET_NAME.MODEL_NAME`,
-(SELECT review_text AS content, customer_id, customer_review_id
-FROM `PROJECT_ID.DATASET_NAME.TABLE_NAME`)
-)
-```
+6. 다음 쿼리에서 `PROJECT_ID` 값을 수정하여 임베딩 테이블을 생성합니다.
+    
+    ```sql
+    CREATE OR REPLACE TABLE `PROJECT_ID.cymbal.embeded_table` AS
+    SELECT * FROM ML.GENERATE_EMBEDDING(
+    MODEL `PROJECT_ID.cymbal.embedding_model`,
+    (SELECT review_text AS content, customer_id, customer_review_id
+    FROM `PROJECT_ID.cymbal.customer_review`)
+    )
+    ```
+    
+    > `PROJECT_ID`: 현재 프로젝트 ID  
 
-* `PROJECT_ID`: 현재 프로젝트 ID  
-* **DATASET\_NAME** : cymbal  
-* **NEW\_TABLE\_NAME** : embeded\_table  
-* **MODEL\_NAME** : embedding\_model  
-* **TABLE\_NAME** : customer\_review  
+7. **Run** 버튼을 클릭하여 실행합니다.
+8. 임베딩 결과 테이블을 바탕으로 벡터 검색을 수행합니다. 아래 쿼리는 품질 불량으로 추정되는 항목을 유사도 순으로 보여줍니다. 실행 후 결과가 실제와 일치하는지 검증합니다.
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_020.png" alt="task4_img_020.png" />  
 
-7. **Run** 버튼을 클릭하여 실행합니다.  
-8. 임베딩 결과 테이블을 바탕으로 벡터 검색을 수행합니다. 아래 쿼리는 품질 불량으로 추정되는 항목을 유사도 순으로 보여줍니다. 실행 후 결과가 실제와 일치하는지 검증합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_020.png" alt="task4_img_020.png" />  
+    | Note: 컬럼의 양이 많다면 벡터 색인을 사용할 수 있습니다. 자세한 정보는 [링크](https://cloud.google.com/bigquery/docs/vector-index?hl=ko) 참조하세요.  |
+    | :---- |
 
-| Note: 컬럼의 양이 많다면 벡터 색인을 사용할 수 있습니다. 자세한 정보는 [링크](https://cloud.google.com/bigquery/docs/vector-index?hl=ko) 참조하세요.  |
-| :---- |
+    ```sql
+    SELECT
+    t.content,
+    t.customer_id,
+    t.customer_review_id,
+    # 코사인 유사도 점수 (1에 가까울수록 의미적으로 유사함)
+    1 - ML.DISTANCE(
+    t.ml_generate_embedding_result,
+    query_embed.ml_generate_embedding_result,
+    'COSINE'
+    ) AS similarity_score
+    FROM
+    `PROJECT_ID.cymbal.embeded_table` AS t,
+    ML.GENERATE_EMBEDDING(
+    MODEL `PROJECT_ID.cymbal.embedding_model`,
+    (SELECT '품질 불량' AS content) # 여기에 검색어를 입력합니다.
+    ) AS query_embed
+    ```  
 
-```sql
-SELECT
-t.content,
-t.customer_id,
-t.customer_review_id,
-# 코사인 유사도 점수 (1에 가까울수록 의미적으로 유사함)
-1 - ML.DISTANCE(
-t.ml_generate_embedding_result,
-query_embed.ml_generate_embedding_result,
-'COSINE'
-) AS similarity_score
-FROM
-`PROJECT_ID.DATASET_NAME.EMBEDDED_TABLE` AS t,
-ML.GENERATE_EMBEDDING(
-MODEL `PROJECT_ID.DATASET_NAME.MODEL_NAME`,
-(SELECT '품질 불량' AS content) # 여기에 검색어를 입력합니다.
-) AS query_embed
-```
+    > `PROJECT_ID`: 현재 프로젝트 명
 
-* **PROJECT\_ID** : 현재 프로젝트 명  
-* **DATASET\_NAME** : cymbal  
-* **MODEL\_NAME** : embedding\_model  
-* **EMBEDDED\_TABLE** : embeded\_table
 
 ### [CHALLENGE]
 품질 불량 유사도를 내림차순으로 정렬하여 상위 5개 항목을 출력합니다.
@@ -1032,156 +1001,147 @@ Challenge 쿼리 실행 여부 확인
 ### **각 리뷰별 카테고리 군집화 데이터 보강**
 
 1. BigQuery Studio 메인화면에서 ML model를 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_015.png" alt="task4_img_015.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_015.png" alt="task4_img_015.png" />
 
 2. 데이터세트(Dataset name)는 cymbal로 지정 및 모델명은 gemini\_model 로 작성 후 Continue 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_022.png" alt="task4_img_022.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_022.png" alt="task4_img_022.png" />  
 
 
 3. Creation method에서 **Connect to Vertex AI LLM service and CloudAI services** 체크 후 Continue 클릭합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_017.png" alt="task4_img_017.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_017.png" alt="task4_img_017.png" />  
 
 
 4. Model options에서 다음과 같이 설정 후 생성합니다.  
-* **Model type** : Google and Partner Models  
-* **Remote Connection** : Default connection  
-* **REMOTE\_SERVICE\_TYPE** : gemini-2.5-flash  
+    > **Model type** : Google and Partner Models  
+    > **Remote Connection** : Default connection  
+    > **ENDPOINT** : gemini-2.5-flash  
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_023.png" alt="task4_img_023.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_023.png" alt="task4_img_023.png" />  
 
-
-| Note: gemini-2.5-flash는 생성형 AI로 다양한 역할을 합니다. 자세한 내용은 [링크](https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-flash?hl=ko) 참조하세요 |
-| :---- |
+    | Note: gemini-2.5-flash는 생성형 AI로 다양한 역할을 합니다. 자세한 내용은 [링크](https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-flash?hl=ko) 참조하세요 |
+    | :---- |
 
 5. 이제 고객 리뷰를 참고하여 군집화된 카테고리를 생성합니다.  
-6. 새 쿼리 창을 열고, 다음 쿼리에서 `PROJECT_ID`, `DATASET_NAME`, `MODEL_NAME`, `TABLE_NAME`을 설정하여 실행합니다.
+6. 새 쿼리 창을 열고, 다음 쿼리에서 `PROJECT_ID` 를 설정하여 실행합니다.
 
-```sql
-SELECT
-customer_review_id,
-customer_id,
-issue_category
-FROM
-AI.GENERATE_TABLE(
-MODEL `PROJECT_ID.DATASET_NAME.MODEL_NAME`,
-(
-SELECT
-t.customer_id,
-t.customer_review_id,
-t.review_text,
-CONCAT(
-'''
-부정적인 리뷰로 판단된 경우 분석해서 문제점을 카테고리화해서 분류하려고 해
-. 다음 카테고리 중 하나를 택해서 분류해줘
-**품질불량, 배송문제, 기대미충족, 단순변심, 결제문제, 응대문제, 기타**
-긍정적인 리뷰로 판단된 경우 **해당없음**으로 분류해주면 돼.
-분석할 리뷰:
-''',
-t.review_text
-) AS prompt
-FROM
-`PROJECT_ID.DATASET_NAME.TABLE_NAME` AS t
-WHERE
-t.rating < 3
-),
-STRUCT(
-"issue_category STRING" AS output_schema,
-8192 AS max_output_tokens)
-)
-```
+    ```sql
+    SELECT
+    customer_review_id,
+    customer_id,
+    issue_category
+    FROM
+    AI.GENERATE_TABLE(
+    MODEL `PROJECT_ID.cymbal.gemini_model`,
+    (
+    SELECT
+    t.customer_id,
+    t.customer_review_id,
+    t.review_text,
+    CONCAT(
+    '''
+    부정적인 리뷰로 판단된 경우 분석해서 문제점을 카테고리화해서 분류하려고 해
+    . 다음 카테고리 중 하나를 택해서 분류해줘
+    **품질불량, 배송문제, 기대미충족, 단순변심, 결제문제, 응대문제, 기타**
+    긍정적인 리뷰로 판단된 경우 **해당없음**으로 분류해주면 돼.
+    분석할 리뷰:
+    ''',
+    t.review_text
+    ) AS prompt
+    FROM
+    `PROJECT_ID.cymbal.customer_review` AS t
+    WHERE
+    t.rating < 3
+    ),
+    STRUCT(
+    "issue_category STRING" AS output_schema,
+    8192 AS max_output_tokens)
+    )
+    ```
 
-* **PROJECT\_ID** : 현재 프로젝트 명  
-* **DATASET\_NAME** : cymbal  
-* **MODEL\_NAME** : gemini\_model  
-* **TABLE\_NAME** : customer\_review
+    > `PROJECT_ID`: 현재 프로젝트 명  
 
-실행하면 다음과 같은 결과가 출력됩니다.
+    실행하면 다음과 같은 결과가 출력됩니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_024.png" alt="task4_img_024.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_024.png" alt="task4_img_024.png" />
 
-9. 결과를 테이블에 추가합니다.
+7. 결과를 테이블에 추가합니다.
 
-```sql
-CREATE OR REPLACE TABLE `PROJECT_ID.DATASET_NAME.cgenf_table` AS (
-SELECT
-customer_review_id,
-customer_id,
-issue_category
-FROM
-AI.GENERATE_TABLE(
-MODEL `PROJECT_ID.DATASET_NAME.MODEL_NAME`,
-(
-SELECT
-t.customer_id,
-t.customer_review_id,
-t.review_text,
-CONCAT(
-'''
-부정적인 리뷰로 판단된 경우 분석해서 문제점을 카테고리화해서 분류하려고 해
-. 다음 카테고리 중 하나를 택해서 분류해줘
-**품질불량, 배송문제, 기대미충족, 단순변심, 결제문제, 응대문제, 기타**
-긍정적인 리뷰로 판단된 경우 **해당없음**으로 분류해주면 돼.
-분석할 리뷰:
-''',
-t.review_text
-) AS prompt
-FROM
-`PROJECT_ID.DATASET_NAME.TABLE_NAME` AS t
-WHERE
-t.rating < 3
-),
-STRUCT(
-"issue_category STRING" AS output_schema,
-8192 AS max_output_tokens)
-)
-)
-```
+    ```sql
+    CREATE OR REPLACE TABLE `PROJECT_ID.cymbal.cgenf_table` AS (
+    SELECT
+    customer_review_id,
+    customer_id,
+    issue_category
+    FROM
+    AI.GENERATE_TABLE(
+    MODEL `PROJECT_ID.cymbal.gemini_model`,
+    (
+    SELECT
+    t.customer_id,
+    t.customer_review_id,
+    t.review_text,
+    CONCAT(
+    '''
+    부정적인 리뷰로 판단된 경우 분석해서 문제점을 카테고리화해서 분류하려고 해
+    . 다음 카테고리 중 하나를 택해서 분류해줘
+    **품질불량, 배송문제, 기대미충족, 단순변심, 결제문제, 응대문제, 기타**
+    긍정적인 리뷰로 판단된 경우 **해당없음**으로 분류해주면 돼.
+    분석할 리뷰:
+    ''',
+    t.review_text
+    ) AS prompt
+    FROM
+    `PROJECT_ID.cymbal.customer_review` AS t
+    WHERE
+    t.rating < 3
+    ),
+    STRUCT(
+    "issue_category STRING" AS output_schema,
+    8192 AS max_output_tokens)
+    )
+    )
+    ```
 
-* **PROJECT\_ID** : 현재 프로젝트 명  
-* **DATASET\_NAME** : cymbal  
-* **MODEL\_NAME** : gemini\_model  
-* **TABLE\_NAME** : customer\_review
+    > `PROJECT_ID`: 현재 프로젝트 명
+
 
 ### **고객 리뷰 분석을 통한 개선점 데이터 보강**
 
 1. 위 과정에서 생성한 모델을 사용합니다.  
-2. 고객 리뷰를 참고하여 개선 방안과 선호할 만한 특성을 분석한 텍스트를 생성합니다.
+2. 고객 리뷰를 참고하여 개선 방안과 선호할 만한 특성을 분석한 텍스트를 생성합니다. 이때, 아래 코드에서 `PROJECT_ID` 를 설정하여 실행합니다.
 
-```sql
-SELECT
-generated_output.customer_id,
-generated_output.customer_review_id,
-generated_output.ml_generate_text_result.candidates[0].content.parts[0].text AS improvement_points
-FROM
-ML.GENERATE_TEXT(
-MODEL `PROJECT_ID.DATASET_NAME.MODEL_NAME`,
-(
-  SELECT
-    customer_id,
-    customer_review_id,
-CONCAT(
-'''
-다음 리뷰를 참고해서 고객이 불만족한 부분을 개선할 수 있는 구체적인 방안 1개와 고객이 좋아할 법한 상품 특성을 1개 제시해줘 양식은 다음과 같아. 양식을 무조건 지켜서 작성해줘.
-개선방안 :
-고객이 좋아할 법한 특성 :
-참고할 리뷰내용 :
-''', review_text) AS prompt
-FROM `PROJECT_ID.DATASET_NAME.TABLE_NAME`
-WHERE rating < 3),
-STRUCT(
-0.2 AS temperature,
-2048 AS max_output_tokens )
-) AS generated_output
-```
+    ```sql
+    SELECT
+    generated_output.customer_id,
+    generated_output.customer_review_id,
+    generated_output.ml_generate_text_result.candidates[0].content.parts[0].text AS improvement_points
+    FROM
+    ML.GENERATE_TEXT(
+    MODEL `PROJECT_ID.cymbal.gemini_model`,
+    (
+      SELECT
+        customer_id,
+        customer_review_id,
+    CONCAT(
+    '''
+    다음 리뷰를 참고해서 고객이 불만족한 부분을 개선할 수 있는 구체적인 방안 1개와 고객이 좋아할 법한 상품 특성을 1개 제시해줘 양식은 다음과 같아. 양식을 무조건 지켜서 작성해줘.
+    개선방안 :
+    고객이 좋아할 법한 특성 :
+    참고할 리뷰내용 :
+    ''', review_text) AS prompt
+    FROM `PROJECT_ID.cymbal.customer_review`
+    WHERE rating < 3),
+    STRUCT(
+    0.2 AS temperature,
+    2048 AS max_output_tokens )
+    ) AS generated_output
+    ```
 
-* **PROJECT\_ID** : 현재 프로젝트 명  
-* **DATASET\_NAME** : cymbal  
-* **MODEL\_NAME** : gemini\_model  
-* **TABLE\_NAME** : customer\_review
+    > `PROJECT_ID`: 현재 프로젝트 명
+    
+    해당 결과는 다음과 같이 출력됩니다.
 
-해당 결과는 다음과 같이 출력됩니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_025.png" alt="task4_img_025.png" />
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_025.png" alt="task4_img_025.png" />
 
 ### [CHALLENGE]  
 위 쿼리 결과로 `improv_table` 테이블을 생성합니다. 이때 데이터가 보강되는 컬럼명은 `improvement_points`로 지정합니다.  
@@ -1193,22 +1153,21 @@ Check if improv\_table exists
 
 ### 탐색 데이터 병합  
 
-1. `cgenf_table`과 위 Challenge에서 생성한 `improv_table`을 조인하여 보강된 데이터를 하나로 합칩니다. `PROJECT_ID`, `DATASET_NAME`을 수정한 후 진행합니다.
+1. `cgenf_table`과 위 Challenge에서 생성한 `improv_table`을 조인하여 보강된 데이터를 하나로 합칩니다. `PROJECT_ID`를 수정한 후 진행합니다.
 
-```sql
-SELECT
-  t1.*,
-  t2.issue_category
-FROM `PROJECT_ID.DATASET_NAME.cgenf_table` as t2
-JOIN `PROJECT_ID.DATASET_NAME.improv_table` as t1 
-ON t1.customer_review_id = t2.customer_review_id
-```
+    ```sql
+    SELECT
+      t1.*,
+      t2.issue_category
+    FROM `PROJECT_ID.cymbal.cgenf_table` as t2
+    JOIN `PROJECT_ID.cymbal.improv_table` as t1 
+    ON t1.customer_review_id = t2.customer_review_id
+    ```
 
-* **PROJECT\_ID** : 현재 프로젝트 명  
-* **DATASET\_NAME** : cymbal  
+    > `PROJECT_ID`: 현재 프로젝트 명
 
-2. 쿼리 결과를 저장합니다. **Save results**를 클릭하고 **CSV** 형식을 선택합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_026.png" alt="task4_img_026.png" />  
+2. 쿼리 결과를 저장합니다. **Save results**를 클릭하고 **CSV** 형식을 선택한 후 로컬환경에 저장합니다. 또는 아래 CHALLENGE의 힌트에서 안내하는 저장방식을 응용할 수 있습니다.  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_026.png" alt="task4_img_026.png" />  
 
 3. 저장한 파일의 이름을 `customer_review_enf_result.csv`로 수정합니다.
 
@@ -1221,10 +1180,10 @@ ON t1.customer_review_id = t2.customer_review_id
 **힌트:** 결과 저장 방법은 위 실습 방법을 따르거나, 다음 방식을 활용할 수 있습니다.  
 
 1. 쿼리 결과 창에서 **Save results**를 클릭하고 **Cloud Storage**를 선택합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_027.png" alt="task4_img_027.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_027.png" alt="task4_img_027.png" />  
 
 2. Challenge 조건에 맞춰 **Browse**를 클릭하고 경로와 파일명을 설정하여 저장합니다.  
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_028.png" alt="task4_img_028.png" />  
+    <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task4_img_028.png" alt="task4_img_028.png" />  
 
 
 목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
@@ -1235,6 +1194,7 @@ ON t1.customer_review_id = t2.customer_review_id
 
 
 ## Task 5: 상품 추천 모델 생성 및 활용
+
 
 #### Overview
 
