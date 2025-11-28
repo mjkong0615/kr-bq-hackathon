@@ -85,26 +85,34 @@ Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative A
 
 먼저, BigQuery가 Gemini 모델과 작동할 수 있도록 Cloud 리소스 연결을 생성합니다.
 
+BigQuery 내부에서 SQL 쿼리만으로 외부의 Gemini 모델을 직접 호출하기 위해서는 상호 작용을 위한 인증 정보와 권한이 포함된 '연결(Connection)' 리소스가 필요합니다. 이 단계에서는 그 연결 고리를 생성합니다.
+
 1. Google Cloud 콘솔에서 **Navigation menu**(☰)로 이동하여 **BigQuery**를 선택합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="548.90" />
+
 2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
 3. **connection ID**에 **gemini_conn**을 입력합니다.
-4. **리전 유형**으로 **리전**을 선택한 다음, 드롭다운에서 **us-central1**을 선택합니다.
+4. **리전 유형**으로 **us-central1**을 선택한 다음, 드롭다운에서 **us-central1**을 선택합니다.
+
+> 이번 핸즈온 실습에서 us-central1을 제약적으로 사용하고 있습니다.
+
 5. **CREATE CONNECTION**을 클릭합니다.
 6. 확인 창이 나타납니다. **Go to connection**을 클릭합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_gotoconnection.png" alt="gotoconnection.png"  width="548.90" />
+
 7. **Connection info** 창(us-central1.gemini_conn)에서 **Service account ID**를 찾아 텍스트 편집기에 복사합니다. 다음 단계에서 필요합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_gotoconnection.png" alt="gotoconnection.png"  width="348.90" />
 
-
-_내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
+목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=1>
 BigQuery External Connection 생성     
 </ql-activity-tracking>  
 
-
 ### **1.2 서비스 계정에 IAM 역할 부여**
 
-연결과 연관된 서비스 계정은 Vertex AI 및 Cloud Storage에 액세스할 수 있는 권한이 필요합니다.
+연결과 연관된 서비스 계정은 **Vertex AI** 및 Cloud Storage에 액세스할 수 있는 권한이 필요합니다.
 
 ##### **Vertex AI User / Storage Object Admin 역할 부여**
 
@@ -116,7 +124,7 @@ BigQuery External Connection 생성
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_iam.png" alt="grant_access.png"  width="348.90" />
 
-_내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
+목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=2>
 생성된 BigQuery External Connection을 위한 서비스 어카운트에 권한 추가
 </ql-activity-tracking>
@@ -129,17 +137,30 @@ _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 
 1. Google Cloud 콘솔에서 **BigQuery**로 이동합니다.
 2. **Explorer** 창에서 **Notebook** 옆의 점 3개(⋮) 아이콘을 클릭하고 **URL에서 Notebook 업로드**를 선택합니다.
-3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1.ipynb 를 입력합니다.
-4. 새 탭에서 Notebook을 엽니다.
+3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1_kr.ipynb 를 입력합니다.
+4. 나머지 설정에 대해서 default설정을 유지합니다.
+5. Notebook을 생성하면 화면 하단 중간에 뜨는, "Go to notebook" 팝업을 클릭합니다.
+6. 새 탭에서 Notebook을 엽니다.
 
 ### 2. Notebook 설정
 
 ### **2.1 환경 초기화**
 
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebool_auth.png" alt="task1_notebool_auth.png" />
+
+노트북 최초 실행 시 위와 같은 팝업 화면이 나타납니다.
+위 화면에서 실습계정을 클릭하여, 로그인을 합니다.
+
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook1.png" alt="task1_notebook1.png" />
 
 
-먼저 설정 셀(Cell)을 실행합니다. 이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
+먼저 설정 셀(Cell)을 실행합니다. 
+이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
+
+셀 실행은 다음과 같이 왼쪽에 마우스를 올리고 실행 버튼을 클릭하면 실행 시작됩니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_cell_execute.png" alt="task1_cell_execute.png"  width="348.90" />
 
 그리고 다음 셀을 실행합니다.
 
@@ -167,6 +188,8 @@ _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 SELECT * FROM `cymbal.customer_reviews_external`
 LIMIT 5
 ```
+
+> 위 쿼리에서 사용된 `%%bigquery`는 BigQuery Studio에서 BigQuery 쿼리를 실행하는 데 사용되는 매직 커맨드(Magic Command)입니다. 이 매직 키워드를 통해서 실제 Bigquery상에서 Job이 실행됩니다.
 
 출력은 다음과 같습니다: 
 
@@ -214,7 +237,10 @@ Create Gemini Model
 
 ### **4.2 텍스트 키워드 및 감성 분석**
 
-데이터와 모델이 준비되었으므로 첫 번째 분석을 시작합니다. 아래 셀을 실행하면 Gemini 모델을 호출하여 각 텍스트 리뷰를 분석하고, 주요 키워드 추출과 감성 분석을 수행합니다.
+데이터와 모델이 준비되었으므로 첫 번째 분석을 시작합니다. 아래 셀을 실행하면 Gemini 모델을 호출하여 각 텍스트 리뷰를 분석하고, 주요 키워드 추출과 감성 분석을 수행합니다. 
+이 단계에서는 GCS 버킷에 저장된 텍스트 리뷰 파일(CSV 파일) 을 읽어와서 분석합니다.
+
+> 분석을 완료하는데는 2~3분의 시간이 소요됩니다.
 
 텍스트 감정 분석을 완료하면 다음과 같은 로그가 출력됩니다.
 
@@ -244,6 +270,10 @@ LIMIT 5
 출력은 다음과 같습니다: 
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/9c00564946cfb97d.png" alt="9c00564946cfb97d.png"  width="624.00" />
+
+테이블의 결과를 전체로 확인하려면 다음 버튼을 클릭합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_table_full_view.png" alt="task1_table_full_view.png"  width="624.00" />
 
 ### **4.5 이미지 및 비디오 분석**
 
@@ -293,7 +323,11 @@ Create Multimodal Table
 
 이 단계에서는 Notebook에 내장된 생성형 AI 어시스턴트(AI Assist)를 사용하여 차트를 생성합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/8403d1142e8f1303.png" alt="8403d1142e8f1303.png"  width="624.00" />
+### [CHALLENGE]
+* 출력 결과는 어시스턴트마다 다르게 출력됩니다.
+* 이전 단계에서 json포맷이 제대로 파싱되지 않은 경우, 그래프가 나오지 않습니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_updated_ui_notebook.png" alt="task1_updated_ui_notebook.png"  width="624.00" />
 
 1. **+ code** 버튼을 클릭하여 새 코드 셀을 추가합니다.
 2. 새 셀 안에서 **generate** 버튼을 클릭합니다.
@@ -306,6 +340,11 @@ plot a bar chart for the distribution of text_sentiment in the multimodal_custom
 ```
 
 제안된 코드를 수락한 다음 셀을 실행하여 차트를 표시합니다. 이는 전반적인 감성 분석에 대한 개요를 제공합니다. 출력 결과는 다음과 같습니다.
+* 출력결과는 실행할 때마다 다르게 생성됩니다.
+* 출력 시 오류가 뜨는 경우, 수락 및 실행 버튼을 클릭하여 재실행합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_when_error.png" alt="task1_when_error.png"  width="362.50" />
+
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/a22946ea304fcf84.png" alt="a22946ea304fcf84.png"  width="362.50" />
 
