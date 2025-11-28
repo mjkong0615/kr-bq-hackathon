@@ -137,7 +137,7 @@ BigQuery External Connection 생성
 
 1. Google Cloud 콘솔에서 **BigQuery**로 이동합니다.
 2. **Explorer** 창에서 **Notebook** 옆의 점 3개(⋮) 아이콘을 클릭하고 **URL에서 Notebook 업로드**를 선택합니다.
-3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1_kr.ipynb 를 입력합니다.
+3. URL란에 https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1_kr.ipynb 를 입력합니다.
 4. 나머지 설정에 대해서 default설정을 유지합니다.
 5. Notebook을 생성하면 화면 하단 중간에 뜨는, "Go to notebook" 팝업을 클릭합니다.
 6. 새 탭에서 Notebook을 엽니다.
@@ -154,8 +154,13 @@ BigQuery External Connection 생성
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook1.png" alt="task1_notebook1.png" />
 
+위 이미지의 레드박스에 해당하는, PROJECT_ID를 각각 할당받은 PROJECT_ID로 변경합니다.
 
-먼저 설정 셀(Cell)을 실행합니다. 
+> PROJECT_ID는 랩의 화면 왼쪽에서 확인가능합니다. (*하단 이미지 참조)
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_id.png" alt="task1_project_id.png" />
+
+다음으로 이제, 설정 셀(Cell)인 첫번째 셀부터 실행합니다. 
 이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
 
 셀 실행은 다음과 같이 왼쪽에 마우스를 올리고 실행 버튼을 클릭하면 실행 시작됩니다.

@@ -115,7 +115,7 @@ BigQuery External Connection 생성
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_iam.png" alt="grant_access.png"  width="348.90" />
 
-_내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
+
 <ql-activity-tracking step=2>
 생성된 BigQuery External Connection을 위햔 서비스 어카운트에 권한 추가
 </ql-activity-tracking>
