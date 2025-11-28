@@ -1398,12 +1398,14 @@ BigQuery 연속 쿼리(CQ)가 실시간으로 추가되는 데이터를 감지�
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Untitled query**를 클릭하여 빈 쿼리 창에 액세스합니다.
-3. BigQuery ML 모델을 생성하기 위해 다음 쿼리를 복사하여 붙여넣고, **Run**을 클릭합니다.
+3. BigQuery ML 모델을 생성하기 위해 다음 쿼리를 복사하여 붙여넣고, **ProjectID**를 수정합니다.
+4. **Run**을 클릭하여 실행합니다.
 
+> Region의 경우, 본 실습에서는 us-central1으로 제약적으로 통일하고 있습니다. 이후 실제 환경에서 활용하실때는 원하는 지역으로 변경이 가능합니다.
 
 ```sql
 CREATE MODEL `Project ID.continuous_queries.gemini_2_0_flash`
-REMOTE WITH CONNECTION `Region.continuous-queries-connection`
+REMOTE WITH CONNECTION `us-central1.continuous-queries-connection`
 OPTIONS(endpoint = 'gemini-2.0-flash');
 ```
 
@@ -1413,14 +1415,18 @@ OPTIONS(endpoint = 'gemini-2.0-flash');
 
 이 작업을 위해 recapture_customer라는 Pub/Sub 토픽과 bq-continuous-query-sa@Project ID.iam.gserviceaccount.com이라는 사용자 지정 서비스 계정을 포함한 여러 리소스가 미리 생성되어 있습니다.
 
+* 이 계정명을 복사해서 이후 단계에서 활용해주세요.
+
 이 작업에서는 이후 작업에서 개인화된 이메일을 생성하고 보내는 데 사용될 BigQuery 데이터세트, 원격 모델 및 Pub/Sub 토픽에 대한 접근 권한을 사용자 지정 서비스 계정에 부여합니다.
 
 ### 2.1 사용자 지정 서비스 계정에 원격 모델 접근 권한 부여
 
-
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
-2. **Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
-3. **connections**를 확장하고, **Region.continuous-queries-connection**을 클릭합니다.
+2. **Class Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="541.50" />
+
+3. **connections**를 확장하고, **us-central1.continuous-queries-connection**을 클릭합니다.
 4. **Connection info** 페이지에서 **Share**를 클릭합니다.
 5. **Add principal**을 클릭합니다.
 6. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다:  
@@ -1431,9 +1437,11 @@ bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 ### 2.2 사용자 지정 서비스 계정에 BigQuery 데이터세트 접근 권한 부여
 
 1. **Explorer** 창에서 고객 리뷰 테이블을 포함하는 데이터세트의 이름인 continuous_queries를 클릭합니다.
-2. **Dataset info** 페이지에서 **Sharing**을 클릭하고 **Permissions**를 선택합니다.
+2. **Dataset info** 페이지에서 **Share**을 클릭하고 **Manage Permission**를 선택합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_manage_permission.png" alt="task6_manage_permission.png"  width="541.50" />
+
 3. **Add principal**을 클릭합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_view_permission.png" alt="6848190bb9b4107c.png"  width="541.50" />
 
 4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 5. **Select a role**에서 **BigQuery** &gt; **BigQuery Data Editor**를 선택합니다.
@@ -1469,14 +1477,16 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 1. Google Cloud 콘솔 검색창(페이지 상단)에 **Application Integration**을 입력한 다음, 결과 목록에서 **Application Integration**을 클릭합니다.  
 
-2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.  
+2. **Get started with Application Integration** 페이지의 **Region**에서 **us-central1**을 선택합니다.  
+
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_location.png" alt="task6_location.png"  width="541.50" />
 
 3. **Quick setup**을 클릭하여 필요한 API를 활성화합니다.  
 
-4. **Create integration**을 클릭하고, 통합에 다음 이름을 지정합니다.   
-`recommend-customer-products-integration`
+4. **Create integration**을 클릭하고, 통합에 `recommend-customer-products-integration` 이름을 지정합니다.이름 외의 설정들은 디폴트 설정을 유지합니다.  
+
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_integration.png" alt="task6_create_integration.png"  width="541.50" />
+
 
 5. **CREATE**를 클릭합니다.  
 
