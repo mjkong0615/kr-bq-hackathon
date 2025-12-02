@@ -85,26 +85,34 @@ Cymbal E-Commerce는 이러한 혁신을 이루는 데 생성형 AI(Generative A
 
 먼저, BigQuery가 Gemini 모델과 작동할 수 있도록 Cloud 리소스 연결을 생성합니다.
 
+BigQuery 내부에서 SQL 쿼리만으로 외부의 Gemini 모델을 직접 호출하기 위해서는 상호 작용을 위한 인증 정보와 권한이 포함된 '연결(Connection)' 리소스가 필요합니다. 이 단계에서는 그 연결 고리를 생성합니다.
+
 1. Google Cloud 콘솔에서 **Navigation menu**(☰)로 이동하여 **BigQuery**를 선택합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="548.90" />
+
 2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
 3. **connection ID**에 **gemini_conn**을 입력합니다.
-4. **리전 유형**으로 **리전**을 선택한 다음, 드롭다운에서 **us-central1**을 선택합니다.
+4. **리전 유형**으로 **us-central1**을 선택한 다음, 드롭다운에서 **us-central1**을 선택합니다.
+
+> 이번 핸즈온 실습에서 us-central1을 제약적으로 사용하고 있습니다.
+
 5. **CREATE CONNECTION**을 클릭합니다.
 6. 확인 창이 나타납니다. **Go to connection**을 클릭합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_gotoconnection.png" alt="gotoconnection.png"  width="548.90" />
+
 7. **Connection info** 창(us-central1.gemini_conn)에서 **Service account ID**를 찾아 텍스트 편집기에 복사합니다. 다음 단계에서 필요합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_gotoconnection.png" alt="gotoconnection.png"  width="348.90" />
 
-
-_내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
+목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=1>
 BigQuery External Connection 생성     
 </ql-activity-tracking>  
 
-
 ### **1.2 서비스 계정에 IAM 역할 부여**
 
-연결과 연관된 서비스 계정은 Vertex AI 및 Cloud Storage에 액세스할 수 있는 권한이 필요합니다.
+연결과 연관된 서비스 계정은 **Vertex AI** 및 Cloud Storage에 액세스할 수 있는 권한이 필요합니다.
 
 ##### **Vertex AI User / Storage Object Admin 역할 부여**
 
@@ -116,7 +124,7 @@ BigQuery External Connection 생성
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_iam.png" alt="grant_access.png"  width="348.90" />
 
-_내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
+목표를 확인하려면 **진행 상황 확인을 클릭**하세요.
 <ql-activity-tracking step=2>
 생성된 BigQuery External Connection을 위한 서비스 어카운트에 권한 추가
 </ql-activity-tracking>
@@ -129,17 +137,35 @@ _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 
 1. Google Cloud 콘솔에서 **BigQuery**로 이동합니다.
 2. **Explorer** 창에서 **Notebook** 옆의 점 3개(⋮) 아이콘을 클릭하고 **URL에서 Notebook 업로드**를 선택합니다.
-3. https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1.ipynb 를 입력합니다.
-4. 새 탭에서 Notebook을 엽니다.
+3. URL란에 https://github.com/seoeunbae/da-hackerthon-instruction/blob/main/task1_kr.ipynb 를 입력합니다.
+4. 나머지 설정에 대해서 default설정을 유지합니다.
+5. Notebook을 생성하면 화면 하단 중간에 뜨는, "Go to notebook" 팝업을 클릭합니다.
+6. 새 탭에서 Notebook을 엽니다.
 
 ### 2. Notebook 설정
 
 ### **2.1 환경 초기화**
 
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebool_auth.png" alt="task1_notebool_auth.png" />
+
+노트북 최초 실행 시 위와 같은 팝업 화면이 나타납니다.
+위 화면에서 실습계정을 클릭하여, 로그인을 합니다.
+
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_notebook1.png" alt="task1_notebook1.png" />
 
+위 이미지의 레드박스에 해당하는, PROJECT_ID를 각각 할당받은 PROJECT_ID로 변경합니다.
 
-먼저 설정 셀(Cell)을 실행합니다. 이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
+> PROJECT_ID는 랩의 화면 왼쪽에서 확인가능합니다. (*하단 이미지 참조)
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_id.png" alt="task1_project_id.png" />
+
+다음으로 이제, 설정 셀(Cell)인 첫번째 셀부터 실행합니다. 
+이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
+
+셀 실행은 다음과 같이 왼쪽에 마우스를 올리고 실행 버튼을 클릭하면 실행 시작됩니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_cell_execute.png" alt="task1_cell_execute.png"  width="348.90" />
 
 그리고 다음 셀을 실행합니다.
 
@@ -167,6 +193,8 @@ _내 진행 상황 확인하기_를 클릭하여 목표를 확인합니다.
 SELECT * FROM `cymbal.customer_reviews_external`
 LIMIT 5
 ```
+
+> 위 쿼리에서 사용된 `%%bigquery`는 BigQuery Studio에서 BigQuery 쿼리를 실행하는 데 사용되는 매직 커맨드(Magic Command)입니다. 이 매직 키워드를 통해서 실제 Bigquery상에서 Job이 실행됩니다.
 
 출력은 다음과 같습니다: 
 
@@ -214,7 +242,10 @@ Create Gemini Model
 
 ### **4.2 텍스트 키워드 및 감성 분석**
 
-데이터와 모델이 준비되었으므로 첫 번째 분석을 시작합니다. 아래 셀을 실행하면 Gemini 모델을 호출하여 각 텍스트 리뷰를 분석하고, 주요 키워드 추출과 감성 분석을 수행합니다.
+데이터와 모델이 준비되었으므로 첫 번째 분석을 시작합니다. 아래 셀을 실행하면 Gemini 모델을 호출하여 각 텍스트 리뷰를 분석하고, 주요 키워드 추출과 감성 분석을 수행합니다. 
+이 단계에서는 GCS 버킷에 저장된 텍스트 리뷰 파일(CSV 파일) 을 읽어와서 분석합니다.
+
+> 분석을 완료하는데는 2~3분의 시간이 소요됩니다.
 
 텍스트 감정 분석을 완료하면 다음과 같은 로그가 출력됩니다.
 
@@ -244,6 +275,10 @@ LIMIT 5
 출력은 다음과 같습니다: 
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/9c00564946cfb97d.png" alt="9c00564946cfb97d.png"  width="624.00" />
+
+테이블의 결과를 전체로 확인하려면 다음 버튼을 클릭합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_table_full_view.png" alt="task1_table_full_view.png"  width="624.00" />
 
 ### **4.5 이미지 및 비디오 분석**
 
@@ -293,7 +328,11 @@ Create Multimodal Table
 
 이 단계에서는 Notebook에 내장된 생성형 AI 어시스턴트(AI Assist)를 사용하여 차트를 생성합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/8403d1142e8f1303.png" alt="8403d1142e8f1303.png"  width="624.00" />
+### [CHALLENGE]
+* 출력 결과는 어시스턴트마다 다르게 출력됩니다.
+* 이전 단계에서 json포맷이 제대로 파싱되지 않은 경우, 그래프가 나오지 않습니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_updated_ui_notebook.png" alt="task1_updated_ui_notebook.png"  width="624.00" />
 
 1. **+ code** 버튼을 클릭하여 새 코드 셀을 추가합니다.
 2. 새 셀 안에서 **generate** 버튼을 클릭합니다.
@@ -306,6 +345,11 @@ plot a bar chart for the distribution of text_sentiment in the multimodal_custom
 ```
 
 제안된 코드를 수락한 다음 셀을 실행하여 차트를 표시합니다. 이는 전반적인 감성 분석에 대한 개요를 제공합니다. 출력 결과는 다음과 같습니다.
+* 출력결과는 실행할 때마다 다르게 생성됩니다.
+* 출력 시 오류가 뜨는 경우, 수락 및 실행 버튼을 클릭하여 재실행합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_when_error.png" alt="task1_when_error.png"  width="362.50" />
+
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/a22946ea304fcf84.png" alt="a22946ea304fcf84.png"  width="362.50" />
 
@@ -1354,12 +1398,14 @@ BigQuery 연속 쿼리(CQ)가 실시간으로 추가되는 데이터를 감지�
 
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Untitled query**를 클릭하여 빈 쿼리 창에 액세스합니다.
-3. BigQuery ML 모델을 생성하기 위해 다음 쿼리를 복사하여 붙여넣고, **Run**을 클릭합니다.
+3. BigQuery ML 모델을 생성하기 위해 다음 쿼리를 복사하여 붙여넣고, **ProjectID**를 수정합니다.
+4. **Run**을 클릭하여 실행합니다.
 
+> Region의 경우, 본 실습에서는 us-central1으로 제약적으로 통일하고 있습니다. 이후 실제 환경에서 활용하실때는 원하는 지역으로 변경이 가능합니다.
 
 ```sql
 CREATE MODEL `Project ID.continuous_queries.gemini_2_0_flash`
-REMOTE WITH CONNECTION `Region.continuous-queries-connection`
+REMOTE WITH CONNECTION `us-central1.continuous-queries-connection`
 OPTIONS(endpoint = 'gemini-2.0-flash');
 ```
 
@@ -1369,14 +1415,18 @@ OPTIONS(endpoint = 'gemini-2.0-flash');
 
 이 작업을 위해 recapture_customer라는 Pub/Sub 토픽과 bq-continuous-query-sa@Project ID.iam.gserviceaccount.com이라는 사용자 지정 서비스 계정을 포함한 여러 리소스가 미리 생성되어 있습니다.
 
+* 이 계정명을 복사해서 이후 단계에서 활용해주세요.
+
 이 작업에서는 이후 작업에서 개인화된 이메일을 생성하고 보내는 데 사용될 BigQuery 데이터세트, 원격 모델 및 Pub/Sub 토픽에 대한 접근 권한을 사용자 지정 서비스 계정에 부여합니다.
 
 ### 2.1 사용자 지정 서비스 계정에 원격 모델 접근 권한 부여
 
-
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
-2. **Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
-3. **connections**를 확장하고, **Region.continuous-queries-connection**을 클릭합니다.
+2. **Class Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="541.50" />
+
+3. **connections**를 확장하고, **us-central1.continuous-queries-connection**을 클릭합니다.
 4. **Connection info** 페이지에서 **Share**를 클릭합니다.
 5. **Add principal**을 클릭합니다.
 6. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다:  
@@ -1387,9 +1437,11 @@ bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 ### 2.2 사용자 지정 서비스 계정에 BigQuery 데이터세트 접근 권한 부여
 
 1. **Explorer** 창에서 고객 리뷰 테이블을 포함하는 데이터세트의 이름인 continuous_queries를 클릭합니다.
-2. **Dataset info** 페이지에서 **Sharing**을 클릭하고 **Permissions**를 선택합니다.
+2. **Dataset info** 페이지에서 **Share**을 클릭하고 **Manage Permission**를 선택합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_manage_permission.png" alt="task6_manage_permission.png"  width="541.50" />
+
 3. **Add principal**을 클릭합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_view_permission.png" alt="6848190bb9b4107c.png"  width="541.50" />
 
 4. **New principals**에 사용자 지정 서비스 계정 ID를 입력합니다: bq-continuous-query-sa@Project ID.iam.gserviceaccount.com
 5. **Select a role**에서 **BigQuery** &gt; **BigQuery Data Editor**를 선택합니다.
@@ -1425,14 +1477,16 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 1. Google Cloud 콘솔 검색창(페이지 상단)에 **Application Integration**을 입력한 다음, 결과 목록에서 **Application Integration**을 클릭합니다.  
 
-2. **Get started with Application Integration** 페이지의 **Region**에서 **Region**을 선택합니다.  
+2. **Get started with Application Integration** 페이지의 **Region**에서 **us-central1**을 선택합니다.  
+
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_location.png" alt="task6_location.png"  width="541.50" />
 
 3. **Quick setup**을 클릭하여 필요한 API를 활성화합니다.  
 
-4. **Create integration**을 클릭하고, 통합에 다음 이름을 지정합니다.   
-`recommend-customer-products-integration`
+4. **Create integration**을 클릭하고, 통합에 `recommend-customer-products-integration` 이름을 지정합니다.이름 외의 설정들은 디폴트 설정을 유지합니다.  
+
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_integration.png" alt="task6_create_integration.png"  width="541.50" />
+
 
 5. **CREATE**를 클릭합니다.  
 
@@ -1517,6 +1571,35 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/22b44f7f0dfa1df3.png" alt="22b44f7f0dfa1df3.png"  width="624.00" />
 
+### 3.3 이메일 보내기 작업을 위한 OAuth Client 생성
+
+클라이언트 ID는 Google OAuth 서버에서 단일 애플리케이션을 식별하는 데 사용됩니다. 애플리케이션이 여러 플랫폼에서 실행되는 경우 각각 고유한 클라이언트 ID가 필요합니다. 애플리케이션에서 OAuth 2.0을 사용하려면 OAuth 2.0 액세스 토큰을 요청할 때 사용하는 OAuth 2.0 클라이언트 ID가 필요합니다.
+
+OAuth 2.0 클라이언트 ID를 생성하려면 다음 단계를 수행하세요:
+
+1. Google Cloud 콘솔에서 **API & Services > credentials**로 이동합니다.
+[credentials 페이지로 이동](https://console.cloud.google.com/apis/credentials)
+
+2. **+ Create Credentials**를 클릭하고 사용 가능한 옵션 목록에서 **OAuth Client ID**를 선택합니다.
+OAuth Client ID 만들기 페이지가 나타납니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_oauth_client_id.png" alt="task6_oauth_client_id.png"  width="541.50" />
+
+
+3. **Application type**: 드롭다운 목록에서 **Web application**을 선택합니다.
+**Name**: oauth-client로 입력합니다.
+4. **Authorized redirect URIs**에서 **+ Add URI**를 클릭하고 다음을 입력합니다:
+```
+ https://console.cloud.google.com/integrations/callback/locations/us-central1
+```
+
+5. **Create**를 클릭합니다.
+
+OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
+
+6. Download JSON 버튼을 클릭하여 JSON 파일을 다운로드합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_download_json.png" alt="task6_download_json.png"  width="541.50" />
 
 ### 3.3 이메일 보내기 작업 추가
 
@@ -1524,33 +1607,41 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 2. 브라우저 탭을 복제합니다 (현재 탭에서 마우스 오른쪽 버튼을 클릭하고 **Duplicate(복제)** 선택).
 3. Google Cloud Console에서 페이지 상단의 검색창에 **Integration Connectors**를 입력한 다음, 결과 목록에서  Connections(연결) 를 클릭합니다.
 4.  Create New(새로 만들기) 를 클릭하여 새 연결을 생성합니다.
-5.  Region 으로  {Region} 을 선택하고  Next(다음) 를 클릭합니다. 
+5.  Region 으로 **us-central1** 을 선택하고  Next(다음) 를 클릭합니다. 
 6. Connector 드롭다운에서 **Gmail**을 선택합니다.
 7.  Connection Name(연결 이름) 에 **send-email**을 입력한 다음,  Next(다음) 를 클릭합니다.
-8.  Authentication(인증) 에서 scopes(범위)로 [**https://mail.google.com/**](https://mail.google.com/) 을 선택한 다음,  Next(다음) 를 클릭합니다.
-9. 세부 정보를 검토한 후 **Create(만들기)** 버튼을 클릭합니다.
+8.  Authentication(인증) 에서 **OAuth 2.0 - Authorization code** 를 선택합니다.
+9.  **Client ID**로 이전 단계에서 저장한 JSON의 Client ID를 입력합니다.
+10. **Client Secret**로 **Create new secret**버튼을 클릭한 후, 이전 단계에서 저장한 JSON에서 Client Secret을 복사하여 입력합니다.
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret.png" alt="task6_create_new_secret.png"  width="541.50" />
+11. **Scopes(범위)**로 [**https://mail.google.com/**](https://mail.google.com/)을 입력합니다.
+12. **Create(만들기)** 버튼을 클릭합니다.
+13. 노란색 박스의 권한에 대한 경고창이 뜨는경우 **Grant Access(승인 권한 부여)** 버튼을 클릭하여 적합한 권한을 부여합니다.
 
-커넥터가 처음 프로비저닝되는 경우 연결 생성에 5~10분이 소요될 수 있습니다.
+> 커넥터가 처음 프로비저닝되는 경우 연결 생성에 5~10분이 소요될 수 있습니다.
 
-10. 연결을 생성한 후, **Authorization Required(승인 필요)** 상태를 클릭한 다음  Authorize(승인) 를 클릭하고 학생 ID(Student ID)를 사용하여 로그인합니다.
-11.  Continue(계속) 를 클릭한 다음 페이지를 새로고침하여 상태가 녹색 체크 표시와 함께  Active(활성) 로 변경되는 것을 확인합니다.
+14. 연결을 생성한 후, **Authorization Required(승인 필요)** 상태를 클릭한 다음  Authorize(승인)를 클릭하고 학생 ID(Student ID)를 사용하여 로그인합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_auth_required.png" alt="task6_auth_required.png"  width="541.50" />
+
+15.  **Continue(계속)** 를 클릭한 다음 페이지를 새로고침하여 상태가 녹색 체크 표시와 함께  Active(활성)으로 변경되는 것을 확인합니다.
 
 브라우저의 Application Integration 탭으로 돌아갑니다.
 
-12. 캔버스 상단에서 **Triggers(트리거)** 옆의  Tasks(태스크) 를 클릭합니다.
-13. 검색창에 **Gmail**을 입력합니다.
-14. 결과에서 **Gmail**을 선택하고 캔버스를 클릭하여 **Data Mappings(데이터 매핑)** 아래에 Gmail 태스크를 추가합니다.
-15. **Data Mapping**의 하단 연결점을 클릭하고 커서를 드래그하여 **Gmail**의 상단 연결점에 연결합니다.
+16. 캔버스 상단에서 **Triggers(트리거)** 옆의  Tasks(태스크) 를 클릭합니다.
+17. 검색창에 **Gmail**을 입력합니다.
+18. 결과에서 **Gmail**을 선택하고 캔버스를 클릭하여 **Data Mappings(데이터 매핑)** 아래에 Gmail 태스크를 추가합니다.
+19. **Data Mapping**의 하단 연결점을 클릭하고 커서를 드래그하여 **Gmail**의 상단 연결점에 연결합니다.
 
 이제 **Cloud Pub/Sub Trigger**와 **Data Mapping**을 연결하는 첫 번째 화살표 외에, **Data Mapping** 하단에서 **Gmail** 상단으로 흐르는 두 번째 화살표가 생겼습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/6848190bb9b4107c.png" alt="6848190bb9b4107c.png"  width="541.50" />
 
 
-16. 캔버스에서 **Gmail** 항목을 클릭하여 세부 정보를 확인합니다.
-17.  **Configure Connector** 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
-18. **Set entities/actions**에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
-19. recommend-customer-products-integration  페이지의 오른쪽 상단에서 Publish(게시)를 클릭합니다.
+20. 캔버스에서 **Gmail** 항목을 클릭하여 세부 정보를 확인합니다.
+21.  **Configure Connector** 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
+22. **Set entities/actions**에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
+23. recommend-customer-products-integration  페이지의 오른쪽 상단에서 Publish(게시)를 클릭합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_justpublish.png" alt="task6_justpublish.png"  width="541.50" />
 
 위와 같은 Autogenerate integration description 창이 뜨는 경우, `NO, JUST PUBLISH`를 클릭합니다.
@@ -1577,8 +1668,9 @@ Create and publish Application Integration
 * 예약 이름(reservation name)에 다음을 입력합니다: bq-continuous-queries-reservation
 * 위치(Location)에서 **us-central1**을 선택합니다.
 * 버전(Edition)에서 **Enterprise**를 선택합니다.
-* Max reservation size selector에서 Extra Small (50 slots)을 선택합니다.
-* Baseline slots에 **50**을 입력합니다.
+* Max reservation size selector에서 **Extra Small (50 slots)**을 선택합니다.
+* Baseline slots에 **0**을 입력합니다.
+* 그 외의 항목은 디폴트 설정을 유지합니다.
 * **저장**을 클릭합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_reservation.png" alt="task6_reservation.png"  width="541.50" />
