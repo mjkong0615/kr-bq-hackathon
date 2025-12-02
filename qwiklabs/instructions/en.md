@@ -1583,8 +1583,7 @@ OAuth 2.0 클라이언트 ID를 생성하려면 다음 단계를 수행하세요
 2. **+ Create Credentials**를 클릭하고 사용 가능한 옵션 목록에서 **OAuth Client ID**를 선택합니다.
 OAuth Client ID 만들기 페이지가 나타납니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_oauth_client_id.png" alt="task6_oauth_client_id.png"  width="541.50" />
-
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_oauth_client_id1.png" alt="task6_oauth_client_id.png"  width="541.50" />
 
 3. **Application type**: 드롭다운 목록에서 **Web application**을 선택합니다.
 **Name**: oauth-client로 입력합니다.
@@ -1599,7 +1598,7 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 
 6. Download JSON 버튼을 클릭하여 JSON 파일을 다운로드합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_download_json.png" alt="task6_download_json.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_download_json1.png" alt="task6_download_json.png"  width="541.50" />
 
 ### 3.3 이메일 보내기 작업 추가
 
@@ -1613,7 +1612,9 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 8.  Authentication(인증) 에서 **OAuth 2.0 - Authorization code** 를 선택합니다.
 9.  **Client ID**로 이전 단계에서 저장한 JSON의 Client ID를 입력합니다.
 10. **Client Secret**로 **Create new secret**버튼을 클릭한 후, 이전 단계에서 저장한 JSON에서 Client Secret을 복사하여 입력합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret.png" alt="task6_create_new_secret.png"  width="541.50" />
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret1.png" alt=".png"  width="541.50" />
+
 11. **Scopes(범위)**로 [**https://mail.google.com/**](https://mail.google.com/)을 입력합니다.
 12. **Create(만들기)** 버튼을 클릭합니다.
 13. 노란색 박스의 권한에 대한 경고창이 뜨는경우 **Grant Access(승인 권한 부여)** 버튼을 클릭하여 적합한 권한을 부여합니다.
@@ -1622,7 +1623,7 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 
 14. 연결을 생성한 후, **Authorization Required(승인 필요)** 상태를 클릭한 다음  Authorize(승인)를 클릭하고 학생 ID(Student ID)를 사용하여 로그인합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_auth_required.png" alt="task6_auth_required.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_auth_required.png" alt=".png"  width="541.50" />
 
 15.  **Continue(계속)** 를 클릭한 다음 페이지를 새로고침하여 상태가 녹색 체크 표시와 함께  Active(활성)으로 변경되는 것을 확인합니다.
 
