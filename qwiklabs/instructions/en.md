@@ -89,7 +89,7 @@ BigQuery 내부에서 SQL 쿼리만으로 외부의 Gemini 모델을 직접 호�
 
 1. Google Cloud 콘솔에서 **Navigation menu**(☰)로 이동하여 **BigQuery**를 선택합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="548.90" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="348.90" />
 
 2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
 3. **connection ID**에 **gemini_conn**을 입력합니다.
