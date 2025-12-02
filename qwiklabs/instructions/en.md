@@ -1379,7 +1379,7 @@ BigQuery 연속 쿼리(CQ)가 실시간으로 추가되는 데이터를 감지�
 5. **Location type**에서 **Region** &gt; **us-central1**을 선택합니다.
 6. **Create connection**을 클릭한 다음, **Go to connection**을 클릭합니다 
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_gotoconnection.png" alt="task6_gotoconnection.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_gotoconnection.png" alt="task6_gotoconnection.png"  width="741.50" />
 
 7. **Connection info** 페이지에서 다음 섹션에서 사용할 **Service account ID**를 복사합니다.  
  예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com
