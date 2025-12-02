@@ -89,7 +89,7 @@ BigQuery 내부에서 SQL 쿼리만으로 외부의 Gemini 모델을 직접 호�
 
 1. Google Cloud 콘솔에서 **Navigation menu**(☰)로 이동하여 **BigQuery**를 선택합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="548.90" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="348.90" />
 
 2. **Explorer** 패널에서 **+ Add Data**를 클릭한 다음, Vertex AI를 입력하고 Vertex AI를 클릭 한 뒤 나오는 **BigQuery Federation**을 클릭합니다.
 3. **connection ID**에 **gemini_conn**을 입력합니다.
@@ -158,7 +158,7 @@ BigQuery External Connection 생성
 
 > PROJECT_ID는 랩의 화면 왼쪽에서 확인가능합니다. (*하단 이미지 참조)
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_id.png" alt="task1_project_id.png" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_id.png" alt="task1_project_id.png" width="348.90"/>
 
 다음으로 이제, 설정 셀(Cell)인 첫번째 셀부터 실행합니다. 
 이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
@@ -1379,7 +1379,7 @@ BigQuery 연속 쿼리(CQ)가 실시간으로 추가되는 데이터를 감지�
 5. **Location type**에서 **Region** &gt; **us-central1**을 선택합니다.
 6. **Create connection**을 클릭한 다음, **Go to connection**을 클릭합니다 
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_gotoconnection.png" alt="task6_gotoconnection.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_gotoconnection.png" alt="task6_gotoconnection.png"  width="741.50" />
 
 7. **Connection info** 페이지에서 다음 섹션에서 사용할 **Service account ID**를 복사합니다.  
  예: bqcx-1054723899402-whbp@gcp-sa-bigquery-condel.iam.gserviceaccount.com
@@ -1424,7 +1424,7 @@ OPTIONS(endpoint = 'gemini-2.0-flash');
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Class Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="348.50" />
 
 3. **connections**를 확장하고, **us-central1.continuous-queries-connection**을 클릭합니다.
 4. **Connection info** 페이지에서 **Share**를 클릭합니다.
@@ -1583,8 +1583,7 @@ OAuth 2.0 클라이언트 ID를 생성하려면 다음 단계를 수행하세요
 2. **+ Create Credentials**를 클릭하고 사용 가능한 옵션 목록에서 **OAuth Client ID**를 선택합니다.
 OAuth Client ID 만들기 페이지가 나타납니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_oauth_client_id.png" alt="task6_oauth_client_id.png"  width="541.50" />
-
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_oauth_client_id1.png" alt="task6_oauth_client_id.png"  width="541.50" />
 
 3. **Application type**: 드롭다운 목록에서 **Web application**을 선택합니다.
 **Name**: oauth-client로 입력합니다.
@@ -1599,7 +1598,7 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 
 6. Download JSON 버튼을 클릭하여 JSON 파일을 다운로드합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_download_json.png" alt="task6_download_json.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_download_json1.png" alt="task6_download_json.png"  width="541.50" />
 
 ### 3.3 이메일 보내기 작업 추가
 
@@ -1613,8 +1612,11 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 8.  Authentication(인증) 에서 **OAuth 2.0 - Authorization code** 를 선택합니다.
 9.  **Client ID**로 이전 단계에서 저장한 JSON의 Client ID를 입력합니다.
 10. **Client Secret**로 **Create new secret**버튼을 클릭한 후, 이전 단계에서 저장한 JSON에서 Client Secret을 복사하여 입력합니다.
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret.png" alt="task6_create_new_secret.png"  width="541.50" />
-11. **Scopes(범위)**로 [**https://mail.google.com/**](https://mail.google.com/)을 입력합니다.
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret1.png" alt=".png"  width="541.50" />
+
+
+11. Scopes(범위)로 [https://mail.google.com/](https://mail.google.com/)을 입력합니다.
 12. **Create(만들기)** 버튼을 클릭합니다.
 13. 노란색 박스의 권한에 대한 경고창이 뜨는경우 **Grant Access(승인 권한 부여)** 버튼을 클릭하여 적합한 권한을 부여합니다.
 
@@ -1622,7 +1624,7 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 
 14. 연결을 생성한 후, **Authorization Required(승인 필요)** 상태를 클릭한 다음  Authorize(승인)를 클릭하고 학생 ID(Student ID)를 사용하여 로그인합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_auth_required.png" alt="task6_auth_required.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_auth_required.png" alt=".png"  width="541.50" />
 
 15.  **Continue(계속)** 를 클릭한 다음 페이지를 새로고침하여 상태가 녹색 체크 표시와 함께  Active(활성)으로 변경되는 것을 확인합니다.
 
