@@ -1424,7 +1424,7 @@ OPTIONS(endpoint = 'gemini-2.0-flash');
 1. Google Cloud 콘솔에서 **Navigation menu**() &gt; **BigQuery**를 클릭합니다.
 2. **Class Explorer** 창에서 **Project ID** 옆의 화살표를 확장합니다.
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="541.50" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_explorer.png" alt="task1_explorer.png"  width="348.50" />
 
 3. **connections**를 확장하고, **us-central1.continuous-queries-connection**을 클릭합니다.
 4. **Connection info** 페이지에서 **Share**를 클릭합니다.
@@ -1615,7 +1615,8 @@ OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret1.png" alt=".png"  width="541.50" />
 
-11. **Scopes(범위)**로 [**https://mail.google.com/**](https://mail.google.com/)을 입력합니다.
+
+11. Scopes(범위)로 [https://mail.google.com/](https://mail.google.com/)을 입력합니다.
 12. **Create(만들기)** 버튼을 클릭합니다.
 13. 노란색 박스의 권한에 대한 경고창이 뜨는경우 **Grant Access(승인 권한 부여)** 버튼을 클릭하여 적합한 권한을 부여합니다.
 
