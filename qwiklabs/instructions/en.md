@@ -158,7 +158,7 @@ BigQuery External Connection 생성
 
 > PROJECT_ID는 랩의 화면 왼쪽에서 확인가능합니다. (*하단 이미지 참조)
 
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_id.png" alt="task1_project_id.png" />
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task1_project_id.png" alt="task1_project_id.png" width="348.90"/>
 
 다음으로 이제, 설정 셀(Cell)인 첫번째 셀부터 실행합니다. 
 이 셀은 필요한 라이브러리를 불러오고 BigQuery 연결을 초기화합니다. 또한 프로젝트 ID, GCS 버킷(Bucket) 경로 등 실습에 필요한 주요 변수를 정의합니다. **반드시 프로젝트 ID를 주어진 환경에 맞게 변경해야 합니다.**
