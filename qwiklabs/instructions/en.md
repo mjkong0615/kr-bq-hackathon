@@ -1571,79 +1571,53 @@ Application Integration은 Google Cloud의 iPaaS(Integration-Platform-as-a-Servi
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/22b44f7f0dfa1df3.png" alt="22b44f7f0dfa1df3.png"  width="624.00" />
 
-### 3.3 이메일 보내기 작업을 위한 OAuth Client 생성
-
-클라이언트 ID는 Google OAuth 서버에서 단일 애플리케이션을 식별하는 데 사용됩니다. 애플리케이션이 여러 플랫폼에서 실행되는 경우 각각 고유한 클라이언트 ID가 필요합니다. 애플리케이션에서 OAuth 2.0을 사용하려면 OAuth 2.0 액세스 토큰을 요청할 때 사용하는 OAuth 2.0 클라이언트 ID가 필요합니다.
-
-OAuth 2.0 클라이언트 ID를 생성하려면 다음 단계를 수행하세요:
-
-1. Google Cloud 콘솔에서 **API & Services > credentials**로 이동합니다.
-[credentials 페이지로 이동](https://console.cloud.google.com/apis/credentials)
-
-2. **+ Create Credentials**를 클릭하고 사용 가능한 옵션 목록에서 **OAuth Client ID**를 선택합니다.
-OAuth Client ID 만들기 페이지가 나타납니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_oauth_client_id1.png" alt="task6_oauth_client_id.png"  width="541.50" />
-
-3. **Application type**: 드롭다운 목록에서 **Web application**을 선택합니다.
-**Name**: oauth-client로 입력합니다.
-4. **Authorized redirect URIs**에서 **+ Add URI**를 클릭하고 다음을 입력합니다:
-```
- https://console.cloud.google.com/integrations/callback/locations/us-central1
-```
-
-5. **Create**를 클릭합니다.
-
-OAuth 2.0 클라이언트 ID가 성공적으로 생성되었습니다.
-
-6. Download JSON 버튼을 클릭하여 JSON 파일을 다운로드합니다.
-
-<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_download_json1.png" alt="task6_download_json.png"  width="541.50" />
-
 ### 3.3 이메일 보내기 작업 추가
+
+<img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_authorize.png" alt="task6_authorize.png"  width="424.00" />
 
 1. 화면 상단의 **Data Mapping Task Editor** 옆에 있는 뒤로 가기 화살표(&lt;-)를 클릭하여 캔버스로 돌아갑니다.
 2. 브라우저 탭을 복제합니다 (현재 탭에서 마우스 오른쪽 버튼을 클릭하고 **Duplicate(복제)** 선택).
 3. Google Cloud Console에서 페이지 상단의 검색창에 **Integration Connectors**를 입력한 다음, 결과 목록에서  Connections(연결) 를 클릭합니다.
 4.  Create New(새로 만들기) 를 클릭하여 새 연결을 생성합니다.
 5.  Region 으로 **us-central1** 을 선택하고  Next(다음) 를 클릭합니다. 
-6. Connector 드롭다운에서 **Gmail**을 선택합니다.
-7.  Connection Name(연결 이름) 에 **send-email**을 입력한 다음,  Next(다음) 를 클릭합니다.
-8.  Authentication(인증) 에서 **OAuth 2.0 - Authorization code** 를 선택합니다.
-9.  **Client ID**로 이전 단계에서 저장한 JSON의 Client ID를 입력합니다.
-10. **Client Secret**로 **Create new secret**버튼을 클릭한 후, 이전 단계에서 저장한 JSON에서 Client Secret을 복사하여 입력합니다.
+6.  Connector 드롭다운에서 **Gmail**을 선택합니다.
+7.  version을 **1**으로 선택합니다.
+8.  Connection Name(연결 이름) 에 **send-email**을 입력한 다음,  Next(다음) 를 클릭합니다.
+9.  Authentication(인증) 에서 **Google managed ** 를 선택합니다.
+10.  **Client ID**로 이전 단계에서 저장한 JSON의 Client ID를 입력합니다.
+11. **Client Secret**로 **Create new secret**버튼을 클릭한 후, 이전 단계에서 저장한 JSON에서 Client Secret을 복사하여 입력합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_create_new_secret1.png" alt=".png"  width="541.50" />
 
 
-11. Scopes(범위)로 [https://mail.google.com/](https://mail.google.com/)을 입력합니다.
-12. **Create(만들기)** 버튼을 클릭합니다.
-13. 노란색 박스의 권한에 대한 경고창이 뜨는경우 **Grant Access(승인 권한 부여)** 버튼을 클릭하여 적합한 권한을 부여합니다.
+12. Scopes(범위)로 [https://mail.google.com/](https://mail.google.com/)을 입력합니다.
+13. **Create(만들기)** 버튼을 클릭합니다.
+14. 노란색 박스의 권한에 대한 경고창이 뜨는경우 **Grant Access(승인 권한 부여)** 버튼을 클릭하여 적합한 권한을 부여합니다.
 
 > 커넥터가 처음 프로비저닝되는 경우 연결 생성에 5~10분이 소요될 수 있습니다.
 
-14. 연결을 생성한 후, **Authorization Required(승인 필요)** 상태를 클릭한 다음  Authorize(승인)를 클릭하고 학생 ID(Student ID)를 사용하여 로그인합니다.
+15. 연결을 생성한 후, **Authorization Required(승인 필요)** 상태를 클릭한 다음  Authorize(승인)를 클릭하고 학생 ID(Student ID)를 사용하여 로그인합니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_auth_required.png" alt=".png"  width="541.50" />
 
-15.  **Continue(계속)** 를 클릭한 다음 페이지를 새로고침하여 상태가 녹색 체크 표시와 함께  Active(활성)으로 변경되는 것을 확인합니다.
+16.  **Continue(계속)** 를 클릭한 다음 페이지를 새로고침하여 상태가 녹색 체크 표시와 함께  Active(활성)으로 변경되는 것을 확인합니다.
 
 브라우저의 Application Integration 탭으로 돌아갑니다.
 
-16. 캔버스 상단에서 **Triggers(트리거)** 옆의  Tasks(태스크) 를 클릭합니다.
-17. 검색창에 **Gmail**을 입력합니다.
-18. 결과에서 **Gmail**을 선택하고 캔버스를 클릭하여 **Data Mappings(데이터 매핑)** 아래에 Gmail 태스크를 추가합니다.
-19. **Data Mapping**의 하단 연결점을 클릭하고 커서를 드래그하여 **Gmail**의 상단 연결점에 연결합니다.
+17. 캔버스 상단에서 **Triggers(트리거)** 옆의  Tasks(태스크) 를 클릭합니다.
+18. 검색창에 **Gmail**을 입력합니다.
+19. 결과에서 **Gmail**을 선택하고 캔버스를 클릭하여 **Data Mappings(데이터 매핑)** 아래에 Gmail 태스크를 추가합니다.
+20. **Data Mapping**의 하단 연결점을 클릭하고 커서를 드래그하여 **Gmail**의 상단 연결점에 연결합니다.
 
 이제 **Cloud Pub/Sub Trigger**와 **Data Mapping**을 연결하는 첫 번째 화살표 외에, **Data Mapping** 하단에서 **Gmail** 상단으로 흐르는 두 번째 화살표가 생겼습니다.
 
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/6848190bb9b4107c.png" alt="6848190bb9b4107c.png"  width="541.50" />
 
 
-20. 캔버스에서 **Gmail** 항목을 클릭하여 세부 정보를 확인합니다.
-21.  **Configure Connector** 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
-22. **Set entities/actions**에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
-23. recommend-customer-products-integration  페이지의 오른쪽 상단에서 Publish(게시)를 클릭합니다.
+21. 캔버스에서 **Gmail** 항목을 클릭하여 세부 정보를 확인합니다.
+22.  **Configure Connector** 를 클릭하고, Region(리전)으로  [리전 이름]을 선택한 다음 connection(연결) 드롭다운에서 **send-email**을 선택하고 Next(다음) 를 클릭합니다.
+23. **Set entities/actions**에서 **gmail.users.drafts.send**를 선택한 다음 Done(완료)을 클릭합니다.
+24. recommend-customer-products-integration  페이지의 오른쪽 상단에서 Publish(게시)를 클릭합니다.
 <img src="https://raw.githubusercontent.com/mjkong0615/kr-bq-hackathon/refs/heads/main/qwiklabs/instructions/images/task6_justpublish.png" alt="task6_justpublish.png"  width="541.50" />
 
 위와 같은 Autogenerate integration description 창이 뜨는 경우, `NO, JUST PUBLISH`를 클릭합니다.
@@ -1781,7 +1755,7 @@ SELECT
      STRUCT(
        customer_name AS customer_name,
        customer_email AS customer_email, 
-       REGEXP_REPLACE(REGEXP_EXTRACT(ml_generate_text_llm_result,r"(?im)\&lt;html\&gt;(?s:.)*\&lt;\/html\&gt;"), r"(?i)\[your name\]", "Your friends at AI Megastore") AS customer_message
+       REGEXP_REPLACE(REGEXP_EXTRACT(ml_generate_text_llm_result,r"(?is)<html>.*?</html>"), r"(?i)\[your name\]", "Your friends at AI Megastore") AS customer_message
      )
    )
  FROM ML.GENERATE_TEXT(
